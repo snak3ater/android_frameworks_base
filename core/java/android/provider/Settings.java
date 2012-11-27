@@ -4348,6 +4348,12 @@ public final class Settings {
         @Deprecated
         public static final String ADB_ENABLED = Global.ADB_ENABLED;
 
+	/**
+         * Whether to display the ADB notification.
+         * @hide
+         */
+        public static final String ADB_NOTIFY = "adb_notify";
+
         /**
          * The hostname for this device
          * @hide
