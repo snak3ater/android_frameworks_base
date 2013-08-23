@@ -56,4 +56,7 @@
 
     <!-- App circle bar -->
     <string name="app_stop_item_title">Kill app</string>
+
+    <!-- Title shown in notification popup for launching notification in floating mode -->
+    <string name="status_bar_notification_floating_item_title">Floating mode</string>
 </resources>
