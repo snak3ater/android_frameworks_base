@@ -33,6 +33,7 @@
     <drawable name="notification_header_bg">#FF000000</drawable>
     <color name="notification_panel_scrim_color">#B0000000</color>
     <color name="status_bar_clock_color">#FFFFFFFF</color>
+
     <!-- Quicksettings battery colors -->
     <color name="qs_batterymeter_frame_color">#66FFFFFF</color><!-- 40% white -->
     <color name="qs_batterymeter_charge_color">#FFFFFFFF</color>
@@ -55,4 +56,7 @@
     <color name="sb_batterymeter_circle_fg">#FFFFFFFF</color>
     <color name="sb_batterymeter_circle_text">#FFFFFFFF</color>
     <color name="sb_batterymeter_circle_text_charging">#FFFFFFFF</color>
+
+    <!-- Network speed indicator -->
+    <color name="status_bar_traffic_color">#FFFFFFFF</color>
 </resources>
