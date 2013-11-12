@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 The Android Open Source Project
+ * This code has been modified. Portions copyright (C) 2013, ParanoidAndroid Project.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,6 +114,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         public View findViewForTask(int persistentTaskId);
         public void drawFadedEdges(Canvas c, int left, int right, int top, int bottom);
         public void setOnScrollListener(Runnable listener);
+        public void swipeAllViewsInLayout();
     }
 
     private final class OnLongClickDelegate implements View.OnLongClickListener {
@@ -281,7 +283,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         mRecentItemLayoutId = a.getResourceId(R.styleable.RecentsPanelView_recentItemLayout, 0);
         mRecentTasksLoader = RecentTasksLoader.getInstance(context);
-	mRecentsActivity = (RecentsActivity) context;
+        mRecentsActivity = (RecentsActivity) context;
         a.recycle();
     }
 
@@ -347,13 +349,12 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
         mShowing = show;
 
+        mRecentsActivity.setRecentHints(show && getTasks() > 0);
+
         if (show) {
             // if there are no apps, bring up a "No recent apps" message
-            boolean noApps = mRecentTaskDescriptions != null
-                    && (mRecentTaskDescriptions.size() == 0);
             mRecentsNoApps.setAlpha(1f);
-            mRecentsNoApps.setVisibility(noApps ? View.VISIBLE : View.INVISIBLE);
-
+            mRecentsNoApps.setVisibility(getTasks() == 0 ? View.VISIBLE : View.INVISIBLE);
             onAnimationEnd(null);
             setFocusable(true);
             setFocusableInTouchMode(true);
@@ -376,8 +377,15 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         }
     }
 
+    public int getTasks() {
+        return mRecentTaskDescriptions != null ? mRecentTaskDescriptions.size()
+                : 0;
+    }
+
     public void onUiHidden() {
         mCallUiHiddenBeforeNextReload = false;
+        // Make sure hint is restored at the last stage
+        mRecentsActivity.setRecentHints(false);
         if (!mShowing && mRecentTaskDescriptions != null) {
             onAnimationEnd(null);
             clearRecentTasksList();
@@ -385,7 +393,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     }
 
     public void dismiss() {
-       mRecentsActivity.dismissAndGoHome();
+        mRecentsActivity.dismissAndGoHome();
     }
 
     public void dismissAndGoBack() {
@@ -469,6 +477,12 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                 ((BitmapDrawable) mRecentsScrim.getBackground()).setTileModeY(TileMode.REPEAT);
             }
         }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        mRecentsActivity.setRecentHints(mShowing && getTasks() > 0);
+        super.onSizeChanged(w, h, oldw, oldh);
     }
 
     public void setMinSwipeAlpha(float minAlpha) {
@@ -594,6 +608,12 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         if (mRecentTaskDescriptions != null) {
             mRecentTasksLoader.cancelLoadingThumbnailsAndIcons(this);
             onTaskLoadingCancelled();
+        }
+    }
+
+    public void clearRecentViewList(){
+        if (mShowing) {
+            mRecentsContainer.swipeAllViewsInLayout();
         }
     }
 
