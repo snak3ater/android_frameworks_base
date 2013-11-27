@@ -491,7 +491,7 @@ class QuickSettings {
                 rotationLockTile.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        startSettingsActivity(android.provider.Settings.ACTION_DISPLAY_SETTINGS);
+                        startSettingsActivity(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
                         return true;
                     }
                 });
@@ -678,6 +678,20 @@ class QuickSettings {
             parent.addView(powermenuTile);
         }
 
+        // Screen off
+        final QuickSettingsBasicTile screenoffTile = new QuickSettingsBasicTile(mContext);
+        screenoffTile.setImageResource(R.drawable.ic_qs_screen_off);
+        screenoffTile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                pm.goToSleep(SystemClock.uptimeMillis());
+            }
+        });
+        mModel.addScreenOffTile(screenoffTile,
+                new QuickSettingsModel.BasicRefreshCallback(screenoffTile));
+        parent.addView(screenoffTile);
+
         // Torch
         if (mModel.deviceSupportsLed()) {
             final QuickSettingsBasicTile torchTile = new QuickSettingsBasicTile(mContext);
@@ -703,20 +717,6 @@ class QuickSettings {
                 parent.addView(torchTile);
             }
         }
-
-        // Screen off
-        final QuickSettingsBasicTile screenoffTile = new QuickSettingsBasicTile(mContext);
-        screenoffTile.setImageResource(R.drawable.ic_qs_screen_off);
-        screenoffTile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-                pm.goToSleep(SystemClock.uptimeMillis());
-            }
-        });
-            mModel.addScreenOffTile(screenoffTile,
-                    new QuickSettingsModel.BasicRefreshCallback(screenoffTile));
-    parent.addView(screenoffTile);
     }
 
     private void addTemporaryTiles(final ViewGroup parent, final LayoutInflater inflater) {

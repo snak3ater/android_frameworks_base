@@ -233,6 +233,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     private boolean mShowCarrierInPanel = false;
 
+    // clock
+    private boolean mShowClock;
+
     // position
     int[] mPositionTmp = new int[2];
     boolean mExpandedVisible;
@@ -1278,8 +1281,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     public void showClock(boolean show) {
         if (mStatusBarView == null) return;
         View clock = mStatusBarView.findViewById(R.id.clock);
+        mShowClock = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_CLOCK, 1) == 1);
         if (clock != null) {
-            clock.setVisibility(show ? View.VISIBLE : View.GONE);
+            clock.setVisibility(show ? (mShowClock ? View.VISIBLE : View.GONE) : View.GONE);
         }
     }
 

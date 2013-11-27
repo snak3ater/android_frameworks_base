@@ -17,16 +17,21 @@
 package com.android.systemui.statusbar.policy;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 import android.text.style.CharacterStyle;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.systemui.DemoMode;
@@ -52,7 +57,32 @@ public class Clock extends TextView implements DemoMode {
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private static final int AM_PM_STYLE = AM_PM_STYLE_GONE;
+//    private static final int AM_PM_STYLE = AM_PM_STYLE_GONE;
+
+    // clock
+    private static int AM_PM_STYLE = AM_PM_STYLE_GONE;
+    private int mAmPmStyle;
+    private boolean mShowClock;
+    Handler mHandler;
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_AM_PM), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CLOCK), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+    }
 
     public Clock(Context context) {
         this(context, null);
@@ -64,6 +94,11 @@ public class Clock extends TextView implements DemoMode {
 
     public Clock(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
+        update();
     }
 
     @Override
@@ -224,5 +259,26 @@ public class Clock extends TextView implements DemoMode {
             setText(getSmallTime());
         }
     }
-}
 
+    private void update() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        // AM PM
+        mAmPmStyle = (Settings.System.getInt(resolver, Settings.System.STATUS_BAR_AM_PM, 2));
+        if (mAmPmStyle != AM_PM_STYLE) {
+            AM_PM_STYLE = mAmPmStyle;
+            mClockFormatString = "";
+            if (mAttached) {
+                updateClock();
+            }
+        }
+
+        // Show/Hide
+        mShowClock = (Settings.System.getInt(resolver, Settings.System.STATUS_BAR_CLOCK, 1) == 1);
+        if (mShowClock) {
+            setVisibility(View.VISIBLE);
+        } else {
+            setVisibility(View.GONE);
+        }
+    }
+}
