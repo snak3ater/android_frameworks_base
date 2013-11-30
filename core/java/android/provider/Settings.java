@@ -2449,18 +2449,13 @@ public final class Settings {
          * @hide
          */
         public static final String SIP_RECEIVE_CALLS = "sip_receive_calls";
-         
-        /** 
-         * Whether power menu screen record is enabled
-         * @hide
-         */
-        public static final String POWER_MENU_SCREENRECORD_ENABLED = "power_menu_screenrecord_enabled";
-        
+
         /**
          * Call Preference String.
          * "SIP_ALWAYS" : Always use SIP with network access
          * "SIP_ADDRESS_ONLY" : Only if destination is a SIP address
          * "SIP_ASK_ME_EACH_TIME" : Always ask me each time
+         * @hide
          */
         public static final String SIP_CALL_OPTIONS = "sip_call_options";
 
