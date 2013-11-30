@@ -191,6 +191,10 @@ public class ActionTarget {
 	    intent.putExtra(AUTO_START, true);
             mContext.sendBroadcast(intent);
             return true;
+        } else if (action.equals(ACTION_POWER_MENU)) {
+            Intent intent = new Intent(Intent.ACTION_POWERMENU);
+                mContext.sendBroadcast(intent);
+            return true;
         } else {
             try {
                 Intent intent = Intent.parseUri(action, 0);

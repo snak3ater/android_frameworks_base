@@ -64,6 +64,7 @@
   <java-symbol type="drawable" name="ic_navigation_ring_lastapp" />
   <java-symbol type="dimen" name="navigation_ring_icon_size" />
   <java-symbol type="dimen" name="navigation_ring_activity_icon_size" />
+  <java-symbol type="drawable" name="ic_navigation_ring_power_menu" />
 
   <!-- Max Wallpaper width -->
   <java-symbol type="integer" name="config_wallpaperMaxWidth" />
