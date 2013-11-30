@@ -7,6 +7,8 @@
     <string name="reboot_system" product="default">Reboot Nexus</string>
     <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
     <string name="global_action_screenshot">Screenshot</string>
+    <!-- label for item that takes screenrecord in the phone options dialog -->
+    <string name="global_action_screenrecord">Screen Record</string>
     <!-- Button to reboot the phone, within the Reboot Options dialog -->
     <string name="reboot_reboot">Reboot</string>
     <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
