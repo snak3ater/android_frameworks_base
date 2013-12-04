@@ -693,7 +693,7 @@ class QuickSettings {
         parent.addView(screenoffTile);
 
         // Torch
-        if (mModel.deviceSupportsLed()) {
+        if (mModel.hasTorchPackage()) {
             final QuickSettingsBasicTile torchTile = new QuickSettingsBasicTile(mContext);
             torchTile.setImageResource(R.drawable.ic_qs_torch);
             torchTile.setOnClickListener(new View.OnClickListener() {
