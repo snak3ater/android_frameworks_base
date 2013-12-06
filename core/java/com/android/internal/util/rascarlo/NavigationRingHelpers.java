@@ -34,6 +34,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 
 import static com.android.internal.util.rascarlo.NavigationRingConstants.*;
+
 import com.android.internal.util.rascarlo.TorchConstants;
 import com.android.internal.widget.multiwaveview.GlowPadView;
 import com.android.internal.widget.multiwaveview.TargetDrawable;
