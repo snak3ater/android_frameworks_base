@@ -119,7 +119,8 @@ public class NavigationBarView extends LinearLayout {
                 View view, int transitionType) {
             if (view.getId() == R.id.back) {
                 mBackTransitioning = true;
-            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
+            } else if (view ==  findViewWithTag(NavbarEditor.NAVBAR_HOME)
+                    && transitionType == LayoutTransition.APPEARING) {
                 mHomeAppearing = true;
                 mStartDelay = transition.getStartDelay(transitionType);
                 mDuration = transition.getDuration(transitionType);
@@ -132,7 +133,8 @@ public class NavigationBarView extends LinearLayout {
                 View view, int transitionType) {
             if (view.getId() == R.id.back) {
                 mBackTransitioning = false;
-            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
+            } else if (view ==  findViewWithTag(NavbarEditor.NAVBAR_HOME)
+                    && transitionType == LayoutTransition.APPEARING) {
                 mHomeAppearing = false;
             }
         }
@@ -140,10 +142,12 @@ public class NavigationBarView extends LinearLayout {
         public void onBackAltCleared() {
             // When dismissing ime during unlock, force the back button to run the same appearance
             // animation as home (if we catch this condition early enough).
-            if (!mBackTransitioning && getBackButton().getVisibility() == VISIBLE
-                    && mHomeAppearing && getHomeButton().getAlpha() == 0) {
-                getBackButton().setAlpha(0);
-                ValueAnimator a = ObjectAnimator.ofFloat(getBackButton(), "alpha", 0, 1);
+            View backView = findViewWithTag(NavbarEditor.NAVBAR_BACK);
+            View homeView = findViewWithTag(NavbarEditor.NAVBAR_HOME);
+            if (!mBackTransitioning && backView != null && backView.getVisibility() == VISIBLE
+                    && mHomeAppearing && homeView != null && homeView.getAlpha() == 0) {
+                findViewWithTag(NavbarEditor.NAVBAR_BACK).setAlpha(0);
+                ValueAnimator a = ObjectAnimator.ofFloat(backView, "alpha", 0, 1);
                 a.setStartDelay(mStartDelay);
                 a.setDuration(mDuration);
                 a.setInterpolator(mInterpolator);
@@ -404,28 +408,17 @@ public class NavigationBarView extends LinearLayout {
 
         mNavigationIconHints = hints;
 
-        View button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
-        if (button != null) {
-            button.setAlpha(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_HOME_NOP)) ? 0.5f : 1.0f);
-        }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
-        if (button != null) {
-            button.setAlpha(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
-        }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_BACK);
-        if (button != null) {
-            button.setAlpha(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
-            ((ImageView)button).setImageDrawable(
-                    (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT))
+        ImageView backView = (ImageView) findViewWithTag(NavbarEditor.NAVBAR_BACK);
+        ImageView recentView = (ImageView) findViewWithTag(NavbarEditor.NAVBAR_RECENT);
+
+        if (backView != null) {
+            backView.setImageDrawable(backAlt
                     ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
-                            : (mVertical ? mBackLandIcon : mBackIcon));
+                    : (mVertical ? mBackLandIcon : mBackIcon));
         }
-        button = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
-        if (button != null) {
-            ((ImageView) button).setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
+
+        if (recentView != null) {
+            recentView.setImageDrawable(mVertical ? mRecentLandIcon : mRecentIcon);
         }
 
         setDisabledFlags(mDisabledFlags, true);
