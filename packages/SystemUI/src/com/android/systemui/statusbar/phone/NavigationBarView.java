@@ -392,10 +392,7 @@ public class NavigationBarView extends LinearLayout {
 
     public void setNavigationIconHints(int hints, boolean force) {
         if (!force && hints == mNavigationIconHints) return;
-        final boolean backAlt = (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0;
-        if ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0 && !backAlt) {
-            mTransitionListener.onBackAltCleared();
-        }
+        
         if (DEBUG) {
             android.widget.Toast.makeText(mContext,
                 "Navigation icon hints = " + hints,
@@ -450,20 +447,13 @@ public class NavigationBarView extends LinearLayout {
             setSlippery(disableHome && disableRecent && disableBack && disableSearch);
         }
 
-        ViewGroup navButtons = (ViewGroup) mCurrentView.findViewById(R.id.nav_buttons);
-        if (navButtons != null) {
-            LayoutTransition lt = navButtons.getLayoutTransition();
+        if (!mScreenOn && mCurrentView != null) {
+            ViewGroup navButtons = (ViewGroup) mCurrentView.findViewById(R.id.nav_buttons);
+            LayoutTransition lt = navButtons == null ? null : navButtons.getLayoutTransition();
             if (lt != null) {
-                if (!lt.getTransitionListeners().contains(mTransitionListener)) {
-                    lt.addTransitionListener(mTransitionListener);
-                }
-                if (!mScreenOn && mCurrentView != null) {
-                    lt.disableTransitionType(
-                            LayoutTransition.CHANGE_APPEARING |
-                            LayoutTransition.CHANGE_DISAPPEARING |
-                            LayoutTransition.APPEARING |
-                            LayoutTransition.DISAPPEARING);
-                }
+                lt.disableTransitionType(
+                        LayoutTransition.CHANGE_APPEARING | LayoutTransition.CHANGE_DISAPPEARING |
+                        LayoutTransition.APPEARING | LayoutTransition.DISAPPEARING);
             }
         }
 
