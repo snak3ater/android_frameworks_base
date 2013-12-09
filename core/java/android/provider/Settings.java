@@ -2635,13 +2635,6 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_TARGETS = "lockscreen_targets";
-         
-        /** 
-         * Navigation bar buttons customization
-         *
-         * @hide
-         */
-        public static final String NAV_BUTTONS = "nav_buttons";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
