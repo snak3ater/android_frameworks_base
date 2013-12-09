@@ -651,6 +651,7 @@ public class NavigationBarView extends LinearLayout {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
+    /*
     @Override
     protected void onLayout (boolean changed, int left, int top, int right, int bottom) {
         if (DEBUG) Log.d(TAG, String.format(
@@ -669,6 +670,8 @@ public class NavigationBarView extends LinearLayout {
         }
         return super.onInterceptTouchEvent(ev);
     }
+    */
+
 
     private String getResourceName(int resId) {
         if (resId != 0) {
