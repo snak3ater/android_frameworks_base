@@ -868,8 +868,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
 
-        mNavigationBarView.setListeners(mRecentsClickListener,
-                mRecentsPreloadOnTouchListener, mHomeSearchActionListener);
+        mNavigationBarView.getRecentsButton().setOnClickListener(mRecentsClickListener);
+        mNavigationBarView.getRecentsButton().setOnTouchListener(mRecentsPreloadOnTouchListener);
+        mNavigationBarView.getHomeButton().setOnTouchListener(mHomeSearchActionListener);
+        mNavigationBarView.getSearchLight().setOnTouchListener(mHomeSearchActionListener);
         updateSearchPanel();
     }
 
@@ -2722,10 +2724,29 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         animateCollapsePanels();
         updateNotificationIcons();
         resetUserSetupObserver();
-        if (mNavigationBarView != null) {
-            mNavigationBarView.updateSettings();
-        }
+        updateSettings();
         super.userSwitched(newUserId);
+    }
+
+    private void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean autoBrightness = Settings.System.getInt(
+                resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, 0) ==
+                Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+        mBrightnessControl = !autoBrightness && Settings.System.getInt(
+                resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
+
+        int batteryStyle = Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_BATTERY, BATTERY_STYLE_NORMAL);
+        boolean meterVisible = batteryStyle == BATTERY_STYLE_NORMAL ||
+                batteryStyle == BATTERY_STYLE_NORMAL_PERCENT;
+        boolean circleVisible = batteryStyle == BATTERY_STYLE_CIRCLE
+                || batteryStyle == BATTERY_STYLE_CIRCLE_PERCENT;
+
+        mBatteryView.setShowPercentage(batteryStyle == BATTERY_STYLE_NORMAL_PERCENT);
+        mBatteryView.setVisibility(meterVisible ? View.VISIBLE : View.GONE);
+        mCircleBatteryView.setVisibility(circleVisible ? View.VISIBLE : View.GONE);
+        mCircleBatteryView.setShowPercent(batteryStyle == BATTERY_STYLE_CIRCLE_PERCENT);
     }
 
     private void resetUserSetupObserver() {
@@ -2901,7 +2922,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     protected boolean shouldDisableNavbarGestures() {
         return !isDeviceProvisioned()
                 || mExpandedVisible
-                || (mNavigationBarView != null && mNavigationBarView.isInEditMode())
                 || (mDisabled & StatusBarManager.DISABLE_SEARCH) != 0;
     }
 
