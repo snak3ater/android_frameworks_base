@@ -74,7 +74,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Needed for takeScreenshot and takeScreenrecord
+ * Needed for takeScreenshot
  */
 import android.content.ServiceConnection;
 import android.content.ComponentName;
@@ -114,7 +114,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private boolean mHasTelephony;
     private boolean mHasVibrator;
     private final boolean mShowSilentToggle;
-    private final boolean mShowScreenRecord;
 
     /**
      * @param context everything needs a context :(
@@ -148,9 +147,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mShowSilentToggle = SHOW_SILENT_TOGGLE && !mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
-
-        mShowScreenRecord = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_enableScreenrecordChord);
     }
 
     /**
@@ -306,33 +302,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     return true;
                 }
             });
-
-        // next: screen record, if enabled
-        if (mShowScreenRecord) {
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.SCREENRECORD_IN_POWER_MENU, 0) != 0) {
-                mItems.add(
-                    new SinglePressAction(com.android.internal.R.drawable.ic_lock_screen_record,
-                            R.string.global_action_screenrecord) {
-
-                        public void onPress() {
-                            takeScreenrecord();
-                        }
-
-                        public boolean onLongPress() {
-                            return false;
-                        }
-
-                        public boolean showDuringKeyguard() {
-                            return true;
-                        }
-
-                        public boolean showBeforeProvisioning() {
-                            return true;
-                        }
-                    });
-            }
-        }
 
         // next: airplane mode
         mItems.add(mAirplaneModeOn);
@@ -546,129 +515,13 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 @Override
                 public void onServiceDisconnected(ComponentName name) {}
             };
-            if (mContext.bindServiceAsUser(
-                    intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
+            if (mContext.bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
                 mScreenshotConnection = conn;
                 mHandler.postDelayed(mScreenshotTimeout, 10000);
             }
         }
     }
-
-    /**
-     * functions needed for taking screen record.
-     */
-    final Object mScreenrecordLock = new Object();
-    ServiceConnection mScreenrecordConnection = null;
-
-    final Runnable mScreenrecordTimeout = new Runnable() {
-        @Override public void run() {
-            synchronized (mScreenrecordLock) {
-                if (mScreenrecordConnection != null) {
-                    mContext.unbindService(mScreenrecordConnection);
-                    mScreenrecordConnection = null;
-                }
-            }
-        }
-    };
-
-    // Assume this is called from the Handler thread.
-    private void takeScreenrecord() {
-        synchronized (mScreenrecordLock) {
-            if (mScreenrecordConnection != null) {
-                return;
-            }
-            ComponentName cn = new ComponentName("com.android.systemui",
-                    "com.android.systemui.omni.screenrecord.TakeScreenrecordService");
-            Intent intent = new Intent();
-            intent.setComponent(cn);
-            ServiceConnection conn = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    synchronized (mScreenrecordLock) {
-                        Messenger messenger = new Messenger(service);
-                        Message msg = Message.obtain(null, 1);
-                        final ServiceConnection myConn = this;
-                        Handler h = new Handler(mHandler.getLooper()) {
-                            @Override
-                            public void handleMessage(Message msg) {
-                                synchronized (mScreenrecordLock) {
-                                    if (mScreenrecordConnection == myConn) {
-                                        mContext.unbindService(mScreenrecordConnection);
-                                        mScreenrecordConnection = null;
-                                        mHandler.removeCallbacks(mScreenrecordTimeout);
-                                    }
-                                }
-                            }
-                        };
-                        msg.replyTo = new Messenger(h);
-                        msg.arg1 = msg.arg2 = 0;
-                        try {
-                            messenger.send(msg);
-                        } catch (RemoteException e) {
-                        }
-                    }
-                }
-                @Override
-                public void onServiceDisconnected(ComponentName name) {}
-            };
-            if (mContext.bindServiceAsUser(
-                    intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
-                mScreenrecordConnection = conn;
-                // Screenrecord max duration is 30 minutes. Allow 31 minutes before killing
-                // the service.
-                mHandler.postDelayed(mScreenrecordTimeout, 31 * 60 * 1000);
-            }
-        }
-    }
-
-    private UserInfo getCurrentUser() {
-        try {
-            return ActivityManagerNative.getDefault().getCurrentUser();
-        } catch (RemoteException re) {
-            return null;
-        }
-    }
-
-    private boolean isCurrentUserOwner() {
-        UserInfo currentUser = getCurrentUser();
-        return currentUser == null || currentUser.isPrimary();
-    }
-
-    private void addUsersToMenu(ArrayList<Action> items) {
-        List<UserInfo> users = ((UserManager) mContext.getSystemService(Context.USER_SERVICE))
-                .getUsers();
-        if (users.size() > 1) {
-            UserInfo currentUser = getCurrentUser();
-            for (final UserInfo user : users) {
-                boolean isCurrentUser = currentUser == null
-                        ? user.id == 0 : (currentUser.id == user.id);
-                Drawable icon = user.iconPath != null ? Drawable.createFromPath(user.iconPath)
-                        : null;
-                SinglePressAction switchToUser = new SinglePressAction(
-                        com.android.internal.R.drawable.ic_menu_cc, icon,
-                        (user.name != null ? user.name : "Primary")
-                        + (isCurrentUser ? " \u2714" : "")) {
-                    public void onPress() {
-                        try {
-                            ActivityManagerNative.getDefault().switchUser(user.id);
-                        } catch (RemoteException re) {
-                            Log.e(TAG, "Couldn't switch user " + re);
-                        }
-                    }
-
-                    public boolean showDuringKeyguard() {
-                        return true;
-                    }
-
-                    public boolean showBeforeProvisioning() {
-                        return false;
-                    }
-                };
-                items.add(switchToUser);
-            }
-        }
-    }
-
+    
     private void prepareDialog() {
         refreshSilentMode();
         mAirplaneModeOn.updateState(mAirplaneState);
