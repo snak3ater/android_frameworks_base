@@ -88,6 +88,7 @@ public class PowerUI extends SystemUI {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_POWER_CONNECTED);
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
     }
