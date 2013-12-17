@@ -2316,6 +2316,7 @@ public final class Settings {
 
         /**
          * How long to wait between flashes for the voicemail notification LED
+
          * @hide
          */
         public static final String NOTIFICATION_LIGHT_PULSE_VMAIL_LED_OFF = "notification_light_pulse_vmail_led_off";
@@ -2632,7 +2633,8 @@ public final class Settings {
          * 1: Display cm battery percentage implementation / dont show stock icon
          * 2: Display cm circle battery implementation without percentage
          * 3: Display cm circle battery implementation with percentage
-         * 4: Hide the battery information
+         * 4: Display the battery as plain text
+         * 5: Hide the battery information
          * default: 0
          * @hide
          */
