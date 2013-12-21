@@ -218,20 +218,6 @@ class QuickSettingsTileView extends FrameLayout {
         super.setVisibility(vis);
     }
 
-     private void updatePreparedState() {
-        if (mOnPrepareListener != null) {
-            if (isParentVisible()) {
-                if (!mPrepared) {
-                    mPrepared = true;
-                    mOnPrepareListener.onPrepare();
-                }
-            } else if (mPrepared) {
-                mPrepared = false;
-                mOnPrepareListener.onUnprepare();
-            }
-        }
-    }
-
      public void setOnPrepareListener(OnPrepareListener listener) {
         if (mOnPrepareListener != listener) {
             mOnPrepareListener = listener;
@@ -242,6 +228,38 @@ class QuickSettingsTileView extends FrameLayout {
                     updatePreparedState();
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        updatePreparedState();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        updatePreparedState();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        updatePreparedState();
+    }
+
+    private void updatePreparedState() {
+        if (mOnPrepareListener != null) {
+            if (isParentVisible()) {
+                if (!mPrepared) {
+                    mPrepared = true;
+                    mOnPrepareListener.onPrepare();
+                }
+            } else if (mPrepared) {
+                mPrepared = false;
+                mOnPrepareListener.onUnprepare();
+            }
         }
     }
 
@@ -259,10 +277,11 @@ class QuickSettingsTileView extends FrameLayout {
         return true;
     }
 
-	/**
-	* Called when the view's parent becomes visible or invisible to provide
-	* an opportunity for the client to provide new content.
-	*/
+
+    /**
+* Called when the view's parent becomes visible or invisible to provide
+* an opportunity for the client to provide new content.
+*/
     public interface OnPrepareListener {
         void onPrepare();
         void onUnprepare();
