@@ -4005,6 +4005,12 @@ public final class Settings {
         public static final String ENABLED_PRINT_SERVICES =
             "enabled_print_services";
 
+         /**
+          * Whether to use the custom quick unlock screen control
+          * @hide
+          */
+         public static final String LOCKSCREEN_QUICK_UNLOCK_CONTROL = "lockscreen_quick_unlock_control";
+
         /**
          * List of the system print services we enabled on first boot. On
          * first boot we enable all system, i.e. bundled print services,
