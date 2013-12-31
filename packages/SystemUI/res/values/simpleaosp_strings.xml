@@ -115,4 +115,8 @@
 
     <!-- Safe headset volume -->
     <string name="safe_headset_volume" translatable="false">@*android:string/safe_headset_warning_title</string>
+
+    <!-- NFC Quicksettings tile -->
+    <string name="quick_settings_nfc_label">NFC on</string>
+    <string name="quick_settings_nfc_off_label">NFC off</string>
 </resources>

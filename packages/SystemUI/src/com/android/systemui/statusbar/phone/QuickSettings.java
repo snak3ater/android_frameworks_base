@@ -45,6 +45,8 @@ import android.media.AudioManager;
 import android.media.MediaRouter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -110,9 +112,10 @@ class QuickSettings {
         BLUETOOTH,
         LOCATION,
         IMMERSIVE,
+	NFC,
 	LIGHTBULB,
         SLEEP,
-        SOUND
+        SOUND        
     }
 
     public static final String NO_TILES = "NO_TILES";
@@ -137,6 +140,7 @@ class QuickSettings {
     private BluetoothController mBluetoothController;
     private RotationLockController mRotationLockController;
     private LocationController mLocationController;
+    private NfcAdapter mNfcAdapter;
 
     private AsyncTask<Void, Void, Pair<String, Drawable>> mUserInfoTask;
     private AsyncTask<Void, Void, Pair<Boolean, Boolean>> mQueryCertTask;
@@ -160,7 +164,9 @@ class QuickSettings {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         mConnectivityManager =
-                   (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NfcManager nfcManager = (NfcManager) mContext.getSystemService(Context.NFC_SERVICE);
+        mNfcAdapter = nfcManager.getDefaultAdapter();
 
         mHandler = new Handler();
 
@@ -967,6 +973,38 @@ class QuickSettings {
                     });
                     parent.addView(immersiveTile);
                     if(addMissing) immersiveTile.setVisibility(View.GONE);
+               } else if(Tile.NFC.toString().equals(tile.toString()) && mNfcAdapter != null) {
+                    final QuickSettingsBasicTile nfcTile = new QuickSettingsBasicTile(mContext);
+                    nfcTile.setTileId(Tile.NFC);
+                    boolean nfcEnabled = mNfcAdapter.isEnabled();
+                    nfcTile.setImageResource(nfcEnabled ?
+                            R.drawable.ic_qs_nfc_on :
+                            R.drawable.ic_qs_nfc_off);
+                    nfcTile.setTextResource(nfcEnabled ?
+                            R.string.quick_settings_nfc_label :
+                            R.string.quick_settings_nfc_off_label);
+                    nfcTile.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            boolean enabled = mNfcAdapter.isEnabled();
+                            if (enabled) {
+                                mNfcAdapter.disable();
+                            } else {
+                                mNfcAdapter.enable();
+                            }
+                            enabled = !enabled;
+                            nfcTile.setImageResource(enabled ?
+                                    R.drawable.ic_qs_nfc_on :
+                                    R.drawable.ic_qs_nfc_off);
+                            nfcTile.setTextResource(enabled ?
+                                    R.string.quick_settings_nfc_label :
+                                    R.string.quick_settings_nfc_off_label);
+                        }
+                    });
+                    mModel.addNfcTile(nfcTile, new QuickSettingsModel.BasicRefreshCallback(nfcTile));
+                    parent.addView(nfcTile);
+                    if(addMissing) nfcTile.setVisibility(View.GONE);
 		} else if(Tile.LIGHTBULB.toString().equals(tile.toString())) { // Lightbulb tile
                     final QuickSettingsBasicTile lightbulbTile
                             = new QuickSettingsBasicTile(mContext);
