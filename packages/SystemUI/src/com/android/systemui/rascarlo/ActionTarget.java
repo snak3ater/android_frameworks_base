@@ -160,7 +160,7 @@ public class ActionTarget {
             }
             return true;
         } else if (action.equals(ACTION_TORCH)) {
-            Intent intent = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
+            Intent intent = new Intent(TorchConstants.ACTION_STATE_CHANGED);
             mContext.sendBroadcast(intent);
             return true;
         } else {
