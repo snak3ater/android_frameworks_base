@@ -285,6 +285,5 @@ public class Clock extends TextView implements DemoMode {
             setVisibility(show ? View.VISIBLE : View.GONE);
         else
             setVisibility(View.GONE);
-        }
     }
 }
