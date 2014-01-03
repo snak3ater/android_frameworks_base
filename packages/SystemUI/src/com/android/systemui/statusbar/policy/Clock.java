@@ -151,9 +151,10 @@ public class Clock extends TextView implements DemoMode {
                 if (mClockFormat != null) {
                     mClockFormat.setTimeZone(mCalendar.getTimeZone());
                 }
+            }
             updateClock();
         }
-    };
+    }
 
     protected final void updateClock() {
         if (mDemoMode) return;    
