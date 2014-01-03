@@ -154,7 +154,7 @@ public class Clock extends TextView implements DemoMode {
             }
             updateClock();
         }
-    }
+    };
 
     protected final void updateClock() {
         if (mDemoMode) return;    
