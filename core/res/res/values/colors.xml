@@ -114,7 +114,7 @@
     <color name="lockscreen_clock_background">#ffffffff</color>
     <color name="lockscreen_clock_foreground">#ffffffff</color>
     <color name="lockscreen_clock_am_pm">#ffffffff</color>
-    <color name="lockscreen_owner_info">#ff9a9a9a</color>
+    <color name="lockscreen_owner_info">#ffffffff</color>
 
     <!-- keyguard overscroll widget pager -->
     <color name="kg_multi_user_text_active">#ffffffff</color>

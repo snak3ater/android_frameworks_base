@@ -27,7 +27,7 @@
     <color name="status_bar_recents_app_label_color">#ffffffff</color>
     <drawable name="status_bar_notification_row_background_color">#ff000000</drawable>
     <color name="notification_list_shadow_top">#80000000</color>
-    <drawable name="recents_callout_line">#99ffffff</drawable>
+    <drawable name="recents_callout_line">#ffffffff</drawable>
     <drawable name="notification_item_background_legacy_color">#ff000000</drawable>
     <drawable name="heads_up_notification_bg_pressed">#ffffffff</drawable>
     <drawable name="notification_header_bg">#FF000000</drawable>
