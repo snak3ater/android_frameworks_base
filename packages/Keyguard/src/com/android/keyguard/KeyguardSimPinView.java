@@ -95,6 +95,11 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     }
 
     @Override
+    protected boolean getQuickUnlockAllowed() {
+        return false;
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
 

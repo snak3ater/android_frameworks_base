@@ -46,6 +46,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     protected View mEcaView;
     private Drawable mBouncerFrame;
     protected boolean mEnableHaptics;
+    protected abstract boolean getQuickUnlockAllowed();
 
     // To avoid accidental lockout due to events while the device in in the pocket, ignore
     // any passwords with length less than or equal to this length.
@@ -126,6 +127,14 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
                 if (mCallback != null) {
                     mCallback.userActivity(0);
                 }
+                if (getQuickUnlockAllowed()) {
+                    if (s.length() > MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT &&
+                             mLockPatternUtils.checkPassword(s.toString())) {
+                         mCallback.dismiss(true);
+                         mCallback.reportSuccessfulUnlockAttempt();
+                    }
+                }
+
             }
         });
         mSecurityMessageDisplay = new KeyguardMessageArea.Helper(this);
