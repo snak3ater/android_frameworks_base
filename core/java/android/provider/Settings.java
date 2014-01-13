@@ -3219,6 +3219,13 @@ public final class Settings {
         public static final String RECENTS_SWITCH = "recents_switch";
 
         /**
+         * @hide
+         * Whether national data roaming should be used.
+         * @hide
+         */
+        public static final String MVNO_ROAMING = "mvno_roaming";
+
+        /**
          * Show the pending notification counts as overlays on the statusbar
          * @hide
          */
