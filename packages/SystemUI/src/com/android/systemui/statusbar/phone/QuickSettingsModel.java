@@ -191,9 +191,24 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private BroadcastReceiver mBootReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+	    final ContentResolver cr = mContext.getContentResolver();
             String action = intent.getAction();
             if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
-                refreshMobileNetworkTile();
+                mHandler.postDelayed(new Runnable() {
+                    @Override public void run() {
+                        mUsesAospDialer = Settings.System
+                                                .getInt(cr, Settings.System.AOSP_DIALER, 0) == 1;
+                        if (deviceHasMobileData()) {
+                            if (mUsesAospDialer) {
+                                mMobileNetworkTile.setTemporary(false);
+                                refreshMobileNetworkTile();
+                            } else {
+                                mMobileNetworkTile.setTemporary(true);
+                                mMobileNetworkTile.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                },
             }
             context.unregisterReceiver(mBootReceiver);
         }
@@ -409,6 +424,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private boolean mUsbTethered = false;
     private boolean mUsbConnected = false;
     private boolean mMassStorageActive = false;
+    private boolean mUsesAospDialer = false;
     private String[] mUsbRegexs;
     private ConnectivityManager mCM;
     private final NetworkObserver mMobileNetworkObserver;
@@ -610,6 +626,9 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
             usbIntentFilter.addAction(Intent.ACTION_MEDIA_UNSHARED);
             context.registerReceiver(mUsbIntentReceiver, usbIntentFilter);
         }
+
+	    Settings.System.putInt(context.getContentResolver(),
+                Settings.System.AOSP_DIALER, 0);
     }
 
     void updateResources() {
@@ -878,7 +897,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     }
 
     void onMobileNetworkChanged() {
-        if (deviceHasMobileData()) {
+        if (deviceHasMobileData() && mUsesAospDialer) {
             mMobileNetworkState.label = getNetworkType(mContext.getResources());
             mMobileNetworkState.iconId = getNetworkTypeIcon();
             mMobileNetworkState.enabled = true;
