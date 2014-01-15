@@ -46,9 +46,9 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.android.internal.statusbar.IStatusBarService;
-import com.android.internal.util.rascarlo.TorchConstants;
 import com.android.internal.util.paranoid.LightbulbConstants;
 import static com.android.internal.util.rascarlo.NavigationRingConstants.*;
+import com.android.internal.util.omni.TaskUtils;
 import com.android.systemui.R;
 import com.android.systemui.screenshot.TakeScreenshotService;
 
@@ -127,6 +127,9 @@ public class ActionTarget {
             return true;
         } else if (action.equals(ACTION_KILL)) {
             mHandler.post(mKillRunnable);
+            return true;
+        } else if (action.equals(ACTION_LAST_APP)) {
+            TaskUtils.toggleLastApp(mContext);
             return true;
         } else if (action.equals(ACTION_VIBRATE)) {
             if (mAm.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE) {
