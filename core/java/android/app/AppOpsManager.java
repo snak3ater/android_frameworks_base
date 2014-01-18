@@ -1275,15 +1275,6 @@ public class AppOpsManager {
     }
 
     /** @hide */
-    public List<Integer> getPrivacyGuardOpsForPackage(String packageName) {
-        try {
-            return mService.getPrivacyGuardOpsForPackage(packageName);
-        } catch (RemoteException e) {
-        }
-        return null;
-    }
-
-    /** @hide */
     public boolean getPrivacyGuardSettingForPackage(int uid, String packageName) {
         try {
             return mService.getPrivacyGuardSettingForPackage(uid, packageName);
@@ -1306,27 +1297,5 @@ public class AppOpsManager {
             mService.resetCounters();
         } catch (RemoteException e) {
         }
-    }
-
-    /**
-     * Retrieve the privacy guard state associated icons for notification and settings
-     * @hide
-     */
-    public static int getPrivacyGuardIconResId(int pgState) {
-        switch (pgState) {
-            case PRIVACY_GUARD_DISABLED:
-                return com.android.internal.R.drawable.stat_notify_privacy_guard_off;
-            case PRIVACY_GUARD_ENABLED:
-                return com.android.internal.R.drawable.stat_notify_privacy_guard;
-            case PRIVACY_GUARD_CUSTOM:
-                return com.android.internal.R.drawable.stat_notify_privacy_guard_custom;
-            case PRIVACY_GUARD_DISABLED_PLUS:
-                return com.android.internal.R.drawable.stat_notify_privacy_guard_off_plus;
-            case PRIVACY_GUARD_ENABLED_PLUS:
-                return com.android.internal.R.drawable.stat_notify_privacy_guard_plus;
-            case PRIVACY_GUARD_CUSTOM_PLUS:
-                return com.android.internal.R.drawable.stat_notify_privacy_guard_custom_plus;
-        }
-        return com.android.internal.R.drawable.stat_notify_privacy_guard_off;
     }
 }
