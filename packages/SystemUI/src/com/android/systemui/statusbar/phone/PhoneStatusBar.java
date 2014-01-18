@@ -2760,8 +2760,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 batteryStyle == BATTERY_STYLE_NORMAL_PERCENT;
         boolean circleVisible = batteryStyle == BATTERY_STYLE_CIRCLE
                 || batteryStyle == BATTERY_STYLE_CIRCLE_PERCENT;
-        boolean textVisible = batteryStyle == BATTERY_METER_TEXT ||
-                batteryStyle == BATTERY_METER_TEXT;
 
         mBatteryView.setShowPercentage(batteryStyle == BATTERY_STYLE_NORMAL_PERCENT);
         mBatteryView.setVisibility(meterVisible ? View.VISIBLE : View.GONE);
