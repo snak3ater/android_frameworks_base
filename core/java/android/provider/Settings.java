@@ -2333,6 +2333,18 @@ public final class Settings {
         public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES = "notification_light_pulse_custom_values";
 
         /**
+         * Whether to show the network status in the status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_STATS = "status_bar_network_stats";
+
+        /**
+         * Frequency at which stats are updated, in milliseconds
+         * @hide
+         */
+        public static final String STATUS_BAR_NETWORK_STATS_UPDATE_INTERVAL = "status_bar_network_stats_update_frequency";
+
+        /**
          * Show pointer location on screen?
          * 0 = no
          * 1 = yes
