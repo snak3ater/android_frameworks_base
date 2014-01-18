@@ -3180,11 +3180,14 @@ package android.app {
     method public void finishOp(java.lang.String, int, java.lang.String);
     method public int noteOp(java.lang.String, int, java.lang.String);
     method public int noteOpNoThrow(java.lang.String, int, java.lang.String);
+    method public static boolean opStrict(int);
+    method public void resetCounters();
     method public int startOp(java.lang.String, int, java.lang.String);
     method public int startOpNoThrow(java.lang.String, int, java.lang.String);
     method public void startWatchingMode(java.lang.String, java.lang.String, android.app.AppOpsManager.OnOpChangedListener);
     method public void stopWatchingMode(android.app.AppOpsManager.OnOpChangedListener);
     field public static final int MODE_ALLOWED = 0; // 0x0
+    field public static final int MODE_ASK = 3; // 0x3
     field public static final int MODE_ERRORED = 2; // 0x2
     field public static final int MODE_IGNORED = 1; // 0x1
     field public static final java.lang.String OPSTR_COARSE_LOCATION = "android:coarse_location";
