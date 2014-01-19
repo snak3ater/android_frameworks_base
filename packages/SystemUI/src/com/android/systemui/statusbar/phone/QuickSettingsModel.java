@@ -777,6 +777,11 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         return DeviceUtils.deviceSupportsLte(mContext);
     }
 
+    boolean deviceHasCameraFlash() {
+        return mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_device_has_camera_flash);
+    }
+
     // RSSI
     void addRSSITile(QuickSettingsTileView view, RefreshCallback cb) {
         mRSSITile = view;
