@@ -200,11 +200,15 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                                                 .getInt(cr, Settings.System.AOSP_DIALER, 0) == 1;
                         if (deviceHasMobileData()) {
                             if (mUsesAospDialer) {
-                                mMobileNetworkTile.setTemporary(false);
                                 refreshMobileNetworkTile();
                             } else {
-                                mMobileNetworkTile.setTemporary(true);
-                                mMobileNetworkTile.setVisibility(View.GONE);
+                                mMobileNetworkState.label =
+                                    mContext.getResources()
+                                            .getString(R.string.quick_settings_network_disabled);
+                                mMobileNetworkState.iconId =
+                                    R.drawable.ic_qs_unexpected_network;
+                                mMobileNetworkCallback.refreshView(mMobileNetworkTile,
+                                                                    mMobileNetworkState);
                             }
                         }
                     }
@@ -424,7 +428,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private boolean mUsbTethered = false;
     private boolean mUsbConnected = false;
     private boolean mMassStorageActive = false;
-    private boolean mUsesAospDialer = false;
+    protected boolean mUsesAospDialer = false;
     private String[] mUsbRegexs;
     private ConnectivityManager mCM;
     private final NetworkObserver mMobileNetworkObserver;
@@ -900,7 +904,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         if (deviceHasMobileData() && mUsesAospDialer) {
             mMobileNetworkState.label = getNetworkType(mContext.getResources());
             mMobileNetworkState.iconId = getNetworkTypeIcon();
-            mMobileNetworkState.enabled = true;
             mMobileNetworkCallback.refreshView(mMobileNetworkTile, mMobileNetworkState);
         }
     }
