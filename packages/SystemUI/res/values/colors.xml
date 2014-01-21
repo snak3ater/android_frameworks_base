@@ -56,7 +56,4 @@
     <color name="sb_batterymeter_circle_fg">#FFFFFFFF</color>
     <color name="sb_batterymeter_circle_text">#FFFFFFFF</color>
     <color name="sb_batterymeter_circle_text_charging">#FFFFFFFF</color>
-
-    <!-- Network speed indicator -->
-    <color name="status_bar_traffic_color">#FFFFFFFF</color>
 </resources>
