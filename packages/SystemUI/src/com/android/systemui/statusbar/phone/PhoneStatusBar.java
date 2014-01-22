@@ -2755,36 +2755,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
 
         int batteryStyle = Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_BATTERY, 0);
-        BatteryMeterMode mode = BatteryMeterMode.BATTERY_METER_ICON_PORTRAIT;
-        switch (batteryStyle) {
-            case 2:
-                mode = BatteryMeterMode.BATTERY_METER_CIRCLE;
-                break;
+                Settings.System.STATUS_BAR_BATTERY, BATTERY_STYLE_NORMAL);
+        boolean meterVisible = batteryStyle == BATTERY_STYLE_NORMAL ||
+                batteryStyle == BATTERY_STYLE_NORMAL_PERCENT;
+        boolean circleVisible = batteryStyle == BATTERY_STYLE_CIRCLE
+                || batteryStyle == BATTERY_STYLE_CIRCLE_PERCENT;
 
-            case 4:
-                mode = BatteryMeterMode.BATTERY_METER_GONE;
-                break;
-
-            case 5:
-                mode = BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE;
-                break;
-
-            case 6:
-                mode = BatteryMeterMode.BATTERY_METER_TEXT;
-                break;
-
-            default:
-                break;
-        }
-
-        boolean showPercent = Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_BATTERY_SHOW_PERCENT, 0) == 1;
-
-        mBatteryView.setMode(mode);
-        mBatteryController.onBatteryMeterModeChanged(mode);
-        mBatteryView.setShowPercent(showPercent);
-        mBatteryController.onBatteryMeterShowPercent(showPercent);
+        mBatteryView.setShowPercentage(batteryStyle == BATTERY_STYLE_NORMAL_PERCENT);
+        mBatteryView.setVisibility(meterVisible ? View.VISIBLE : View.GONE);
+        mCircleBatteryView.setVisibility(circleVisible ? View.VISIBLE : View.GONE);
+        mCircleBatteryView.setShowPercent(batteryStyle == BATTERY_STYLE_CIRCLE_PERCENT);
     }
 
     private void resetUserSetupObserver() {
