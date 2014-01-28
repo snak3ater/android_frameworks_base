@@ -436,6 +436,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     PackageParser.Package mPlatformPackage;
     ComponentName mCustomResolverComponentName;
 
+    private AppOpsManager mAppOps;
+
     boolean mResolverReplaced = false;
     private AppOpsManager mAppOps;
 
@@ -880,14 +882,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                             }
 
                             if (!update && !isSystemApp(res.pkg.applicationInfo)) {
-                                boolean privacyGuard = Secure.getIntForUser(
+                                boolean privacyGuard = android.provider.Settings.Secure.getIntForUser(
                                         mContext.getContentResolver(),
                                         android.provider.Settings.Secure.PRIVACY_GUARD_DEFAULT,
                                         0, UserHandle.USER_CURRENT) == 1;
                                 if (privacyGuard) {
                                     mAppOps.setPrivacyGuardSettingForPackage(
                                             res.pkg.applicationInfo.uid,
-                                            res.pkg.applicationInfo.packageName, true);
+                                            res.pkg.applicationInfo.packageName, true, false);
                                 }
                             }
 
