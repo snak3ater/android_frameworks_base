@@ -64,7 +64,9 @@
     <!-- QuickSettings: Mobile Network (2G/3G) [CHAR LIMIT=NONE] -->
     <string name="quick_settings_network_type">Network</string>
     <string name="quick_settings_network_unknown">Unknown</string>
-    <!-- USB Tether Tile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_network_disabled">Disabled</string>
+    <string name="quick_settings_network_toast_disabled">Network settings are not available</string>
+    <!-- QuickSettings: USB Tether Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_usb_tether_connected_label">USB Tethering Off</string>
     <string name="quick_settings_usb_tether_on_label">USB Tethering</string>
     <!-- QuickSettings: Sleep Tile [CHAR LIMIT=NONE] -->
@@ -80,12 +82,18 @@
     <!-- QuickSettings: Wifi AP Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_wifi_ap_label">Wi-Fi AP</string>
     <string name="quick_settings_wifi_ap_off_label">Wi-Fi AP Off</string>
-    <!-- Quick Settings Bluetooth Extra Tile [CHAR LIMIT=NONE] -->
+    <!-- QuickSettings: Bluetooth Extra Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_bluetooth_not_discoverable_label">Not discoverable</string>
     <string name="quick_settings_bluetooth_discoverable_label">Discoverable</string>
     <string name="quick_settings_bluetooth_disabled">Disabled</string>
-    <!-- Quick Settings Location Extra Tile [CHAR LIMIT=NONE] -->
+    <!-- QuickSettings: Location Extra Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_location_mode_high_label">High</string>
     <string name="quick_settings_location_mode_battery_label">Battery</string>
     <string name="quick_settings_location_mode_sensors_label">Device</string>
+    <!-- QuickSettings: Sound Tile  -->
+    <string name="quick_settings_ringer_mode_silent_label">Silent</string>
+    <string name="quick_settings_ringer_mode_vibrate_label">Vibrate</string>
+    <string name="quick_settings_ringer_mode_normal_label">Sound</string>
+    <string name="quick_settings_ringer_mode_normal_vibrate_label">Sound &amp; Vibration</string>
+    <string name="quick_settings_volume_label">Volume</string>
 </resources>
