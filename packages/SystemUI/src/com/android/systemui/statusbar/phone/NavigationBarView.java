@@ -464,7 +464,8 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
             public void run() {
                 if (iconId == 1) iv.setImageResource(R.drawable.search_light_land);
                 else iv.setImageDrawable(mVertical ? mRecentAltLandIcon : mRecentAltIcon);
-                setVisibleOrGone(getNotifsButton(), iconId != 0);
+                mWasNotifsButtonVisible = iconId != 0 && ((mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) != 0);
+                setVisibleOrGone(getNotifsButton(), mWasNotifsButtonVisible);
             }
         });
     }
@@ -520,11 +521,7 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE, 0) == 0;
 
         setVisibleOrGone(getCameraButton(), showCamera);
-        setVisibleOrGone(getNotifsButton(), showNotifs);
-
-        // Just hide view if neccessary - don't show it because that interferes with Keyguard
-        // which uses setButtonDrawable to decide whether it should be shown
-        if (!showNotifs) setVisibleOrGone(getNotifsButton(), showNotifs);
+        setVisibleOrGone(getNotifsButton(), showNotifs && mWasNotifsButtonVisible);
 
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
 
