@@ -316,6 +316,11 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         return mCurrentView.findViewById(R.id.camera_button);
     }
 
+    // used for lockscreen notifications
+    public View getNotifsButton() {
+        return mCurrentView.findViewById(R.id.show_notifs);
+    }
+
     private void getIcons(Resources res) {
         mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
         mBackLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_land);
@@ -446,7 +451,16 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
     public int getNavigationIconHints() {
         return mNavigationIconHints;
     }
-
+    public void setButtonDrawable(int buttonId, final int iconId) {
+        final ImageView iv = (ImageView)getNotifsButton();
+        mHandler.post(new Runnable() {
+            public void run() {
+                if (iconId == 1) iv.setImageResource(R.drawable.search_light_land);
+                else iv.setImageDrawable(mVertical ? mRecentAltLandIcon : mRecentAltIcon);
+                setVisibleOrGone(getNotifsButton(), iconId != 0);
+            }
+        });
+    }
     public void setDisabledFlags(int disabledFlags) {
         setDisabledFlags(disabledFlags, false);
     }
@@ -492,6 +506,16 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         setVisibleOrGone(getSearchLight(), showSearch 
 		&& NavigationRingHelpers.hasLockscreenTargets(mContext));
         setVisibleOrGone(getCameraButton(), showCamera);
+
+        final boolean showNotifs = showSearch &&
+                Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.LOCKSCREEN_NOTIFICATIONS, 1) == 1 &&
+                Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE, 0) == 0;
+
+        // Just hide view if neccessary - don't show it because that interferes with Keyguard
+        // which uses setButtonDrawable to decide whether it should be shown
+        if (!showNotifs) setVisibleOrGone(getNotifsButton(), showNotifs);
 
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
 
