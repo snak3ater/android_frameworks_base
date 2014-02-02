@@ -36,10 +36,9 @@ interface IAppOpsService {
     List<AppOpsManager.PackageOps> getOpsForPackage(int uid, String packageName, in int[] ops);
     void setMode(int code, int uid, String packageName, int mode);
     void resetAllModes();
+    void resetCounters();
 
     // Privacy guard methods
-    List getPrivacyGuardOpsForPackage(String packageName);
-    int getPrivacyGuardSettingForPackage(int uid, String packageName);
-    void setPrivacyGuardSettingForPackage(int uid, String packageName,
-        boolean state, boolean forceAll);
+    boolean getPrivacyGuardSettingForPackage(int uid, String packageName);
+    void setPrivacyGuardSettingForPackage(int uid, String packageName, boolean state);
 }
