@@ -590,7 +590,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
             setImplLocked(type, triggerAtTime, triggerElapsed, windowLength, maxElapsed,
                     interval, operation, isStandalone, true, workSource, wakeupFiltered);
         }
-    }
+   }
 
     private void setImplLocked(int type, long when, long whenElapsed, long windowLength,
             long maxWhen, long interval, PendingIntent operation, boolean isStandalone,
