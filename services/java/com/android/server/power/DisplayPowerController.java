@@ -26,7 +26,6 @@ import com.android.server.display.DisplayManagerService;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.ContentResolver;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -42,8 +41,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.util.FloatMath;
 import android.util.Log;
@@ -183,9 +180,6 @@ final class DisplayPowerController {
 
     // The display blanker.
     private final DisplayBlanker mDisplayBlanker;
-
-    // Our context
-    private final Context mContext;
 
     // Our handler.
     private final DisplayControllerHandler mHandler;
