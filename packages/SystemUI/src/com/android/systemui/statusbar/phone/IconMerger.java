@@ -29,7 +29,7 @@ import android.database.ContentObserver;
 import com.android.systemui.R;
 
 import com.android.systemui.statusbar.policy.Clock;
-import com.android.systemui.statusbar.policy.ClockCenter;
+import com.android.systemui.statusbar.policy.CenterClock;
 
 public class IconMerger extends LinearLayout {
     private static final String TAG = "IconMerger";
@@ -37,7 +37,7 @@ public class IconMerger extends LinearLayout {
 
     private int mIconSize;
     private View mMoreView;
-    private ClockCenter mClockCenter;
+    private CenterClock mCenterClock;
     private View mCenterSpacer;
     private int mTotalWidth;
     private SettingsObserver mSettingsObserver;
@@ -100,8 +100,8 @@ public class IconMerger extends LinearLayout {
         checkOverflow(r - l);
     }
 
-    public void setClockCenter(ClockCenter clockCenter) {
-        mClockCenter = clockCenter;
+    public void setCenterClock(CenterClock centerClock) {
+        mCenterClock = centerClock;
     }
 
     public void setCenterSpacer(View centerSpacer) {
@@ -110,7 +110,7 @@ public class IconMerger extends LinearLayout {
 
     private void recalcSize() {
         if (mShowCenterClock){
-            mAvailWidth = mTotalWidth/2 - mClockCenter.getMeasuredWidth()/2 - mIconSize/2;
+            mAvailWidth = mTotalWidth/2 - mCenterClock.getMeasuredWidth()/2 - mIconSize/2;
         } else {
             mAvailWidth = getMeasuredWidth();
         }
@@ -147,7 +147,7 @@ public class IconMerger extends LinearLayout {
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.STATUSBAR_CLOCK_STYLE), false,
+                    .getUriFor(Settings.System.STATUS_BAR_CLOCK_STYLE), false,
                     this);
             updateSettings();
         }
@@ -162,7 +162,7 @@ public class IconMerger extends LinearLayout {
         ContentResolver resolver = mContext.getContentResolver();
 
         mShowCenterClock = Settings.System.getInt(resolver,
-                Settings.System.STATUSBAR_CLOCK_STYLE, Clock.STYLE_CLOCK_RIGHT) == Clock.STYLE_CLOCK_CENTER;
+                Settings.System.STATUS_BAR_CLOCK_STYLE, Clock.CLOCK_STYLE_RIGHT) == Clock.CLOCK_STYLE_CENTER;
 
         mIconHPadding = mContext.getResources().getDimensionPixelSize(
                 R.dimen.status_bar_icon_padding);
