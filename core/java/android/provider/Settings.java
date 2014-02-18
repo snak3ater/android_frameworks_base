@@ -1249,6 +1249,36 @@ public final class Settings {
             }
         }
 
+	/**
+	* @hide
+	* Convenience function for retrieving a single system settings value
+	* as a boolean. Note that internally setting values are always
+	* stored as strings; this function converts the string to a boolean
+	* for you. It will only return true if the stored value is "1"
+	*
+	* @param cr The ContentResolver to access.
+	* @param name The name of the setting to retrieve.
+	* @param def Value to return if the setting is not defined.
+	*
+	* @return The setting's current value, or 'def' if it is not defined
+	* or not a valid integer.
+	*/
+	public static boolean getBoolean(ContentResolver cr, String name, boolean def) {
+	return getBooleanForUser(cr, name, def, UserHandle.myUserId());
+	}
+	/** @hide */
+	public static boolean getBooleanForUser(ContentResolver cr, String name, boolean def, int userHandle) {
+	String v = getStringForUser(cr, name, userHandle);
+	try {
+	if(v != null)
+	return "1".equals(v);
+	else
+	return def;
+	} catch (NumberFormatException e) {
+	return def;
+	}
+	}
+
         /**
          * Convenience function for updating a single settings value as an
          * integer. This will either create a new entry in the table if the
@@ -1271,6 +1301,28 @@ public final class Settings {
                 int userHandle) {
             return putStringForUser(cr, name, Integer.toString(value), userHandle);
         }
+
+	/**
+	* @hide
+	* Convenience function for updating a single settings value as a
+	* boolean. This will either create a new entry in the table if the
+	* given name does not exist, or modify the value of the existing row
+	* with that name. Note that internally setting values are always
+	* stored as strings, so this function converts the given value to a
+	* string (1 or 0) before storing it.
+	*
+	* @param cr The ContentResolver to access.
+	* @param name The name of the setting to modify.
+	* @param value The new value for the setting.
+	* @return true if the value was set, false on database errors
+	*/
+	public static boolean putBoolean(ContentResolver cr, String name, boolean value) {
+	return putBooleanForUser(cr, name, value, UserHandle.myUserId());
+	}
+	/** @hide */
+	public static boolean putBooleanForUser(ContentResolver cr, String name, boolean value, int userHandle) {
+	return putStringForUser(cr, name, value ? "1" : "0", userHandle);
+	}
 
         /**
          * Convenience function for retrieving a single system settings value
@@ -1994,6 +2046,56 @@ public final class Settings {
         @Deprecated
         public static final String NOTIFICATIONS_USE_RING_VOLUME =
             "notifications_use_ring_volume";
+
+	/**
+         * Whether the blacklisting feature for phone calls is enabled
+         * @hide
+         */
+        public static final String PHONE_BLACKLIST_ENABLED = "phone_blacklist_enabled";
+
+        /**
+         * Whether a notification should be shown when a call/message is blocked
+         * @hide
+         */
+        public static final String PHONE_BLACKLIST_NOTIFY_ENABLED = "phone_blacklist_notify_enabled";
+
+        /**
+         * Whether the blacklisting feature for phone calls from private numbers is enabled
+         * @hide
+         */
+        public static final String PHONE_BLACKLIST_PRIVATE_NUMBER_MODE = "phone_blacklist_private_number_enabled";
+
+        /**
+         * Whether the blacklisting feature for phone calls from unknown numbers is enabled
+         * @hide
+         */
+        public static final String PHONE_BLACKLIST_UNKNOWN_NUMBER_MODE = "phone_blacklist_unknown_number_enabled";
+
+        /**
+         * Constants to be used for {@link PHONE_BLACKLIST_PRIVATE_NUMBER_MODE} and
+         * {@link PHONE_BLACKLIST_UNKNOWN_NUMBER_MODE}.
+         * @hide
+         */
+        public static final int BLACKLIST_DO_NOT_BLOCK = 0;
+
+        /**
+         * @hide
+         */
+        public static final int BLACKLIST_BLOCK = 1;
+        /**
+         * @hide
+         */
+        public static final int BLACKLIST_PHONE_SHIFT = 0;
+        /**
+         * @hide
+         */
+        public static final int BLACKLIST_MESSAGE_SHIFT = 4;
+
+        /**
+         * Whether the regex blacklisting feature for phone calls is enabled
+         * @hide
+         */
+        public static final String PHONE_BLACKLIST_REGEX_ENABLED = "phone_blacklist_regex_enabled";
 
         /**
          * Volume Adjust Sounds Enable, This is the noise made when using volume hard buttons
@@ -7104,7 +7206,7 @@ public final class Settings {
         public static boolean putFloat(ContentResolver cr, String name, float value) {
             return putString(cr, name, Float.toString(value));
         }
-    }
+}
 
     /**
      * User-defined bookmarks and shortcuts.  The target of each bookmark is an
