@@ -85,7 +85,6 @@ public class KeyguardHostView extends KeyguardViewBase {
     private KeyguardSecurityViewFlipper mSecurityViewContainer;
     private KeyguardSelectorView mKeyguardSelectorView;
     private KeyguardTransportControlView mTransportControl;
-    private View mExpandChallengeView;
     private boolean mIsVerifyUnlockOnly;
     private boolean mEnableFallback; // TODO: This should get the value from KeyguardPatternView
     private SecurityMode mCurrentSecuritySelection = SecurityMode.Invalid;
@@ -399,22 +398,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         showPrimarySecurityScreen(false);
         updateSecurityViews();
         enableUserSelectorIfNecessary();
-        minimizeChallengeIfDesired();
-
-        mExpandChallengeView = (View) findViewById(R.id.expand_challenge_handle);
-        if (mExpandChallengeView != null) {
-            mExpandChallengeView.setOnLongClickListener(mFastUnlockClickListener);
-            mExpandChallengeView.bringToFront();
-        }
     }
-
-    private final OnLongClickListener mFastUnlockClickListener = new OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            showNextSecurityScreenOrFinish(false);
-            return true;
-        }
-    };
 
     private void updateAndAddWidgets() {
         cleanupAppWidgetIds();
@@ -1061,7 +1045,6 @@ public class KeyguardHostView extends KeyguardViewBase {
         }
 
         requestFocus();
-        minimizeChallengeIfDesired();
     }
 
     @Override
@@ -1115,19 +1098,6 @@ public class KeyguardHostView extends KeyguardViewBase {
             // otherwise, go to the unlock screen, see if they can verify it
             mIsVerifyUnlockOnly = true;
             showSecurityScreen(securityMode);
-        }
-    }
-
-    private void minimizeChallengeIfDesired() {
-        if (mSlidingChallengeLayout == null) {
-            return;
-        }
-
-        int setting = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0, UserHandle.USER_CURRENT);
-
-        if (setting == 1) {
-            mSlidingChallengeLayout.showChallenge(false);
         }
     }
 
