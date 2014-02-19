@@ -111,4 +111,7 @@
     <!-- Quick pulldown confirmation dialog -->
     <string name="quick_settings_quick_pull_down_title">Quick pull down</string>
     <string name="quick_settings_quick_pull_down_message">Would you like the edge of the status bar to pull down quick settings?</string>
+
+    <!-- Safe headset volume -->
+    <string name="safe_headset_volume">Safe headset volume</string>
 </resources>
