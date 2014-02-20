@@ -2695,10 +2695,16 @@ public final class Settings {
         public static final String HEADSET_PLUG_SYSTEM_DEFAULT = "SYSTEM_DEFAULT";
 
         /**
-         * Quick Settings Quick Pulldown
-         *
+         * Store last immersive state to persist through reboot
          * @hide
          */
+        public static final String IMMERSIVE_LAST_ACTIVE_STATE = "immersive_last_active_state";
+
+	/**
+	* Quick Settings Quick Pulldown
+	*
+	* @hide
+	*/
         public static final String QS_QUICK_PULLDOWN = "qs_quick_pulldown";
 
         /**
