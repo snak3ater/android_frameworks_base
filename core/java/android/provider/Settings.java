@@ -2743,7 +2743,25 @@ public final class Settings {
          *  Enable statusbar double tap gesture on to put device to sleep
          * @hide
          */
-        public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
+        public static final String DOUBLE_TAP_SLEEP_STATUS_BAR = "double_tap_sleep_status_bar";
+
+        /**
+         *  Enable pin password double tap gesture on to put device to sleep
+         * @hide
+         */
+        public static final String DOUBLE_TAP_SLEEP_STATUS_PIN_PASSWORD = "double_tap_sleep_pin_password";
+
+        /**
+         *  Enable pattern double tap gesture on to put device to sleep
+         * @hide
+         */
+        public static final String DOUBLE_TAP_SLEEP_PATTERN = "double_tap_sleep_pattern";
+
+        /**
+         *  Enable glowpad double tap gesture on to put device to sleep
+         * @hide
+         */
+        public static final String DOUBLE_TAP_SLEEP_GLOWPAD = "double_tap_sleep_glowpad";
 
         /**
          * Weather to minimize lockscreen challenge on screen turned on
