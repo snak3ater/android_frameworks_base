@@ -221,7 +221,7 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
         });
 
         if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0) == 1) {
+                    Settings.System.DOUBLE_TAP_SLEEP_GLOWPAD, 0) == 1) {
             mGlowPadView.setOnTouchListener(new OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

@@ -124,7 +124,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
         mPasswordEntry.addTextChangedListener(this);
 
         if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0) == 1) {
+                Settings.System.DOUBLE_TAP_SLEEP_STATUS_PIN_PASSWORD, 0) == 1) {
             mPasswordEntry.setOnTouchListener(new OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
