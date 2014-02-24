@@ -43,9 +43,7 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.AlarmClock;
@@ -709,20 +707,6 @@ class QuickSettings {
                     new QuickSettingsModel.BasicRefreshCallback(powermenuTile));
             parent.addView(powermenuTile);
         }
-
-        // Screen off
-        final QuickSettingsBasicTile screenoffTile = new QuickSettingsBasicTile(mContext);
-        screenoffTile.setImageResource(R.drawable.ic_qs_screen_off);
-        screenoffTile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-                pm.goToSleep(SystemClock.uptimeMillis());
-            }
-        });
-        mModel.addScreenOffTile(screenoffTile,
-                new QuickSettingsModel.BasicRefreshCallback(screenoffTile));
-        parent.addView(screenoffTile);
 
         // Torch
         if (mModel.hasTorchPackage()) {
