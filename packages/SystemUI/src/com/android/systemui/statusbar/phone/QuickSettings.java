@@ -39,12 +39,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.media.MediaRouter;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.AlarmClock;
@@ -112,6 +111,7 @@ class QuickSettings {
     boolean mUseDefaultAvatar = false;
 
     private Handler mHandler;
+    private ConnectivityManager mConnectivityManager;
 
     // The set of QuickSettingsTiles that have dynamic spans (and need to be updated on
     // configuration change)
@@ -447,9 +447,25 @@ class QuickSettings {
             rssiTile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startSettingsActivity(android.provider.Settings.ACTION_DATA_ROAMING_SETTINGS);
+                    mConnectivityManager = (ConnectivityManager) mContext
+                            .getSystemService(Context.CONNECTIVITY_SERVICE);
+                    boolean connectivityManagerState = mConnectivityManager.getMobileDataEnabled();
+                    mConnectivityManager.setMobileDataEnabled(!connectivityManagerState);
                 }
             });
+            if (LONG_PRESS_TOGGLES) {
+                rssiTile.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Intent dataUsageSummaryActivityIntent = new Intent();
+                        dataUsageSummaryActivityIntent.setComponent(new ComponentName(
+                                "com.android.settings",
+                                "com.android.settings.Settings$DataUsageSummaryActivity"));
+                        startSettingsActivity(dataUsageSummaryActivityIntent);
+                        return true;
+                    }
+                });
+            }
             mModel.addRSSITile(rssiTile, new NetworkActivityCallback() {
                 @Override
                 public void refreshView(QuickSettingsTileView view, State state) {
@@ -691,20 +707,6 @@ class QuickSettings {
                     new QuickSettingsModel.BasicRefreshCallback(powermenuTile));
             parent.addView(powermenuTile);
         }
-
-        // Screen off
-        final QuickSettingsBasicTile screenoffTile = new QuickSettingsBasicTile(mContext);
-        screenoffTile.setImageResource(R.drawable.ic_qs_screen_off);
-        screenoffTile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-                pm.goToSleep(SystemClock.uptimeMillis());
-            }
-        });
-        mModel.addScreenOffTile(screenoffTile,
-                new QuickSettingsModel.BasicRefreshCallback(screenoffTile));
-        parent.addView(screenoffTile);
 
         // Torch
         if (mModel.hasTorchPackage()) {
