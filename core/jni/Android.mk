@@ -4,9 +4,6 @@ include $(CLEAR_VARS)
 LOCAL_CFLAGS += -DHAVE_CONFIG_H -DKHTML_NO_EXCEPTIONS -DGKWQ_NO_JAVA
 LOCAL_CFLAGS += -DNO_SUPPORT_JS_BINDING -DQT_NO_WHEELEVENT -DKHTML_NO_XBL
 LOCAL_CFLAGS += -U__APPLE__
-LOCAL_CFLAGS += -Wno-unused-parameter -Wno-int-to-pointer-cast
-LOCAL_CFLAGS += -Wno-maybe-uninitialized -Wno-parentheses
-LOCAL_CPPFLAGS += -Wno-conversion-null
 
 ifeq ($(TARGET_ARCH), arm)
 	LOCAL_CFLAGS += -DPACKED="__attribute__ ((packed))"
@@ -86,6 +83,7 @@ LOCAL_SRC_FILES:= \
 	android_util_StringBlock.cpp \
 	android_util_XmlBlock.cpp \
 	android/graphics/AutoDecodeCancel.cpp \
+	android/graphics/Bitmap.cpp \
 	android/graphics/BitmapFactory.cpp \
 	android/graphics/Camera.cpp \
 	android/graphics/Canvas.cpp \
@@ -213,26 +211,6 @@ LOCAL_SHARED_LIBRARIES := \
 	libusbhost \
 	libharfbuzz_ng \
 	libz
-
-ifeq ($(TARGET_ARCH), arm)
-  ifeq ($(TARGET_USE_KRAIT_BIONIC_OPTIMIZATION), true)
-    TARGET_arm_CFLAGS += -DUSE_NEON_BITMAP_OPTS -mvectorize-with-neon-quad
-    LOCAL_SRC_FILES+= \
-		android/graphics/Bitmap.cpp.arm
-  else
-    ifeq ($(TARGET_ARCH_VARIANT_CPU), cortex-a15)
-      TARGET_arm_CFLAGS += -DUSE_NEON_BITMAP_OPTS -mvectorize-with-neon-quad
-      LOCAL_SRC_FILES+= \
-		android/graphics/Bitmap.cpp.arm
-    else
-      LOCAL_SRC_FILES+= \
-		android/graphics/Bitmap.cpp
-    endif
-  endif
-else
-    LOCAL_SRC_FILES+= \
-		android/graphics/Bitmap.cpp
-endif
 
 ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_SHARED_LIBRARIES += libhwui
