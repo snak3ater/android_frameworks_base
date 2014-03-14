@@ -3010,6 +3010,11 @@ public final class Settings {
         public static final String ENABLE_FORWARD_LOOKUP = "enable_forward_lookup";
          
         /**
+         * @hide
+         */
+        public static final String NAVIGATION_BUTTON_GLOW_TIME = "navigation_button_glow_time";
+
+        /**
          * Enable looking up of phone numbers of people
          *
          * @hide

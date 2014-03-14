@@ -19,14 +19,19 @@ package com.android.systemui.statusbar.policy;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.hardware.input.InputManager;
+import android.os.Handler;
 import android.os.SystemClock;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -65,6 +70,33 @@ public class KeyButtonView extends ImageView {
     RectF mRect = new RectF();
     AnimatorSet mPressedAnim;
     Animator mAnimateToQuiescent = new ObjectAnimator();
+
+    int mGlowTime = 500;
+    Handler mHandler = new Handler();
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor( 
+                    Settings.System.NAVIGATION_BUTTON_GLOW_TIME), false, this); 
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+    }
+   
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            mGlowTime = Settings.System.getIntForUser(resolver, 
+            Settings.System.NAVIGATION_BUTTON_GLOW_TIME, mGlowTime, UserHandle.USER_CURRENT);
+    }
 
     Runnable mCheckLongPress = new Runnable() {
         public void run() {
@@ -107,14 +139,16 @@ public class KeyButtonView extends ImageView {
 
         setClickable(true);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-
+	SettingsObserver observer = new SettingsObserver(new Handler());
+        observer.observe();
     }
 
     public void updateResources(Resources res) {
         if (mGlowBgId != 0) {
             mGlowBG = res.getDrawable(mGlowBgId);
         }
-    }
+}
+        
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -228,7 +262,7 @@ public class KeyButtonView extends ImageView {
                         ObjectAnimator.ofFloat(this, "glowAlpha", 1f),
                         ObjectAnimator.ofFloat(this, "glowScale", GLOW_MAX_SCALE_FACTOR)
                     );
-                    as.setDuration(30);
+                    as.setDuration(mGlowTime / 10);
                 } else {
                     mAnimateToQuiescent.cancel();
                     mAnimateToQuiescent = animateToQuiescent();
@@ -237,7 +271,7 @@ public class KeyButtonView extends ImageView {
                         ObjectAnimator.ofFloat(this, "glowScale", 1f),
                         mAnimateToQuiescent
                     );
-                    as.setDuration(300);
+                    as.setDuration(mGlowTime);
                 }
                 as.start();
             }
