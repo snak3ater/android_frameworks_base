@@ -457,11 +457,7 @@ class QuickSettings {
                 rssiTile.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Intent dataUsageSummaryActivityIntent = new Intent();
-                        dataUsageSummaryActivityIntent.setComponent(new ComponentName(
-                                "com.android.settings",
-                                "com.android.settings.Settings$DataUsageSummaryActivity"));
-                        startSettingsActivity(dataUsageSummaryActivityIntent);
+                        startSettingsActivity(android.provider.Settings.ACTION_DATA_ROAMING_SETTINGS);
                         return true;
                     }
                 });
