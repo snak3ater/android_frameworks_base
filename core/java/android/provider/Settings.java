@@ -2620,12 +2620,11 @@ public final class Settings {
          * Whether to show the clock in status bar
          * of the stock battery icon
          * 0: hide
-         * 1: right
-         * 2: center
+         * 1: show
          * default: 1
          * @hide
          */
-        public static final String STATUS_BAR_CLOCK_STYLE = "status_bar_clock_style";
+        public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
          * Display style of AM/PM next to clock in status bar
