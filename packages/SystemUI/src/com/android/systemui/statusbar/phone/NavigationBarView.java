@@ -371,9 +371,10 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
                     : (mVertical ? mBackLandIcon : mBackIcon));
         } else if (button == NavigationCallback.NAVBAR_RECENTS_HINT) {
             ((ImageView)getRecentsButton()).setImageDrawable(
-                (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_ALT))
-                    ? (mVertical ? mRecentAltLandIcon : mRecentAltIcon)
-                    : (mVertical ? mRecentLandIcon : mRecentIcon));
+                (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_ALT)) && Settings.System.getInt(
+                    mContext.getContentResolver(), Settings.System.NAVBAR_RECENTS_CLEAR_ALL, 0) != 2
+                        ? (mVertical ? mRecentAltLandIcon : mRecentAltIcon)
+                        : (mVertical ? mRecentLandIcon : mRecentIcon));
         }
         setDisabledFlags(mDisabledFlags, true);
     }

@@ -2733,6 +2733,12 @@ public final class Settings {
          */
         public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
 
+         /**
+         * Navbar recents clear all option
+         * @hide
+         */
+        public static final String NAVBAR_RECENTS_CLEAR_ALL = "navbar_recents_clear_all";
+
         /**
          * Navigation bar buttons customization
          *
@@ -3360,7 +3366,8 @@ public final class Settings {
          * @hide
          */
         public static final String[] SETTINGS_TO_RESET = {
-            PIE_STATE
+            PIE_STATE,
+            NAVBAR_RECENTS_CLEAR_ALL
         };
 
         // Settings moved to Settings.Secure
