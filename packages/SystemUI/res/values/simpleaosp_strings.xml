@@ -93,4 +93,9 @@
     <string name="enable_pie_control_title">Pie controls</string>
     <string name="enable_pie_control_message">Would you like to use pie controls while in immersive mode?</string>
     <string name="pie_state">@string/enable_pie_control_title</string>
+
+    <!-- Clear recents confirmation dialog -->
+    <string name="navbar_recents_clear_all_title">Clear all</string>
+    <string name="navbar_recents_clear_all_message">Would you like the "recents button" to clear all apps?</string>
+    <string name="navbar_recents_clear_all">@string/navbar_recents_clear_all_title</string>
 </resources>

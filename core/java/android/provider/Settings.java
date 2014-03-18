@@ -2569,6 +2569,12 @@ public final class Settings {
          */
         public static final String EGG_MODE = "egg_mode";
 
+         /**
+         * Navbar recents clear all option
+         * @hide
+         */
+        public static final String NAVBAR_RECENTS_CLEAR_ALL = "navbar_recents_clear_all";
+
         /**
          * Whether to show the IME switcher in the status bar
          * @hide
@@ -3120,7 +3126,8 @@ public final class Settings {
 	* @hide
 	*/
         public static final String[] SETTINGS_TO_RESET = {
-	PIE_STATE
+            PIE_STATE,
+            NAVBAR_RECENTS_CLEAR_ALL
         };
 
         // Settings moved to Settings.Secure
