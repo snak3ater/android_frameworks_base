@@ -107,6 +107,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private MyAdapter mAdapter;
 
     private boolean mKeyguardShowing = false;
+    private boolean mKeyguardSecure = false;
     private boolean mDeviceProvisioned = false;
     private ToggleAction.State mAirplaneState = ToggleAction.State.Off;
     private boolean mIsWaitingForEcmExit = false;
@@ -155,14 +156,15 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
      * Show the global actions dialog (creating if necessary)
      * @param keyguardShowing True if keyguard is showing
      */
-    public void showDialog(boolean keyguardShowing, boolean isDeviceProvisioned) {
-        showDialog(keyguardShowing, isDeviceProvisioned, false);
+    public void showDialog(boolean keyguardShowing, boolean isKeyguardSecure, boolean isDeviceProvisioned) {
+        showDialog(keyguardShowing, isKeyguardSecure, isDeviceProvisioned, false);
     }
 
-    public void showDialog(boolean keyguardShowing, boolean isDeviceProvisioned,
+    public void showDialog(boolean keyguardShowing, boolean isKeyguardSecure, boolean isDeviceProvisioned,
             boolean isRebootSubMenu) {
         mRebootMenu = isRebootSubMenu;
         mKeyguardShowing = keyguardShowing;
+        mKeyguardSecure = isKeyguardSecure;
         mDeviceProvisioned = isDeviceProvisioned;
         if (mDialog != null) {
             if (mUiContext != null) {
@@ -299,7 +301,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             new SinglePressAction(R.drawable.ic_lock_reboot,
                         R.string.global_action_reboot) {
                 public void onPress() {
-                    showDialog(mKeyguardShowing, mDeviceProvisioned, true);
+                    if (mKeyguardShowing && mKeyguardSecure){
+                        mWindowManagerFuncs.reboot(true);
+                    } else {
+                        showDialog(mKeyguardShowing, mKeyguardSecure, mDeviceProvisioned, true);
+                    }
                 }
 
                 public boolean onLongPress() {
