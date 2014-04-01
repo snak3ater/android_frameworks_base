@@ -2223,7 +2223,15 @@ please see styles_device_defaults.xml.
         <item name="android:button">@android:drawable/btn_star_holo_light</item>
     </style>
 
-    <style name="Widget.Holo.Light.TabWidget" parent="Widget.Holo.TabWidget">
+    <style name="Widget.Holo.Light.TabWidget" parent="@style/Widget.TabWidget">
+        <item name="divider">?dividerVertical</item>
+        <item name="tabStripLeft">@null</item>
+        <item name="tabStripRight">@null</item>
+        <item name="tabStripEnabled">false</item>
+        <item name="measureWithLargestChild">true</item>
+        <item name="showDividers">middle</item>
+        <item name="dividerPadding">8.0dip</item>
+        <item name="tabLayout">@layout/tab_indicator_holo_light</item>
     </style>
 
     <style name="Widget.Holo.Light.WebTextView" parent="Widget.WebTextView">
@@ -2281,11 +2289,14 @@ please see styles_device_defaults.xml.
         <item name="android:contentDescription">@string/action_menu_overflow_description</item>
     </style>
 
-    <style name="Widget.Holo.Light.ActionBar.TabView" parent="Widget.Holo.ActionBar.TabView">
+    <style name="Widget.Holo.Light.ActionBar.TabView" parent="Widget.ActionBar.TabView">
+	 <item name="background">@drawable/tab_indicator_ab_holo_light</item>
+        <item name="paddingStart">16.0dip</item>
+        <item name="paddingEnd">16.0dip</item>
     </style>
 
     <style name="Widget.Holo.Light.Tab" parent="Widget.Holo.Light.ActionBar.TabView">
-        <item name="android:background">@android:drawable/tab_indicator_holo</item>
+        <item name="android:background">@android:drawable/tab_indicator_holo_light</item>
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_weight">1</item>
         <item name="android:minWidth">80dip</item>
