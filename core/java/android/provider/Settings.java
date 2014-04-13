@@ -2619,6 +2619,18 @@ public final class Settings {
          */
         public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
 
+       /**
+	* Opens music app when headset is plugged.
+	* @hide
+	*/
+        public static final String HEADSET_PLUG_ENABLED = "headset_plug_enabled";
+
+       /**
+	* Disable opens music app when headset is plugged.
+	* @hide
+	*/
+        public static final String HEADSET_PLUG_SYSTEM_DEFAULT = "SYSTEM_DEFAULT";
+
         /**
          * Quick Settings Quick Pulldown
          *
