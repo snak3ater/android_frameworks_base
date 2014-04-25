@@ -98,4 +98,9 @@
     <string name="navbar_recents_clear_all_title">Clear all</string>
     <string name="navbar_recents_clear_all_message">Would you like the "recents button" to clear all apps?</string>
     <string name="navbar_recents_clear_all">@string/navbar_recents_clear_all_title</string>
+
+    <!-- Switch apps -->
+    <string name="enable_switch_apps_title">Switch apps</string>
+    <string name="enable_switch_apps_message">Quickly launch prior app when long pressing recents?</string>
+    <string name="recents_switch">@string/enable_switch_apps_title</string>
 </resources>

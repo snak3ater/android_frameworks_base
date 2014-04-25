@@ -2925,6 +2925,14 @@ public final class Settings {
         public static final String USE_EDGE_SERVICE_FOR_GESTURES = "edge_service_for_gestures";
 
         /**
+         * Recents longpress switchs apps.
+         * 0 = off
+         * 1 = on
+         * @hide
+         */
+        public static final String RECENTS_SWITCH = "recents_switch";
+
+        /**
          * Show the pending notification counts as overlays on the statusbar
          * @hide
          */
@@ -3127,7 +3135,8 @@ public final class Settings {
 	*/
         public static final String[] SETTINGS_TO_RESET = {
             PIE_STATE,
-            NAVBAR_RECENTS_CLEAR_ALL
+            NAVBAR_RECENTS_CLEAR_ALL,
+            RECENTS_SWITCH
         };
 
         // Settings moved to Settings.Secure
