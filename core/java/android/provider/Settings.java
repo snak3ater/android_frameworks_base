@@ -2733,8 +2733,13 @@ public final class Settings {
         public static final String NAVBAR_RECENTS_CLEAR_ALL = "navbar_recents_clear_all";
 
         /**
-         * Navigation bar buttons customization
-         *
+         * Whether to show the IME switcher in the status bar
+         * @hide
+         */
+        public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
+
+        /**
+	 * Navigation bar buttons customization
          * @hide
          */
         public static final String NAV_BUTTONS = "nav_buttons";
