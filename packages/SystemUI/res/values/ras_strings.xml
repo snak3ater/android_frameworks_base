@@ -2,21 +2,6 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Quick Settings -->
-    <!-- Power Menu tile -->
-    <string name="quick_settings_power_menu_label">Power Menu</string>
-    <!-- Screen off tile -->
-    <string name="quick_settings_screen_off_label">Power</string>
-    <!-- Torch tile -->
-    <string name="quick_settings_torch_label">Torch</string>
-
-    <!-- QuickSettings: Sound Tile  -->
-    <string name="quick_settings_ringer_mode_silent_label">Silent</string>
-    <string name="quick_settings_ringer_mode_vibrate_label">Vibrate</string>
-    <string name="quick_settings_ringer_mode_normal_label">Sound</string>
-    <string name="quick_settings_ringer_mode_normal_vibrate_label">Sound &amp; Vibration</string>
-    <string name="quick_settings_volume_label">Volume</string>
-
     <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_connection_HP">HSPA+</string>
 

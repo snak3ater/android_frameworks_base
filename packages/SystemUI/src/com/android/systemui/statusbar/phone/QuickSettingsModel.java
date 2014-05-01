@@ -27,14 +27,11 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
 import android.media.MediaRouter;
 import android.media.MediaRouter.RouteInfo;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
@@ -145,15 +142,6 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         }
     };
 
-    /** Broadcast receive to determine ringer mode. */
-    private BroadcastReceiver mRingerReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int ringerMode = intent.getIntExtra(AudioManager.EXTRA_RINGER_MODE, 0);
-            onRingerModeChanged(ringerMode);
-        }
-    };
-
     /** ContentObserver to determine the next alarm */
     private class NextAlarmObserver extends ContentObserver {
         public NextAlarmObserver(Handler handler) {
@@ -212,24 +200,6 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         }
     }
 
-    /** ContentObserver to determine the Ringer mode */
-    private class RingerObserver extends ContentObserver {
-        public RingerObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            onRingerModeChanged();
-        }
-
-        public void startObserving() {
-            final ContentResolver cr = mContext.getContentResolver();
-            cr.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.VIBRATE_WHEN_RINGING), false, this);
-        }
-    }
-
     /** Callback for changes to remote display routes. */
     private class RemoteDisplayRouteCallback extends MediaRouter.SimpleCallback {
         @Override
@@ -260,9 +230,6 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private final NextAlarmObserver mNextAlarmObserver;
     private final BugreportObserver mBugreportObserver;
     private final BrightnessObserver mBrightnessObserver;
-    private final RingerObserver mRingerObserver;
-    private final AudioManager mAudioManager;
-    private final Vibrator mVibrator;
 
     private final MediaRouter mMediaRouter;
     private final RemoteDisplayRouteCallback mRemoteDisplayRouteCallback;
@@ -333,18 +300,6 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
     private RefreshCallback mSslCaCertWarningCallback;
     private State mSslCaCertWarningState = new State();
 
-    private QuickSettingsTileView mTorchTile;
-    private RefreshCallback mTorchCallback;
-    private State mTorchState = new State();
-
-    private QuickSettingsTileView mRingerModeTile;
-    private RefreshCallback mRingerModeCallback;
-    private State mRingerModeState = new State();
-
-    private QuickSettingsTileView mScreenOffTile;
-    private RefreshCallback mScreenOffCallback;
-    private State mScreenOffState = new State();
-
     private RotationLockController mRotationLockController;
 
     public QuickSettingsModel(Context context) {
@@ -354,26 +309,20 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
             @Override
             public void onUserSwitched(int newUserId) {
                 mBrightnessObserver.startObserving();
-                mRingerObserver.startObserving();
                 refreshRotationLockTile();
                 onBrightnessLevelChanged();
                 onNextAlarmChanged();
                 onBugreportChanged();
                 rebindMediaRouterAsCurrentUser();
-                onRingerModeChanged();
             }
         };
+
         mNextAlarmObserver = new NextAlarmObserver(mHandler);
         mNextAlarmObserver.startObserving();
         mBugreportObserver = new BugreportObserver(mHandler);
         mBugreportObserver.startObserving();
         mBrightnessObserver = new BrightnessObserver(mHandler);
         mBrightnessObserver.startObserving();
-        mRingerObserver = new RingerObserver(mHandler);
-        mRingerObserver.startObserving();
-
-        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
         mMediaRouter = (MediaRouter)context.getSystemService(Context.MEDIA_ROUTER_SERVICE);
         rebindMediaRouterAsCurrentUser();
@@ -387,10 +336,6 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         IntentFilter alarmIntentFilter = new IntentFilter();
         alarmIntentFilter.addAction(Intent.ACTION_ALARM_CHANGED);
         context.registerReceiver(mAlarmIntentReceiver, alarmIntentFilter);
-
-        IntentFilter ringerFilter = new IntentFilter();
-        ringerFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
-        context.registerReceiver(mRingerReceiver, ringerFilter);
     }
 
     void updateResources() {
@@ -401,9 +346,6 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         refreshRotationLockTile();
         refreshRssiTile();
         refreshLocationTile();
-        refreshTorchTile();
-        refreshRingerModeTile();
-        refreshScreenOffTile();
     }
 
     // Settings
@@ -929,126 +871,5 @@ class QuickSettingsModel implements BluetoothStateChangeCallback,
         }
         mSslCaCertWarningState.label = r.getString(R.string.ssl_ca_cert_warning);
         mSslCaCertWarningCallback.refreshView(mSslCaCertWarningTile, mSslCaCertWarningState);
-    }
-
-    // Torch
-    // show torch tile only on device with flash
-    boolean hasTorchPackage() {
-        PackageManager pm = mContext.getPackageManager();
-        try {
-            return pm.getPackageInfo("net.cactii.flash2", 0) != null;
-        } catch (PackageManager.NameNotFoundException e) {
-            // ignored, just catched: return false below
-        }
-        return false;
-    }
-
-    void addTorchTile(QuickSettingsTileView view, RefreshCallback cb) {
-        mTorchTile = view;
-        mTorchCallback = cb;
-        refreshTorchTile();
-    }
-
-    void refreshTorchTile() {
-        if (hasTorchPackage()) {
-            Resources r = mContext.getResources();
-            mTorchState.label = r.getString(R.string.quick_settings_torch_label);
-            mTorchCallback.refreshView(mTorchTile, mTorchState);
-        } else {
-            return;
-        }
-    }
-
-    // Ringer mode
-    private static final int RINGER_MODE_SILENT = 0;
-    private static final int RINGER_MODE_VIBRATE = 1;
-    private static final int RINGER_MODE_NORMAL = 2;
-
-    void addRingerModeTile(QuickSettingsTileView view, RefreshCallback cb) {
-        mRingerModeTile = view;
-        mRingerModeCallback = cb;
-        onRingerModeChanged();
-    }
-
-    void onRingerModeChanged() {
-        onRingerModeChanged(getRingerMode());
-    }
-
-    private void onRingerModeChanged(int ringerMode) {
-        Resources r = mContext.getResources();
-        switch (ringerMode) {
-            case RINGER_MODE_SILENT:
-                updateRingerModeTile(R.drawable.ic_qs_ringer_silent,
-                        r.getString(R.string.quick_settings_ringer_mode_silent_label));
-                break;
-            case RINGER_MODE_VIBRATE:
-                updateRingerModeTile(R.drawable.ic_qs_ringer_vibrate,
-                        r.getString(R.string.quick_settings_ringer_mode_vibrate_label));
-                break;
-            case RINGER_MODE_NORMAL:
-                if (vibrateWhenRinging()) {
-                    updateRingerModeTile(R.drawable.ic_qs_ringer_normal_vibrate,
-                            r.getString(R.string.quick_settings_ringer_mode_normal_vibrate_label));
-                } else {
-                    updateRingerModeTile(R.drawable.ic_qs_ringer_normal,
-                            r.getString(R.string.quick_settings_ringer_mode_normal_label));
-                }
-                break;
-        }
-        mRingerModeCallback.refreshView(mRingerModeTile, mRingerModeState);
-    }
-
-    void updateRingerModeTile(int icon, String label) {
-        mRingerModeState.iconId = icon;
-        mRingerModeState.label = label;
-    }
-
-    void refreshRingerModeTile() {
-        onRingerModeChanged();
-    }
-
-    protected int getRingerMode() {
-        return mAudioManager.getRingerMode();
-    }
-
-    private void setRingerMode(int mode) {
-        mAudioManager.setRingerMode(mode);
-    }
-
-    protected boolean vibrateWhenRinging() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.VIBRATE_WHEN_RINGING, 0) != 0;
-    }
-
-    protected void switchRingerMode() {
-        int ringerMode = getRingerMode();
-        switch (ringerMode) {
-            case RINGER_MODE_SILENT:
-                if (mVibrator.hasVibrator()) {
-                    setRingerMode(RINGER_MODE_VIBRATE);
-                    mVibrator.vibrate(150);
-                } else {
-                    setRingerMode(RINGER_MODE_NORMAL);
-                }
-                break;
-            case RINGER_MODE_VIBRATE:
-                setRingerMode(RINGER_MODE_NORMAL);
-                if(vibrateWhenRinging()) mVibrator.vibrate(150);
-                break;
-            case RINGER_MODE_NORMAL:
-                setRingerMode(RINGER_MODE_SILENT);
-                break;
-        }
-}
-    // Screen Off
-    void addScreenOffTile(QuickSettingsTileView view, RefreshCallback cb) {
-        mScreenOffTile = view;
-        mScreenOffCallback = cb;
-        refreshScreenOffTile();
-    }
-    void refreshScreenOffTile() {
-        Resources r = mContext.getResources();
-        mScreenOffState.label = r.getString(R.string.quick_settings_screen_off_label);
-        mScreenOffCallback.refreshView(mScreenOffTile, mScreenOffState);
     }
 }

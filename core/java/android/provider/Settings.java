@@ -2605,7 +2605,7 @@ public final class Settings {
          */
         public static final String SIP_ASK_ME_EACH_TIME = "SIP_ASK_ME_EACH_TIME";
 
-       /**
+        /**
          * Pointer speed setting.
          * This is an integer value in a range between -7 and +7, so there are 15 possible values.
          *   -7 = slowest
