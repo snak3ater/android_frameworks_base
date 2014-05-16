@@ -3098,6 +3098,13 @@ public final class Settings {
 	*/
 	public static final String DIALKEY_PADDING = "dialkey_padding";
 
+	/**
+         * The delay when killing the app on long press takes place
+         *
+         * @hide
+         */
+         public static final String LONG_PRESS_KILL_DELAY = "long_press_kill_delay";
+
         /**
          * Volume key controls ringtone or media sound stream
          *
