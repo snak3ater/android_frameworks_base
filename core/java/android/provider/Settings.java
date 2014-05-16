@@ -3105,6 +3105,13 @@ public final class Settings {
          */
         public static final String CALL_UI_AS_HEADS_UP = "call_ui_as_heads_up";
 
+	/**
+         * The delay when killing the app on long press takes place
+         *
+         * @hide
+         */
+         public static final String LONG_PRESS_KILL_DELAY = "long_press_kill_delay";
+
         /**
          * Volume key controls ringtone or media sound stream
          *
