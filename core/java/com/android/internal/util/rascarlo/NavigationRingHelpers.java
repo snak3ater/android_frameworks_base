@@ -133,7 +133,9 @@ public class NavigationRingHelpers {
             resourceId = com.android.internal.R.drawable.ic_action_assist_generic;
         } else if (action.equals(ACTION_POWER_MENU)) {
             resourceId = com.android.internal.R.drawable.ic_navigation_ring_power_menu;
-        } 
+        } else if (action.equals(ACTION_LAST_APP)) {
+            resourceId = com.android.internal.R.drawable.ic_navigation_ring_lastapp;
+        }
 
         if (resourceId < 0) {
             // no pre-defined action, try to resolve URI
