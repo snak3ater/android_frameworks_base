@@ -26,6 +26,7 @@
   <!-- Notification LED -->
   <java-symbol type="array" name="notification_light_package_mapping" />
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
+  <java-symbol type="bool" name="config_multiColorBatteryLed" />
 
   <!-- Navigation Ring -->
   <java-symbol type="drawable" name="ic_navigation_ring_blank_normal" />
