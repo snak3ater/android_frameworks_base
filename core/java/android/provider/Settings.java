@@ -2918,6 +2918,18 @@ public final class Settings {
         public static final String LOCKSCREEN_ENABLE_POWER_MENU = "lockscreen_enable_power_menu";
 
         /**
+         * Swipe recents for floating windows option
+         * @hide
+         */
+        public static final String RECENTS_SWIPE_FLOATING = "recents_swipe_floating";
+
+        /**
+         * Swipe notification for floating window option
+         * @hide
+         */
+        public static final String STATUS_BAR_NOTIFICATION_SWIPE_FLOATING = "status_bar_notification_swipe_floating";
+
+        /**
          * Set the timeout of peek when pikcing up the device
          * @hide
          */
@@ -3397,8 +3409,9 @@ public final class Settings {
             POWER_MENU_REBOOT_ENABLED,
             POWER_MENU_AIRPLANE_ENABLED,
             POWER_MENU_SILENT_ENABLED,
-	    POWER_MENU_SCREENRECORD_ENABLED
-
+	    POWER_MENU_SCREENRECORD_ENABLED,
+            RECENTS_SWIPE_FLOATING,
+            STATUS_BAR_NOTIFICATION_SWIPE_FLOATING
         };
 
         // Settings moved to Settings.Secure
@@ -7480,4 +7493,5 @@ public final class Settings {
         return "android-" + Long.toHexString(androidId);
     }
 }
+
 

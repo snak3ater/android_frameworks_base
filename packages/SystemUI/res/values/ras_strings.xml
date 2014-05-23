@@ -62,4 +62,16 @@
 
     <!-- Title shown in recents popup for showing app in floating mode -->
     <string name="status_bar_recent_floating_item_title">Floating mode</string>
+
+    <!-- Swipe recents for floating window confirmation dialog -->
+    <string name="recents_swipe_floating_title">Swipe recents to float</string>
+    <string name="recents_swipe_floating_message_portrait">Would you like to swipe left to open apps in floating window?</string>
+    <string name="recents_swipe_floating_message_landscape">Would you like to swipe down to open apps in floating window?</string>
+
+    <!-- Swipe notification for floating window confirmation dialog -->
+    <string name="status_bar_notification_swipe_floating_title">Swipe notification to float</string>
+    <string name="status_bar_notification_swipe_floating_message">Would you like to swipe left to open apps in floating window?</string>
+
+    <string name="recents_swipe_floating" translatable="false">@string/recents_swipe_floating_title</string>
+    <string name="status_bar_notification_swipe_floating" translatable="false">@string/status_bar_notification_swipe_floating_title</string>
 </resources>
