@@ -3414,6 +3414,16 @@ public final class Settings {
             STATUS_BAR_NOTIFICATION_SWIPE_FLOATING
         };
 
+       /**
+	* Settings to reset on user choice. They will fall back to their default value (0).
+	*
+	* @hide
+	*/
+        public static final String[] SETTINGS_TO_RESET = {
+	RECENTS_SWIPE_FLOATING,
+	STATUS_BAR_NOTIFICATION_SWIPE_FLOATING
+        };
+
         // Settings moved to Settings.Secure
 
         /**
