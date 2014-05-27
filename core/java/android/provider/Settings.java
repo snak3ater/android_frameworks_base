@@ -3329,6 +3329,15 @@ public final class Settings {
             NOTIFICATION_SOUND
         };
 
+       /**
+	* Settings to reset on user choice. They will fall back to their default value (0).
+	*
+	* @hide
+	*/
+        public static final String[] SETTINGS_TO_RESET = {
+	STATUS_BAR_BATTERY
+        };
+
         // Settings moved to Settings.Secure
 
         /**
