@@ -790,6 +790,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 }
             }
 
+            // remove quicksettings callbacks before they are used and nullify quicksettings
+            if (mQS != null) {
+                mQS.shutdown(mNetworkController, mBluetoothController, mBatteryController,
+                        mLocationController, mRotationLockController);
+                mQS = null;
+            }
+
             // wherever you find it, Quick Settings needs a container to survive
             mSettingsContainer = (QuickSettingsContainerView)
                     mStatusBarWindow.findViewById(R.id.quick_settings_container);
@@ -3005,7 +3012,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             R.dimen.status_bar_icon_padding);
 
         if (newIconHPadding != mIconHPadding || newIconSize != mIconSize) {
-//            Log.d(TAG, "size=" + newIconSize + " padding=" + newIconHPadding);
+            //Log.d(TAG, "size=" + newIconSize + " padding=" + newIconHPadding);
             mIconHPadding = newIconHPadding;
             mIconSize = newIconSize;
             //reloadAllNotificationIcons(); // reload the tray
