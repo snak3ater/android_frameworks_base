@@ -507,8 +507,4 @@
          linebreak to position it correctly.  [CHAR LIMIT=45] -->
     <string name="ssl_ca_cert_warning">Network may\nbe monitored</string>
 
-    <!-- Immersive mode strings break the rules a bit - the icon identifies the feature, the string indicates current state -->
-    <string name="quick_settings_immersive_mode">Expanded</string>
-    <string name="quick_settings_immersive_mode_off">Normal</string>
-
 </resources>
