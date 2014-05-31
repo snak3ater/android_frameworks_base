@@ -101,15 +101,8 @@ class QuickSettings {
         AIRPLANE,
         BLUETOOTH,
         LOCATION,
-<<<<<<< HEAD
-        IMMERSIVE
-=======
         IMMERSIVE,
-        LTE,
-        MOBILENETWORK,
-        LIGHTBULB,
         SLEEP
->>>>>>> 6a742d6... Quicksettings: Sleep tile.
     }
 
     public static final String NO_TILES = "NO_TILES";
