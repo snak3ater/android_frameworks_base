@@ -3312,6 +3312,15 @@ public final class Settings {
 	*/
         public static final String STATUS_BAR_BATTERY_SHOW_PERCENT =
                 "status_bar_battery_show_percent";
+
+	/**
+	* Either if notification peek is enabled of disabled
+	* 0 = disabled (default)
+	* 1 = enabled
+	* @hide
+	*/
+        public static final String PEEK_STATE = "peek_state";
+	
 	/**
          * Quick settings tiles to show on status bar
          * @hide
