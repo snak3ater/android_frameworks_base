@@ -3048,6 +3048,12 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_NOTIFICATIONS_COLOR = "lockscreen_notifications_color";
 
+	/**
+	* Whether quiet hours will enable or disable themselves on volume change
+	* @hide
+	*/
+        public static final String QUIET_HOURS_AUTOMATIC = "quiet_hours_automatic";
+
         /**
          * Show when WiFi or data mobile is sending/receiving data
          * @hide
