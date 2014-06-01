@@ -81,6 +81,7 @@ import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.RotationLockController;
+import com.android.internal.util.paranoid.LightbulbConstants;
 
 import java.lang.Throwable;
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ class QuickSettings {
     private static final String TAG = "QuickSettings";
     public static final boolean SHOW_IME_TILE = false;
     private static final String AUTO_START = "AUTO_START";
-
+    private static final String TOGGLE_FLASHLIGHT = "TOGGLE_FLASHLIGHT";
     public enum Tile {
         USER,
         BRIGHTNESS,
@@ -108,6 +109,7 @@ class QuickSettings {
         BLUETOOTH,
         LOCATION,
         IMMERSIVE,
+	LIGHTBULB,
         SLEEP,
         SOUND
     }
@@ -117,7 +119,7 @@ class QuickSettings {
     public static final String DEFAULT_TILES = Tile.USER + DELIMITER + Tile.BRIGHTNESS
         + DELIMITER + Tile.SETTINGS + DELIMITER + Tile.WIFI + DELIMITER + Tile.RSSI
         + DELIMITER + Tile.ROTATION + DELIMITER + Tile.BATTERY + DELIMITER + Tile.BLUETOOTH
-        + DELIMITER + Tile.LOCATION + DELIMITER + Tile.IMMERSIVE;
+        + DELIMITER + Tile.LOCATION + DELIMITER + Tile.IMMERSIVE + Tile.LIGHTBULB;
 
     private Context mContext;
     private PanelBar mBar;
@@ -913,6 +915,41 @@ class QuickSettings {
                     });
                     parent.addView(immersiveTile);
                     if(addMissing) immersiveTile.setVisibility(View.GONE);
+		} else if(Tile.LIGHTBULB.toString().equals(tile.toString())) { // Lightbulb tile
+                    final QuickSettingsBasicTile lightbulbTile
+                            = new QuickSettingsBasicTile(mContext);
+                    lightbulbTile.setTileId(Tile.LIGHTBULB);
+                    lightbulbTile.setImageResource(R.drawable.ic_qs_lightbulb_on);
+                    lightbulbTile.setTextResource(R.string.quick_settings_lightbulb_label);
+                    lightbulbTile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!mModel.mLightbulbActive && !mModel.deviceHasCameraFlash()) {
+                                collapsePanels();
+                                startSettingsActivity(LightbulbConstants.INTENT_LAUNCH_APP);
+                            }
+                            Intent intent = new Intent(TOGGLE_FLASHLIGHT);
+                            intent.putExtra(AUTO_START, true);
+                            mContext.sendBroadcast(intent);
+                        }
+                    });
+                    lightbulbTile.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            collapsePanels();
+                            startSettingsActivity(LightbulbConstants.INTENT_LAUNCH_APP);
+                            return true; // consume click
+                        }
+                    });
+                    mModel.addLightbulbTile(lightbulbTile, new QuickSettingsModel.RefreshCallback() {
+                        @Override
+                        public void refreshView(QuickSettingsTileView unused, State state) {
+                            lightbulbTile.setImageResource(state.iconId);
+                            lightbulbTile.setText(state.label);
+                        }
+                    });
+                    parent.addView(lightbulbTile);
+                    if(addMissing) lightbulbTile.setVisibility(View.GONE);
                 } else if(Tile.SLEEP.toString().equals(tile.toString())) { // Sleep tile
                     final PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
                     final QuickSettingsDualBasicTile sleepTile

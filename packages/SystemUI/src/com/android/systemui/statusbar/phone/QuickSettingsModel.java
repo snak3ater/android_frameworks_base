@@ -55,6 +55,7 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.systemui.BatteryMeterView.BatteryMeterMode;
 import com.android.internal.util.rascarlo.DeviceUtils;
+import com.android.internal.util.paranoid.LightbulbConstants;
 import com.android.systemui.R;
 import com.android.systemui.settings.BrightnessController.BrightnessStateChangeCallback;
 import com.android.systemui.settings.CurrentUserTracker;
@@ -199,6 +200,15 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
             context.unregisterReceiver(mBootReceiver);
         }
     };    
+
+    /** Broadcast receive to determine lightbulb state. */
+    private BroadcastReceiver mLightbulbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mLightbulbActive = intent.getIntExtra(LightbulbConstants.EXTRA_CURRENT_STATE, 0) != 0;
+            onLightbulbChanged();
+        }
+    };
 
     /** ContentObserver to determine the next alarm */
     private class NextAlarmObserver extends ContentObserver {
@@ -390,7 +400,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private final RemoteDisplayRouteCallback mRemoteDisplayRouteCallback;
 
     private final boolean mHasMobileData;
-
+    protected boolean mLightbulbActive;
     private QuickSettingsTileView mUserTile;
     private RefreshCallback mUserCallback;
     private UserState mUserState = new UserState();
@@ -475,6 +485,10 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private RefreshCallback mMobileNetworkCallback;
     private State mMobileNetworkState = new State();
 
+    private QuickSettingsTileView mLightbulbTile;
+    private RefreshCallback mLightbulbCallback;
+    private State mLightbulbState = new State();
+
     private QuickSettingsTileView mSleepTimeTile;
     private RefreshCallback mSleepTimeCallback;
     private State mSleepTimeState = new State();
@@ -546,6 +560,10 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
 	IntentFilter bootFilter = new IntentFilter();
         bootFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
         context.registerReceiver(mBootReceiver, bootFilter);
+
+        IntentFilter lightbulbFilter = new IntentFilter();
+        lightbulbFilter.addAction(LightbulbConstants.ACTION_STATE_CHANGED);
+        context.registerReceiver(mLightbulbReceiver, lightbulbFilter);
 
         IntentFilter wifiApStateFilter = new IntentFilter();
         wifiApStateFilter.addAction(WifiManager.WIFI_AP_STATE_CHANGED_ACTION);
@@ -1339,6 +1357,25 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         }
         mSslCaCertWarningState.label = r.getString(R.string.ssl_ca_cert_warning);
         mSslCaCertWarningCallback.refreshView(mSslCaCertWarningTile, mSslCaCertWarningState);
+    }
+
+    // Lightbulb
+    void addLightbulbTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mLightbulbTile = view;
+        mLightbulbCallback = cb;
+        onLightbulbChanged();
+    }
+
+    void onLightbulbChanged() {
+        if (mLightbulbActive) {
+            mLightbulbState.iconId = R.drawable.ic_qs_lightbulb_on;
+            mLightbulbState.label = mContext.getString(R.string.quick_settings_lightbulb_label);
+        } else {
+            mLightbulbState.iconId = R.drawable.ic_qs_lightbulb_off;
+            mLightbulbState.label = mContext.getString(R.string.quick_settings_lightbulb_off_label);
+        }
+        mLightbulbState.enabled = mLightbulbActive;
+        mLightbulbCallback.refreshView(mLightbulbTile, mLightbulbState);
     }
 
     private void updateState() {

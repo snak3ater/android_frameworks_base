@@ -47,6 +47,7 @@ import android.widget.Toast;
 
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.rascarlo.TorchConstants;
+import com.android.internal.util.paranoid.LightbulbConstants;
 import static com.android.internal.util.rascarlo.NavigationRingConstants.*;
 import com.android.internal.util.rascarlo.TaskUtils;
 import com.android.systemui.R;
@@ -160,7 +161,7 @@ public class ActionTarget {
             }
             return true;
         } else if (action.equals(ACTION_TORCH)) {
-            Intent intent = new Intent(TorchConstants.ACTION_STATE_CHANGED);
+	    Intent intent = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
             mContext.sendBroadcast(intent);
             return true;
         } else {
