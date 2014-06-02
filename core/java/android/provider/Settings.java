@@ -2747,6 +2747,12 @@ public final class Settings {
         public static final String WAKELOCK_BLOCKING_ENABLED = "wakelock_blocking_enabled";
 
         /**
+         * Handle activation of immersive mode on lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_IMMERSIVE_MODE = "lockscreen_immersive_mode";
+
+        /**
 	* List of wakelock blocks selected
 	* @hide
 	*/

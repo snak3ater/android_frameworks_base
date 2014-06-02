@@ -40,6 +40,11 @@ public class DeviceUtils {
 
     private static final String SETTINGS_METADATA_NAME = "com.android.settings";
 
+    public static final int IMMERSIVE_MODE_OFF = 0;
+    public static final int IMMERSIVE_MODE_FULL = 1;
+    public static final int IMMERSIVE_MODE_HIDE_ONLY_NAVBAR = 2;
+    public static final int IMMERSIVE_MODE_HIDE_ONLY_STATUSBAR = 3;
+
     // Device types
     private static final int DEVICE_PHONE  = 0;
     private static final int DEVICE_HYBRID = 1;

@@ -376,7 +376,8 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
 
 		}
 	}
-}
+};
+
     /** Broadcast receiver for NFC State */
     private final BroadcastReceiver mNfcReceiver = new BroadcastReceiver() {
         @Override

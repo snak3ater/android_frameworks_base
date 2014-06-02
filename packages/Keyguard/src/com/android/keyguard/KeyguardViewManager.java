@@ -40,6 +40,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.os.RemoteException;
@@ -61,7 +62,7 @@ import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
+import com.android.internal.util.rascarlo.DeviceUtils;
 /**
  * Manages creating, showing, hiding and resetting the keyguard.  Calls back
  * via {@link KeyguardViewMediator.ViewMediatorCallback} to poke
@@ -98,6 +99,7 @@ public class KeyguardViewManager {
     private boolean mRotated = false;
     private LockPatternUtils mLockPatternUtils;
 
+    private int mImmersiveModeStored = DeviceUtils.IMMERSIVE_MODE_OFF;
     private Bitmap mBlurredImage = null;
     private int mLastRotation = 0;
 
@@ -181,9 +183,11 @@ public class KeyguardViewManager {
         if (DEBUG) Log.d(TAG, "show(); mKeyguardView==" + mKeyguardView);
 
         boolean enableScreenRotation = shouldEnableScreenRotation();
+        boolean disableImmersiveMode = shouldDisableImmersiveMode();
 
         maybeCreateKeyguardLocked(enableScreenRotation, false, options);
         maybeEnableScreenRotation(enableScreenRotation);
+        maybeDisableImmersiveMode(disableImmersiveMode);
 
         // Disable common aspects of the system/status/navigation bars that are not appropriate or
         // useful on any keyguard screen but can be re-shown by dialogs or SHOW_WHEN_LOCKED
@@ -201,6 +205,11 @@ public class KeyguardViewManager {
         mKeyguardHost.setVisibility(View.VISIBLE);
         mKeyguardView.show();
         mKeyguardView.requestFocus();
+    }
+
+    private boolean shouldDisableImmersiveMode() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_IMMERSIVE_MODE, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     private boolean shouldEnableScreenRotation() {
@@ -522,6 +531,27 @@ public class KeyguardViewManager {
         mViewManager.updateViewLayout(mKeyguardHost, mWindowLayoutParams);
     }
 
+    private void maybeDisableImmersiveMode(boolean disableImmersiveMode) {
+        if(disableImmersiveMode) {
+            // Store old immersivemode
+            mImmersiveModeStored = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.IMMERSIVE_MODE, DeviceUtils.IMMERSIVE_MODE_OFF, UserHandle.USER_CURRENT);
+            // Disable immersive mode if was enabled
+            if(mImmersiveModeStored != DeviceUtils.IMMERSIVE_MODE_OFF) {
+                Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.IMMERSIVE_MODE, DeviceUtils.IMMERSIVE_MODE_OFF, UserHandle.USER_CURRENT);
+            }
+        }
+    }
+
+    private void maybeRestoreImmersiveMode() {
+        if(mImmersiveModeStored != DeviceUtils.IMMERSIVE_MODE_OFF) {
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                Settings.System.IMMERSIVE_MODE, mImmersiveModeStored, UserHandle.USER_CURRENT);
+            mImmersiveModeStored = DeviceUtils.IMMERSIVE_MODE_OFF;
+        }
+    }
+
     void updateShowWallpaper(boolean show) {
 
         if (show) {
@@ -635,7 +665,7 @@ public class KeyguardViewManager {
      */
     public synchronized void hide() {
         if (DEBUG) Log.d(TAG, "hide()");
-
+        maybeRestoreImmersiveMode();
         if (mLockscreenNotifications) {
             mNotificationViewManager.onDismiss();
         }
