@@ -61,6 +61,9 @@ import java.net.URISyntaxException;
 public class ActionTarget {
     private static final String TAG = "ActionTarget";
 
+    private static final String AUTO_START = "AUTO_START";
+    private static final String TOGGLE_FLASHLIGHT = "TOGGLE_FLASHLIGHT";
+
     private AudioManager mAm;
     private Context mContext;
     private Handler mHandler;
@@ -156,8 +159,9 @@ public class ActionTarget {
                 // ignored
             }
             return true;
-        } else if (action.equals(ACTION_TORCH)) {
-	    Intent intent = new Intent(TorchConstants.ACTION_TOGGLE_STATE);
+        } else if (action.equals(ACTION_LIGHTBULB)) {
+            Intent intent = new Intent(TOGGLE_FLASHLIGHT);
+	    intent.putExtra(AUTO_START, true);
             mContext.sendBroadcast(intent);
             return true;
         } else {
