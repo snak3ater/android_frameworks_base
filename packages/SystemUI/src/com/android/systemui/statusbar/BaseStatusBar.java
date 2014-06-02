@@ -960,11 +960,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
 
             //int flags = Intent.FLAG_FLOATING_WINDOW | Intent.FLAG_ACTIVITY_CLEAR_TASK;
-            if (mPile.launchNextNotificationFloating()) {
-                if (mPendingIntent != null) {
-                    launchFloating(mPendingIntent);
-                }
-            } else if (mPendingIntent != null) {
+            if (mPendingIntent != null) {
                 int[] pos = new int[2];
                 v.getLocationOnScreen(pos);
                 Intent overlay = new Intent();
