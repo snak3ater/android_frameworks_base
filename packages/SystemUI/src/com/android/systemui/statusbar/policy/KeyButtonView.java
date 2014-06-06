@@ -21,7 +21,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
@@ -46,8 +45,6 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.NavbarEditor;
-import com.android.systemui.statusbar.phone.NavbarEditor.ButtonInfo;
 
 public class KeyButtonView extends ImageView {
     private static final String TAG = "StatusBar.KeyButtonView";
@@ -58,7 +55,6 @@ public class KeyButtonView extends ImageView {
 
     long mDownTime;
     int mCode;
-    boolean mIsSmall;
     int mTouchSlop;
     Drawable mGlowBG;
     int mGlowWidth, mGlowHeight;
@@ -67,10 +63,9 @@ public class KeyButtonView extends ImageView {
     float mDrawingAlpha = 1f;
     @ViewDebug.ExportedProperty(category = "drawing")
     float mQuiescentAlpha = DEFAULT_QUIESCENT_ALPHA;
-    boolean mSupportsLongPress = true;
     boolean mShouldTintIcons = true;
-    boolean mInEditMode;
-    RectF mRect = new RectF(0f,0f,0f,0f);
+    boolean mSupportsLongpress = true;
+    RectF mRect = new RectF();
     AnimatorSet mPressedAnim;
     Animator mAnimateToQuiescent = new ObjectAnimator();
 
@@ -100,7 +95,8 @@ public class KeyButtonView extends ImageView {
                 defStyle, 0);
 
         mCode = a.getInteger(R.styleable.KeyButtonView_keyCode, 0);
-        mSupportsLongPress = a.getBoolean(R.styleable.KeyButtonView_keyRepeat, true);
+
+        mSupportsLongpress = a.getBoolean(R.styleable.KeyButtonView_keyRepeat, true);
 
         mGlowBG = a.getDrawable(R.styleable.KeyButtonView_glowBackground);
         setDrawingAlpha(mQuiescentAlpha);
@@ -247,57 +243,7 @@ public class KeyButtonView extends ImageView {
         super.setPressed(pressed);
     }
 
-    public void setEditMode(boolean editMode) {
-        mInEditMode = editMode;
-        updateVisibility();
-    }
-
-    public void setInfo(ButtonInfo item, boolean isVertical, boolean isSmall) {
-        final Resources res = getResources();
-        final int keyDrawableResId;
-
-        setTag(item);
-        setContentDescription(res.getString(item.contentDescription));
-        mCode = item.keyCode;
-        mIsSmall = isSmall;
-
-        if (isSmall) {
-            keyDrawableResId = item.sideResource;
-        } else if (!isVertical) {
-            keyDrawableResId = item.portResource;
-        } else {
-            keyDrawableResId = item.landResource;
-        }
-        // The reason for setImageDrawable vs setImageResource is because setImageResource calls
-        // relayout() w/o any checks. setImageDrawable performs size checks and only calls relayout
-        // if necessary. We rely on this because otherwise the setX/setY attributes which are post
-        // layout cause it to mess up the layout.
-        setImageDrawable(res.getDrawable(keyDrawableResId));
-        updateVisibility();
-    }
-
-    private void updateVisibility() {
-        if (mInEditMode) {
-            setVisibility(View.VISIBLE);
-            return;
-        }
-
-        ButtonInfo info = (ButtonInfo) getTag();
-        if (info == NavbarEditor.NAVBAR_EMPTY) {
-            setVisibility(mIsSmall ? View.INVISIBLE : View.GONE);
-        } else if (info == NavbarEditor.NAVBAR_CONDITIONAL_MENU) {
-            setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private boolean supportsLongPress() {
-        return mSupportsLongPress && getTag() != NavbarEditor.NAVBAR_HOME;
-    }
-
     public boolean onTouchEvent(MotionEvent ev) {
-        if (mInEditMode) {
-            return false;
-        }
         final int action = ev.getAction();
         int x, y;
 
@@ -312,7 +258,7 @@ public class KeyButtonView extends ImageView {
                     // Provide the same haptic feedback that the system offers for virtual keys.
                     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 }
-                if (supportsLongPress()) {
+                if (mSupportsLongpress) {
                     removeCallbacks(mCheckLongPress);
                     postDelayed(mCheckLongPress, ViewConfiguration.getLongPressTimeout());
                 }
@@ -330,7 +276,7 @@ public class KeyButtonView extends ImageView {
                 if (mCode != 0) {
                     sendEvent(KeyEvent.ACTION_UP, KeyEvent.FLAG_CANCELED);
                 }
-                if (supportsLongPress()) {
+                if (mSupportsLongpress) {
                     removeCallbacks(mCheckLongPress);
                 }
                 break;
@@ -351,7 +297,7 @@ public class KeyButtonView extends ImageView {
                         performClick();
                     }
                 }
-                if (supportsLongPress()) {
+                if (mSupportsLongpress) {
                     removeCallbacks(mCheckLongPress);
                 }
                 break;
