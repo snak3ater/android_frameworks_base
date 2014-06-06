@@ -105,4 +105,7 @@
     <string name="enable_switch_apps_title">Switch apps</string>
     <string name="enable_switch_apps_message">Quickly launch prior app when long pressing recents?</string>
     <string name="recents_switch">@string/enable_switch_apps_title</string>
+
+    <!-- First time run hover -->
+    <string name="hover_cling_text">Hover is now enabled.\n\nWhen a new notification arrives, an overlay will show allowing you to respond to it without leaving current app.</string>
 </resources>
