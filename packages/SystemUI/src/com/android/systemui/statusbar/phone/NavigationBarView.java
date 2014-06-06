@@ -277,6 +277,7 @@ public class NavigationBarView extends LinearLayout {
     public View getRecentsButton() {
         return mCurrentView.findViewById(R.id.recent_apps);
     }
+
     public View getMenuButton() {
         return mCurrentView.findViewById(R.id.menu);
     }
