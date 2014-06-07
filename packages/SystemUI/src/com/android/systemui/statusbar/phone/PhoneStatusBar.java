@@ -2898,7 +2898,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         animateCollapsePanels();
         updateNotificationIcons();
         resetUserSetupObserver();
-        updateSettings();
         super.userSwitched(newUserId);
     }
 
