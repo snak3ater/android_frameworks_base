@@ -2727,12 +2727,6 @@ public final class Settings {
          */
         public static final String SAFE_HEADSET_VOLUME = "safe_headset_volume";
 
-        /**
-         * Height of navigation bar buttons
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
-
          /**
          * Navbar recents clear all option
          * @hide
@@ -2903,9 +2897,15 @@ public final class Settings {
 
         /**
          * Alternative recent apps integration using OmniSwitch
-         * @hide
+ 	* @hide
          */
         public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
+
+	/**
+         * Sets navigation bar height in percent
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
 
        /**
 	* Always turn on screen after call ignoring proximity?
