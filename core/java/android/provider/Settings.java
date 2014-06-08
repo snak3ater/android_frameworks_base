@@ -2673,12 +2673,6 @@ public final class Settings {
          */
         public static final String IMMERSIVE_MODE = "immersive_mode";
 
-	/**
-         * Height of navigation bar buttons
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
-
         /**
          * Whether to wake the screen with the volume keys, the value is boolean.
          * @hide
@@ -2774,6 +2768,12 @@ public final class Settings {
 	* Stores the java DateFormat string for the date
 	*/
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
+
+        /**
+         * Sets navigation bar height in percent
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
 
         /**
          *  Enable statusbar double tap gesture on to put device to sleep
