@@ -1262,12 +1262,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // Height of the navigation bar when presented horizontally at bottom
         mNavigationBarHeightForRotation[mPortraitRotation] =
         mNavigationBarHeightForRotation[mUpsideDownRotation] =
-                Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
+                immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
+                        0 : Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
                 Settings.System.getFloat(mContext.getContentResolver(),
                         Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
         mNavigationBarHeightForRotation[mLandscapeRotation] =
-        mNavigationBarHeightForRotation[mSeascapeRotation] = Math.round(res.getDimensionPixelSize(
-                com.android.internal.R.dimen.navigation_bar_height_landscape) *
+        mNavigationBarHeightForRotation[mSeascapeRotation] =
+                immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
+                        0 : Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height_landscape) *
                 Settings.System.getFloat(mContext.getContentResolver(),
                         Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
@@ -1276,7 +1278,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mNavigationBarWidthForRotation[mUpsideDownRotation] =
         mNavigationBarWidthForRotation[mLandscapeRotation] =
         mNavigationBarWidthForRotation[mSeascapeRotation] =
-                Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width) *
+                immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
+                0 : Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width) *
                 Settings.System.getFloat(mContext.getContentResolver(),
                         Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
@@ -1405,25 +1408,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
         
-            // Height of the navigation bar when presented horizontally at bottom
+	    // Refresh navigation bar height and view state
             Resources res = mContext.getResources();
             mNavigationBarHeightForRotation[mPortraitRotation] =
             mNavigationBarHeightForRotation[mUpsideDownRotation] =
-                    Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
+                    immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
+                    0 : Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
                     Settings.System.getFloat(mContext.getContentResolver(),
                             Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
             mNavigationBarHeightForRotation[mLandscapeRotation] =
-            mNavigationBarHeightForRotation[mSeascapeRotation] = Math.round(res.getDimensionPixelSize(
-                    com.android.internal.R.dimen.navigation_bar_height_landscape) *
+            mNavigationBarHeightForRotation[mSeascapeRotation] =
+                    immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
+                    0 : Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height_landscape) *
                     Settings.System.getFloat(mContext.getContentResolver(),
                             Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
-            // Width of the navigation bar when presented vertically along one side
             mNavigationBarWidthForRotation[mPortraitRotation] =
             mNavigationBarWidthForRotation[mUpsideDownRotation] =
             mNavigationBarWidthForRotation[mLandscapeRotation] =
             mNavigationBarWidthForRotation[mSeascapeRotation] =
-                    Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width) *
+                    immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
+                    0 : Math.round(res.getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width) *
                     Settings.System.getFloat(mContext.getContentResolver(),
                             Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
@@ -3035,11 +3040,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mNavigationBarHeightForRotation[mPortraitRotation] =
             mNavigationBarHeightForRotation[mUpsideDownRotation] =
                     immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
-                            0 : mContext.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height);
+		    0 : Math.round(mContext.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
+                    Settings.System.getFloat(mContext.getContentResolver(),
+                           Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
             mNavigationBarHeightForRotation[mLandscapeRotation] =
             mNavigationBarHeightForRotation[mSeascapeRotation] =
                     immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
-                            0 : mContext.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height_landscape);
+		    0 : Math.round(mContext.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height) *
+                    Settings.System.getFloat(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
             // Width of the navigation bar when presented vertically along one side
             mNavigationBarWidthForRotation[mPortraitRotation] =
@@ -3047,7 +3056,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mNavigationBarWidthForRotation[mLandscapeRotation] =
             mNavigationBarWidthForRotation[mSeascapeRotation] =
                     immersiveModeHidesNavigationBar() && immersiveModeImplementsPie() ?
-                            0 : mContext.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_width);
+		   0 : Math.round(mContext.getResources().getDimensionPixelSize(com.android.internal.R.dimen.navigation_bar_height_landscape) *
+                    Settings.System.getFloat(mContext.getContentResolver(),
+                            Settings.System.NAVIGATION_BAR_HEIGHT, 1f));
 
             boolean updateSysUiVisibility = false;
             if (mNavigationBar != null) {
