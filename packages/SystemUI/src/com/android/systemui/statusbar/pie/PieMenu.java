@@ -144,13 +144,24 @@ public class PieMenu extends FrameLayout {
     private Path mBatteryPathBackground;
     private Path mBatteryPathJuice;
 
-    private Paint mPieBackground = new Paint(COLOR_PIE_BACKGROUND);
-    private Paint mPieSelected = new Paint(COLOR_PIE_SELECT);
-    private Paint mPieOutlines = new Paint(COLOR_PIE_OUTLINES);
-    private Paint mChevronBackground = new Paint(COLOR_CHEVRON);
-    private Paint mBatteryJuice = new Paint(COLOR_BATTERY_JUICE);
-    private Paint mBatteryBackground = new Paint(COLOR_BATTERY_BACKGROUND);
-    private Paint mSnapBackground = new Paint(COLOR_SNAP_BACKGROUND);
+    private Paint mPieBackground = new Paint();
+    private Paint mPieSelected = new Paint();
+    private Paint mPieOutlines = new Paint();
+    private Paint mChevronBackground = new Paint();
+    private Paint mBatteryJuice = new Paint();
+    private Paint mBatteryBackground = new Paint();
+    private Paint mSnapBackground = new Paint();
+
+    private int mColorSnapBackground;
+    private int mColorPieBackground;
+    private int mColorPieSelect;
+    private int mColorPieOutlines;
+    private int mColorChevron;
+    private int mColorStatus;
+    private int mColorBatteryBackground;
+    private int mColorBatteryJuice;
+    private int mColorBatteryJuiceLow;
+    private int mColorBatteryJuiceCritical;
 
     private Paint mClockPaint;
     private Paint mAmPmPaint;
@@ -244,6 +255,38 @@ public class PieMenu extends FrameLayout {
     private float mX = 0;
     private float mY = 0;
 
+    private void updatePieColors() {
+        mColorSnapBackground = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_SNAP_BACKGROUND_COLOR, COLOR_SNAP_BACKGROUND));
+        mColorPieBackground = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_BACKGROUND_COLOR, COLOR_PIE_BACKGROUND));
+        mColorPieSelect = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_SELECT_COLOR, COLOR_PIE_SELECT));
+        mColorPieOutlines = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_OUTLINES_COLOR, COLOR_PIE_OUTLINES));
+        mColorChevron = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_CHEVRON_COLOR, COLOR_CHEVRON));
+        mColorStatus = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_STATUS_COLOR, COLOR_STATUS));
+        mColorBatteryBackground = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_BATTERY_BACKGROUND_COLOR, COLOR_BATTERY_BACKGROUND));
+        mColorBatteryJuice = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_BATTERY_JUICE_COLOR, COLOR_BATTERY_JUICE));
+        mColorBatteryJuiceLow = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_BATTERY_JUICE_LOW_COLOR, COLOR_BATTERY_JUICE_LOW));
+        mColorBatteryJuiceCritical = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_BATTERY_JUICE_CRITICAL_COLOR, COLOR_BATTERY_JUICE_CRITICAL));
+    }
+
+    private void updatePieSettings() {
+        mPieAngle = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_ANGLE, ANGLE_BASE));
+        mPieGap = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.PIE_GAP, GAP_BASE));
+        mPieSize = (Settings.System.getFloat(mContext.getContentResolver(),
+                Settings.System.PIE_SIZE, SIZE_BASE));
+    }
+
     private void getDimensions() {
         mPanelDegree = mPanel.getDegree();
         mPanelOrientation = mPanel.getOrientation();
@@ -255,10 +298,12 @@ public class PieMenu extends FrameLayout {
                 Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) != 0;
         mIsProtected = mPanel.isKeyguardSecureShowing();
 
-        // hardcode for now
+        /* hardcode for now
         mPieAngle = ANGLE_BASE;
         mPieGap = GAP_BASE;
-        mPieSize = SIZE_BASE;
+        mPieSize = SIZE_BASE; */
+
+        updatePieSettings();
 
         // snap
         mSnapRadius = (int) (mResources.getDimensionPixelSize(R.dimen.pie_snap_radius) * mPieSize);
@@ -342,15 +387,18 @@ public class PieMenu extends FrameLayout {
         mOuterBatteryRadius = (int) (mInnerBatteryRadius +
                 mResources.getDimensionPixelSize(R.dimen.pie_battery_increment) * mPieSize);
 
-        mBatteryBackground.setColor(COLOR_BATTERY_BACKGROUND);
+        // Before that
+        updatePieColors();
+
+        mBatteryBackground.setColor(mColorBatteryBackground);
         mBatteryLevel = mPieHelper.getBatteryLevel();
         if(mBatteryLevel <= PieHelper.LOW_BATTERY_LEVEL
                 && mBatteryLevel > PieHelper.CRITICAL_BATTERY_LEVEL) {
-            mBatteryJuice.setColor(COLOR_BATTERY_JUICE_LOW);
+            mBatteryJuice.setColor(mColorBatteryJuiceLow);
         } else if(mBatteryLevel <= PieHelper.CRITICAL_BATTERY_LEVEL) {
-            mBatteryJuice.setColor(COLOR_BATTERY_JUICE_CRITICAL);
+            mBatteryJuice.setColor(mColorBatteryJuiceCritical);
         } else {
-            mBatteryJuice.setColor(COLOR_BATTERY_JUICE);
+            mBatteryJuice.setColor(mColorBatteryJuice);
         }
 
         mStartBattery = mPanel.getDegree() + mEmptyAngle + mPieGap;
@@ -360,15 +408,16 @@ public class PieMenu extends FrameLayout {
         mBatteryPathJuice = makeSlice(mStartBattery, mStartBattery,
                 mInnerBatteryRadius, mOuterBatteryRadius, mCenter);
 
-        mSnapBackground.setColor(COLOR_SNAP_BACKGROUND);
-        mStatusPaint.setColor(COLOR_STATUS);
+        // Set custom colors
+        mSnapBackground.setColor(mColorSnapBackground);
+        mStatusPaint.setColor(mColorStatus);
+        mPieBackground.setColor(mColorPieBackground);
+        mPieSelected.setColor(mColorPieSelect);
+        mPieOutlines.setColor(mColorPieOutlines);
+        mClockPaint.setColor(mColorStatus);
+        mAmPmPaint.setColor(mColorStatus);
+        mChevronBackground.setColor(mColorChevron);
 
-        mPieBackground.setColor(COLOR_PIE_BACKGROUND);
-        mPieSelected.setColor(COLOR_PIE_SELECT);
-        mPieOutlines.setColor(COLOR_PIE_OUTLINES);
-        mClockPaint.setColor(COLOR_STATUS);
-        mAmPmPaint.setColor(COLOR_STATUS);
-        mChevronBackground.setColor(COLOR_CHEVRON);
         mBatteryJuice.setColorFilter(null);
 
         // measure clock

@@ -3297,6 +3297,71 @@ public final class Settings {
          */
         public static final String PIE_GRAVITY = "pie_gravity";
 
+	/**
+	* @hide
+	*/
+        public static final String PIE_SNAP_BACKGROUND_COLOR = "pie_snap_background_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_BACKGROUND_COLOR = "pie_background_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_SELECT_COLOR = "pie_select_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_OUTLINES_COLOR = "pie_outlines_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_CHEVRON_COLOR = "pie_chevron_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_STATUS_COLOR = "pie_status_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_BATTERY_BACKGROUND_COLOR = "pie_battery_background_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_BATTERY_JUICE_COLOR = "pie_battery_juice_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_BATTERY_JUICE_LOW_COLOR = "pie_battery_juice_low_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_BATTERY_JUICE_CRITICAL_COLOR = "pie_battery_juice_critical_color";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_ANGLE = "pie_angle";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_GAP = "pie_gap";
+
+        /**
+	* @hide
+	*/
+        public static final String PIE_SIZE = "pie_size";
+
         /**
          * Use EdgeGesture Service for system gestures in PhoneWindowManager
          * @hide
