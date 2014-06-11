@@ -2520,10 +2520,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                             | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
                 boolean blacklisted = false;
                 // don't pass notifications that run in Hover to Ticker
-                try {
-                    blacklisted = getNotificationManager().isPackageAllowedForHover(n.getPackageName());
-                } catch (android.os.RemoteException ex) {
-                    // System is dead
+                if (mHoverState == HOVER_ENABLED) {
+                    try {
+                        blacklisted = getNotificationManager().isPackageAllowedForHover(n.getPackageName());
+                    } catch (android.os.RemoteException ex) {
+                        // System is dead
+                    }
                 }
                 if (!blacklisted) mTicker.addEntry(n);
             }
@@ -2543,6 +2545,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     }
 
     private class MyTicker extends Ticker {
+        private boolean hasTicked = false;
 
         MyTicker(Context context, View sb) {
             super(context, sb);
@@ -2550,7 +2553,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
         @Override
         public void tickerStarting() {
-            mTicking = true;
+            if (mHoverState == HOVER_DISABLED) mTicking = true;
             mStatusBarContents.setVisibility(View.GONE);
             mCenterClockLayout.setVisibility(View.GONE);
             mTickerView.setVisibility(View.VISIBLE);
@@ -2559,10 +2562,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             mCenterClockLayout.startAnimation(
                 loadAnim(com.android.internal.R.anim.push_up_out,
                 null));
+            hasTicked = true;
         }
 
         @Override
         public void tickerDone() {
+            if (!hasTicked) return;
             mStatusBarContents.setVisibility(View.VISIBLE);
             mCenterClockLayout.setVisibility(View.VISIBLE);
             mTickerView.setVisibility(View.GONE);
@@ -2572,6 +2577,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             mCenterClockLayout.startAnimation(
                 loadAnim(com.android.internal.R.anim.push_down_in,
                 null));
+            hasTicked = false;
         }
 
         public void tickerHalting() {
