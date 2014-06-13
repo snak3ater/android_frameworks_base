@@ -61,4 +61,7 @@
 
     <!-- Network traffic monitor multi-line text size -->
     <dimen name="net_traffic_multi_text_size">9dp</dimen>
+
+    <!-- QuickSettings dimens -->
+    <dimen name="qs_tile_corner_switch_icon_size">32dp</dimen>
 </resources>
