@@ -103,6 +103,18 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
         out.recycle();
         return data;
     }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void resetStatistics() {
+        mContext.enforceCallingPermission(
+                android.Manifest.permission.RESET_BATTERY_STATS, null);
+        synchronized (mStats) {
+            mStats.resetAllStatsLocked();
+        }
+    }
     
     public void noteStartWakelock(int uid, int pid, String name, int type) {
         enforceCallingPermission();
