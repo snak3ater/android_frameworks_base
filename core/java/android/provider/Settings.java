@@ -3204,12 +3204,6 @@ public final class Settings {
 	*/
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
-       /**
-	* Display second in the Clock
-	* @hide
-	*/
-        public static final String CLOCK_USE_SECOND = "clock_use_second";
-
         /**
          * Whether to include audio when recording a video
          * @hide
