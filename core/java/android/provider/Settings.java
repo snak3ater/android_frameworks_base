@@ -2694,10 +2694,24 @@ public final class Settings {
         public static final String HEADSET_PLUG_SYSTEM_DEFAULT = "SYSTEM_DEFAULT";
 
         /**
-         * Store last immersive state to persist through reboot
+         * Store last immersive state to persist through reboot       
          * @hide
          */
         public static final String IMMERSIVE_LAST_ACTIVE_STATE = "immersive_last_active_state";
+
+	/**
+ 	 * Heads Up Notifications
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
+
+        /**
+         * Which applications to disable heads up notifications for
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_CUSTOM_VALUES = "heads_up_custom_values";
 
 	/**
 	* Quick Settings Quick Pulldown

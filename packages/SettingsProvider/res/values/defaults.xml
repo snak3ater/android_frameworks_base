@@ -185,5 +185,7 @@
 
     <!-- Volume adjust sound -->
     <integer name="def_volume_adjust_sounds_enabled">1</integer>
-</resources>
 
+    <!-- Default values of Settings.System.HEADS_UP_NOTIFICATION -->
+    <string name="def_heads_up_notification_values"></string>
+</resources>
