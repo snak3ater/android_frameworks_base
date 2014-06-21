@@ -20,8 +20,14 @@
     <!-- The list of components which should be automatically disabled. -->
     <string-array name="config_disabledComponents" translatable="false">
     </string-array>
+
     <!-- Camera flash -->
     <bool name="config_device_has_camera_flash">false</bool>
+
+    <!-- Maximum wallpaper width for devices with very high-res screen (1920x1200)
+         the wallpaper width suggestion by the launcher may be too large for
+         the GPU to handle. -->
+    <integer name="config_wallpaperMaxWidth">-1</integer>
 
     <!-- kill app long press back -->
     <integer name="config_backKillTimeout">500</integer>
