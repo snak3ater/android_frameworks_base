@@ -3127,6 +3127,13 @@ public final class Settings {
         public static final int INCOMING_CALL_STYLE_FULLSCREEN_PHOTO = 1;
 
         /**
+         * Hover: Option to exclude from insecure lockscreen, default is 0 (off).
+         *
+         * @hide
+         */
+        public static final String HOVER_EXCLUDE_FROM_INSECURE_LOCK_SCREEN = "hover_exclude_from_insecure_lock_screen";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
