@@ -42,6 +42,7 @@
 
   <!-- UI theme mode -->
   <java-symbol type="integer" name="config_uiThemeMode" />
+  <java-symbol type="drawable" name="dialog_full_holo_dark" />
 
   <!-- Download Icon -->
   <java-symbol type="drawable" name="stat_sys_downloadicon" />
