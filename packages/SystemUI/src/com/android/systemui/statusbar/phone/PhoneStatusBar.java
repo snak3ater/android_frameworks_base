@@ -3151,6 +3151,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
         makeStatusBarView();
         repositionNavigationBar();
+        addHeadsUpView();
 
         // recreate StatusBarIconViews.
         for (int i = 0; i < nIcons; i++) {
