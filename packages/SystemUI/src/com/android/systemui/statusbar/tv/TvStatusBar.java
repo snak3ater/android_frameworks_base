@@ -159,14 +159,10 @@ public class TvStatusBar extends BaseStatusBar {
 
     @Override
     public void hideHeadsUp() {
-	}
-
-    @Override
-    public void updateHeadsUpPosition(boolean statusBarShows) {
     }
 
     @Override
-    public void animateExpandSettingsPanel(boolean flip) {
+    public void updateHeadsUpPosition(boolean statusBarShows) {
     }
 
     @Override
