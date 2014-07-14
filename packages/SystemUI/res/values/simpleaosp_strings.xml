@@ -108,6 +108,7 @@
     <string name="navbar_recents_clear_all_title">Clear all</string>
     <string name="navbar_recents_clear_all_message">Would you like the "recents button" to clear all apps?</string>
     <string name="navbar_recents_clear_all" translatable="false">@string/navbar_recents_clear_all_title</string>
+    <string name="status_bar_recents_card_stack" translatable="false">@string/status_bar_recents_card_stack_title</string>
 
     <!-- Switch apps -->
     <string name="enable_switch_apps_title">Switch apps</string>
@@ -157,4 +158,8 @@
     <string name="navbar_menu_conditional_button">Menu (AutoHide) button</string>
     <string name="navbar_menu_always_button">Menu (AlwaysShow) button</string>
     <string name="navbar_menu_big_button">Menu button</string>
+
+    <!-- Recents card stack view confirmation dialog -->
+    <string name="status_bar_recents_card_stack_title">Recents card stack view</string>
+    <string name="status_bar_recents_card_stack_message">Would you like to enable recents card stack view?</string>
 </resources>
