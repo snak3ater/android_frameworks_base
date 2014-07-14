@@ -3512,6 +3512,12 @@ public final class Settings {
         public static final String DIALER_OPENCNAM_AUTH_TOKEN = "dialer_opencnam_auth_token";
 
         /**
+         * Card stack view for recents
+         * @hide
+         */
+        public static final String STATUS_BAR_RECENTS_CARD_STACK = "status_bar_recents_card_stack";
+
+        /**
          * Pie control panel. Meet him on the spot.
          * State (full/lite) based on immersive mode.
          * 0 = off
@@ -3679,7 +3685,8 @@ public final class Settings {
             SAFE_HEADSET_VOLUME,
             PIE_STATE,
             NAVBAR_RECENTS_CLEAR_ALL,
-            RECENTS_SWITCH
+            RECENTS_SWITCH,
+            STATUS_BAR_RECENTS_CARD_STACK
         };
 
         // Settings moved to Settings.Secure

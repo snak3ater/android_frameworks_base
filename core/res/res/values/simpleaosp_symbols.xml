@@ -110,4 +110,6 @@
   <!-- Theme install failure notification -->
   <java-symbol type="string" name="theme_install_error_title" />
   <java-symbol type="string" name="theme_install_error_message" />
+
+  <java-symbol type="dimen" name="status_bar_recents_card_margin" />
 </resources>
