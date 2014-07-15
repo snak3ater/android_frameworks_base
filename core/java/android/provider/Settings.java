@@ -3465,6 +3465,14 @@ public final class Settings {
         public static final String HEADS_UP_FLOATING_WINDOW = "heads_up_floating_window";
 
         /**
+	 * Time how long heads up will show till it is automatically hidden.
+         * If time = 0 notifications stays till the user interacts with it.
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFCATION_DECAY = "heads_up_notifcation_decay";
+
+        /**
          * Pie control panel. Meet him on the spot.
          * State (full/lite) based on immersive mode.
          * 0 = off
