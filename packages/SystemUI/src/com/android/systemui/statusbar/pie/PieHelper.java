@@ -188,9 +188,7 @@ public class PieHelper {
     }
 
     public boolean isAssistantAvailable() {
-        Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                .getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
-        return intent != null;
+        return mBar.getSearchPanelView().isAssistantAvailable();
     }
 
     public void startAssistActivity() {
