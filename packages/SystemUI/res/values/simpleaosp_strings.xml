@@ -64,16 +64,16 @@
     <string name="app_killed_message">Application killed</string>
 
     <!-- Title shown in notification popup for launching notification in floating mode -->
-    <string name="status_bar_notification_floating_item_title">Floating mode</string>
+    <string name="status_bar_notification_floating_item_title">Floating-mode</string>
 
     <!-- Title shown in recents popup for showing app in floating mode -->
-    <string name="status_bar_recent_floating_item_title">Floating mode</string>
+    <string name="status_bar_recent_floating_item_title">Floating-mode</string>
 
     <!-- Title shown when app provides no interface -->
     <string name="status_bar_floating_no_interface">App provides no interface</string>
 
     <!-- Blacklisted app for floating mode -->
-    <string name="floating_mode_blacklisted_app">The current app is blacklisted as it may not work as expected in floating mode</string>
+    <string name="floating_mode_blacklisted_app">The current app is blacklisted as it may not work as expected in floating-mode</string>
 
     <!-- First time run hover -->
     <string name="hover_cling_text">Hover is now enabled and\n\nwhen a new notification arrives, an overlay will show allowing you to respond to it without leaving current app</string>
