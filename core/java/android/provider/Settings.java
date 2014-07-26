@@ -3050,6 +3050,13 @@ public final class Settings {
         public static final String HEADS_UP_SHOW_UPDATE = "heads_up_show_update";
 
 	/**
+         * Whether heads up notification is shown on the bottom of the screen (default = disabled)
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_GRAVITY_BOTTOM = "heads_up_gravity_bottom";
+
+	/**
          *
          * OverScroll Glow Color
          * @hide
