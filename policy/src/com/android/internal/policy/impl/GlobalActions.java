@@ -26,15 +26,12 @@ import com.android.internal.R;
 import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ThemeUtils;
 import android.content.pm.UserInfo;
 import android.content.res.TypedArray;
@@ -280,31 +277,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     R.string.global_action_power_off) {
 
                 public void onPress() {
-                    // Check quickboot status
-                    boolean quickbootAvailable = false;
-                    final PackageManager pm = mContext.getPackageManager();
-                    try {
-                        pm.getPackageInfo("com.qapp.quickboot", PackageManager.GET_META_DATA);
-                        quickbootAvailable = true;
-                    } catch (NameNotFoundException e) {
-                        // Ignore
-                    }
-                    final boolean quickbootEnabled = Settings.Global.getInt(
-                            mContext.getContentResolver(), Settings.Global.ENABLE_QUICKBOOT,
-                            1) == 1;
-
-                    // goto quickboot mode
-                    if (quickbootAvailable && quickbootEnabled) {
-                        startQuickBoot();
-                        return;
-                    }
                     // shutdown by making sure radio and power are handled accordingly.
                     mWindowManagerFuncs.shutdown(true);
                 }
 
                 public boolean onLongPress() {
-                    // long press always does a full shutdown in case quickboot is enabled
-                    mWindowManagerFuncs.shutdown(true);
                     return true;
                 }
 
@@ -1142,16 +1119,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
         if (!mHasTelephony) {
             mAirplaneState = on ? ToggleAction.State.On : ToggleAction.State.Off;
-        }
-    }
-
-    private void startQuickBoot() {
-
-        Intent intent = new Intent("org.codeaurora.action.QUICKBOOT");
-        intent.putExtra("mode", 0);
-        try {
-            mContext.startActivityAsUser(intent,UserHandle.CURRENT);
-        } catch (ActivityNotFoundException e) {
         }
     }
 
