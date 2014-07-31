@@ -31,8 +31,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageDataObserver;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.ThemeConfig;
@@ -124,10 +126,15 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_HIDE_HEADS_UP = 1027;
     protected static final int MSG_ESCALATE_HEADS_UP = 1028;
 
-    protected static final boolean ENABLE_HEADS_UP = true;
-    // scores above this threshold should be displayed in heads up mode.
-    protected static final int INTERRUPTION_THRESHOLD = 11;
-    protected static final String SETTING_HEADS_UP = "heads_up_enabled";
+    // Scores above this threshold should be displayed in heads up mode.
+    // We allow everything between PRIORITY_HIGH and PRIORITY_MAX (10 - 20) as long
+    // the application explicit sends meta information to request a
+    // heads up notification.
+    protected static final int INTERRUPTION_THRESHOLD = 10;
+    // Default timeout for heads up snooze. 5 minutes.
+    protected static final int DEFAULT_TIME_HEADS_UP_SNOOZE = 300000;
+
+    private static final int MENU_HEADS_UP_ID = 1;
 
     // Should match the value in PhoneWindowManager
     public static final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
@@ -174,11 +181,17 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected int mLayoutDirection = -1; // invalid
     private Locale mLocale;
-    protected boolean mUseHeadsUp = false;
+    private int mHeadsUpSnoozeTime = DEFAULT_TIME_HEADS_UP_SNOOZE;
+    private long mHeadsUpSnoozeStartTime;
+    protected String mHeadsUpPackageName;
+    protected boolean mShowHeadsUpUpdates;
 
     protected IDreamManager mDreamManager;
     PowerManager mPowerManager;
     protected int mRowHeight;
+
+    private PackageManager mPm;
+
     protected FrameLayout mStatusBarContainer;
 
     // Notification helper
@@ -204,6 +217,9 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected WindowManager mWindowManager;
     protected IWindowManager mWindowManagerService;
     protected abstract void refreshLayout(int layoutDirection);
+    protected abstract boolean panelsEnabled();
+    protected abstract void populateHeadsUp(IBinder key,
+            StatusBarNotification notification, NotificationData.Entry shadeEntry);
 
     protected Display mDisplay;
 
@@ -338,6 +354,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     };
 
     public void start() {
+        mPm = mContext.getPackageManager();
+
         mWindowManager = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
         mDisplay = mWindowManager.getDefaultDisplay();
@@ -683,6 +701,17 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mNotificationBlamePopup.getMenuInflater().inflate(
                         R.menu.notification_popup_menu,
                         mNotificationBlamePopup.getMenu());
+
+                // Add heads up menu entry.
+                final boolean isHeadsUp = mPm.getHeadsUpSetting(packageNameF);
+
+                if (!isThisASystemPackage(packageNameF)) {
+                    mNotificationBlamePopup.getMenu().add(0, MENU_HEADS_UP_ID, 0,
+                            mContext.getResources().getString(
+                            isHeadsUp ? R.string.status_bar_notification_heads_up_disable_title
+                            : R.string.status_bar_notification_heads_up_enable_title));
+                }
+
                 final ContentResolver cr = mContext.getContentResolver();
                 if (Settings.Secure.getInt(cr,
                         Settings.Secure.DEVELOPMENT_SHORTCUT, 0) == 0) {
@@ -714,6 +743,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                         if (item.getItemId() == R.id.notification_inspect_item) {
                             startApplicationDetailsActivity(packageNameF);
                             animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                        } else if (item.getItemId() == MENU_HEADS_UP_ID) {
+                            mPm.setHeadsUpSetting(packageNameF, !isHeadsUp);
 			} else if (item.getItemId() == R.id.notification_inspect_item_force_stop) {
                             ActivityManager am = (ActivityManager) mContext
                                     .getSystemService(
@@ -782,7 +813,19 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     }
 
-    public void onHeadsUpDismissed() {
+    private boolean isThisASystemPackage(String packageName) {
+        try {
+            PackageInfo packageInfo = mPm.getPackageInfo(packageName,
+                        PackageManager.GET_SIGNATURES);
+            PackageInfo sys = mPm.getPackageInfo("android", PackageManager.GET_SIGNATURES);
+            return (packageInfo != null && packageInfo.signatures != null &&
+                    sys.signatures[0].equals(packageInfo.signatures[0]));
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    public void onHeadsUpDismissed(boolean direction) {
     }
 
     @Override
@@ -1466,7 +1509,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             try {
                 updateNotificationViews(oldEntry, notification);
 
-                if (ENABLE_HEADS_UP && mInterruptingNotificationEntry != null
+                if (mInterruptingNotificationEntry != null
                         && oldNotification == mInterruptingNotificationEntry.notification) {
                     if (!shouldInterrupt(notification)) {
                         if (DEBUG) Log.d(TAG, "no longer interrupts!");
@@ -1474,8 +1517,12 @@ public abstract class BaseStatusBar extends SystemUI implements
                     } else {
                         if (DEBUG) Log.d(TAG, "updating the current heads up:" + notification);
                         mInterruptingNotificationEntry.notification = notification;
-                        updateNotificationViews(mInterruptingNotificationEntry, notification);
+                        updateNotificationViews(mInterruptingNotificationEntry, notification, true);
                     }
+                } else if (shouldInterrupt(notification)
+                        && panelsEnabled() && !isHeadsUpInSnooze() && mShowHeadsUpUpdates) {
+                    final NotificationData.Entry newEntry = mNotificationData.findByKey(key);
+                    populateHeadsUp(key, notification, newEntry);
                 }
 
                 // Update the icon.
@@ -1504,10 +1551,14 @@ public abstract class BaseStatusBar extends SystemUI implements
             final boolean wasExpanded = oldEntry.row.isUserExpanded();
             removeNotificationViews(key);
             addNotificationViews(key, notification);  // will also replace the heads up
+            final NotificationData.Entry newEntry = mNotificationData.findByKey(key);
             if (wasExpanded) {
-                final NotificationData.Entry newEntry = mNotificationData.findByKey(key);
                 newEntry.row.setExpanded(true);
                 newEntry.row.setUserExpanded(true);
+            }
+            if (mInterruptingNotificationEntry == null && shouldInterrupt(notification)
+                    && panelsEnabled() && !isHeadsUpInSnooze() && mShowHeadsUpUpdates) {
+                populateHeadsUp(key, notification, newEntry);
             }
         }
 
@@ -1532,6 +1583,11 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     private void updateNotificationViews(NotificationData.Entry entry,
             StatusBarNotification notification) {
+        updateNotificationViews(entry, notification, false);
+    }
+
+    private void updateNotificationViews(NotificationData.Entry entry,
+            StatusBarNotification notification, boolean headsUp) {
         final RemoteViews contentView = notification.getNotification().contentView;
         final RemoteViews bigContentView = notification.getNotification().bigContentView;
         // Reapply the RemoteViews
@@ -1542,8 +1598,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         // update the contentIntent
         final PendingIntent contentIntent = notification.getNotification().contentIntent;
         if (contentIntent != null) {
-            final View.OnClickListener listener = makeClicker(contentIntent,
-                    notification.getPackageName(), notification.getTag(), notification.getId());
+            final View.OnClickListener listener =
+                    mNotificationHelper.getNotificationClickListener(entry, headsUp, false);
             entry.content.setOnClickListener(listener);
         } else {
             entry.content.setOnClickListener(null);
@@ -1574,8 +1630,44 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     }
 
+    public void snoozeHeadsUp() {
+        hideHeadsUp();
+        mHeadsUpSnoozeStartTime = System.currentTimeMillis();
+        Toast.makeText(mContext,
+                mContext.getString(R.string.heads_up_snooze_message,
+                mHeadsUpSnoozeTime / 60 / 1000), Toast.LENGTH_LONG).show();
+    }
+
+    protected boolean isHeadsUpInSnooze() {
+        return (mHeadsUpSnoozeStartTime + mHeadsUpSnoozeTime - System.currentTimeMillis()) > 0;
+    }
+
+    protected void setHeadsUpSnoozeTime(int snoozeTime) {
+        mHeadsUpSnoozeTime = snoozeTime;
+    }
+
+    protected void resetHeadsUpSnoozeTimer() {
+        mHeadsUpSnoozeStartTime = 0;
+    }
+
+    @Override // CommandQueue
+    public void hideHeadsUpCandidate(String packageName) {
+        // Activity stack notifies us that probably the the current heads up
+        // is from the package which is opened now. If this is the case hide
+        // our heads up immediatelly to do not disturb the workflow.
+        if (mHeadsUpPackageName != null && mHeadsUpPackageName.equals(packageName)) {
+            hideHeadsUp();
+        }
+    }
+
+    public boolean excludeHeadsUpFromLockScreen() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HEADS_UP_EXCLUDE_FROM_LOCK_SCREEN, 0) != 0;
+    }
+
     protected boolean shouldInterrupt(StatusBarNotification sbn) {
         Notification notification = sbn.getNotification();
+        mHeadsUpPackageName = sbn.getPackageName();
         // some predicates to make the boolean logic legible
         boolean isNoisy = (notification.defaults & Notification.DEFAULT_SOUND) != 0
                 || (notification.defaults & Notification.DEFAULT_VIBRATE) != 0
@@ -1583,15 +1675,31 @@ public abstract class BaseStatusBar extends SystemUI implements
                 || notification.vibrate != null;
         boolean isHighPriority = sbn.getScore() >= INTERRUPTION_THRESHOLD;
         boolean isFullscreen = notification.fullScreenIntent != null;
-        boolean isAllowed = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
-                Notification.HEADS_UP_ALLOWED) != Notification.HEADS_UP_NEVER;
+        int asHeadsUp = notification.extras.getInt(Notification.EXTRA_AS_HEADS_UP,
+                Notification.HEADS_UP_NEVER);
+        boolean isAllowed = asHeadsUp != Notification.HEADS_UP_NEVER;
+        boolean isRequested = asHeadsUp == Notification.HEADS_UP_REQUESTED;
+        boolean isOngoing = sbn.isOngoing();
+        boolean isHeadsUpPackage = mPm.getHeadsUpSetting(sbn.getPackageName());
 
         final KeyguardTouchDelegate keyguard = KeyguardTouchDelegate.getInstance(mContext);
-        boolean interrupt = (isFullscreen || (isHighPriority && isNoisy))
+        boolean keyguardNotVisible = !keyguard.isShowingAndNotHidden()
+                && !keyguard.isInputRestricted();
+        boolean keyguardVisibleNotSecure =
+                keyguard.isShowingAndNotHidden() && !keyguard.isSecure();
+
+        // Possibly a heads up from an app with native support.
+        boolean interrupt = (isFullscreen || (isHighPriority && isNoisy) || isRequested)
                 && isAllowed
                 && mPowerManager.isScreenOn()
-                && !keyguard.isShowingAndNotHidden()
-                && !keyguard.isInputRestricted();
+                && (keyguardNotVisible || (keyguardVisibleNotSecure && !excludeHeadsUpFromLockScreen()));
+
+        // Possibly a heads up package set from the user.
+        interrupt = interrupt
+                || (isHeadsUpPackage
+                && !isOngoing
+                && mPowerManager.isScreenOn()
+                && (keyguardNotVisible || (keyguardVisibleNotSecure && !excludeHeadsUpFromLockScreen())));
         try {
             interrupt = interrupt && !mDreamManager.isDreaming();
         } catch (RemoteException e) {

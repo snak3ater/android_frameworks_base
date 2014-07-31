@@ -3099,6 +3099,13 @@ public final class Settings {
 	public static final String DIALKEY_PADDING = "dialkey_padding";
 
         /**
+         * Whether incomming call UI stays in background and shows as heads up notification
+         *
+         * @hide
+         */
+        public static final String CALL_UI_AS_HEADS_UP = "call_ui_as_heads_up";
+
+        /**
          * Volume key controls ringtone or media sound stream
          *
          * @hide
@@ -3401,8 +3408,56 @@ public final class Settings {
         public static final String QUIET_HOURS_ACTIVE = "quiet_hours_active";
 
        /**
-         * The forward lookup provider
+         * Whether heads up notification is shown on the bottom of the screen (default = disabled)
          *
+         * @hide
+         */
+        public static final String HEADS_UP_GRAVITY_BOTTOM = "heads_up_gravity_bottom";
+
+        /**
+         * Whether heads up notification is expanded by default (default = disabled)
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_EXPANDED = "heads_up_expanded";
+
+        /**
+         * Time where heads up is disabled by user interaction (default = 5 minutes)
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_SNOOZE_TIME = "heads_up_snooze_time";
+
+        /**
+         * Time how long heads up will show till it is automatically hidden.
+         * If time = 0 notifications stays till the user interacts with it.
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFCATION_DECAY = "heads_up_notifcation_decay";
+
+        /**
+         * Whether notification updates from background notifications should be shown as heads up.
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_SHOW_UPDATE = "heads_up_show_update";
+
+        /**
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_FLOATING_WINDOW = "heads_up_floating_window";
+
+        /**
+         * Heads up: Option to exclude from lockscreen, default is 0 (off).
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_EXCLUDE_FROM_LOCK_SCREEN = "heads_up_exclude_from_lock_screen";
+
+        /**
+         * The forward lookup provider
          * @hide
          */
         public static final String FORWARD_LOOKUP_PROVIDER = "forward_lookup_provider";
