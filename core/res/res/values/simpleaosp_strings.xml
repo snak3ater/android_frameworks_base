@@ -72,4 +72,8 @@
     <string name="permlab_changePhoneBlacklist">change phone blacklist</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changePhoneBlacklist">Allows an app to change the phone numbers that are blocked for incoming calls or messages.</string>
+
+  <!-- Heads up -->
+  <string name="permlab_changeHeadsUpState">enable or disable heads up</string>
+  <string name="permdesc_changeHeadsUpState">Allows the application to change whether another application is allowed to show normal notifications as heads up notification.</string>
 </resources>

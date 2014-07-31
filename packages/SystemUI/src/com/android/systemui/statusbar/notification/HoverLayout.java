@@ -195,7 +195,7 @@ public class HoverLayout extends RelativeLayout implements ExpandHelper.Callback
         }
 
         @Override
-        public void onChildDismissed(View v) {
+        public void onChildDismissed(View v, boolean direction) {
             mTouchOutside = false; // reset
             mHover.clearHandlerCallbacks();
             mHover.setAnimatingVisibility(false);
