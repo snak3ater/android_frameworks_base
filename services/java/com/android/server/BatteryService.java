@@ -51,7 +51,6 @@ import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import com.android.internal.util.simpleaosp.QuietHoursUtils;
 
 
 /**
@@ -143,11 +142,6 @@ public final class BatteryService extends Binder {
     private boolean mMultiColorLed;
 
     private boolean mSentLowBatteryBroadcast = false;
-
-   // Quiet hours support
-    private boolean mQuietHoursEnabled = false;
-    private int mQuietHoursStart = 0;
-    private int mQuietHoursEnd = 0;
 
     private BatteryListener mBatteryPropertiesListener;
     private IBatteryPropertiesRegistrar mBatteryPropertiesRegistrar;
@@ -741,21 +735,9 @@ public final class BatteryService extends Binder {
         public void updateLightsLocked() {
             final int level = mBatteryProps.batteryLevel;
             final int status = mBatteryProps.batteryStatus;
-		if (!mLightEnabled) {
+            if (!mLightEnabled) {
                 // No lights if explicitly disabled
                 mBatteryLight.turnOff();
-		} else if (QuietHoursUtils.inQuietHours(mContext,Settings.System.QUIET_HOURS_DIM)) {
-                if (mLedPulseEnabled && level < mLowBatteryWarningLevel &&
-                        status != BatteryManager.BATTERY_STATUS_CHARGING) {
-                    // The battery is low, the device is not charging and the low battery pulse
-                    // is enabled - ignore Quiet Hours
-                    mBatteryLight.setFlashing(mBatteryLowARGB, LightsService.LIGHT_FLASH_TIMED,
-                            mBatteryLedOn, mBatteryLedOff);
-                } else {
-                    // No lights if in Quiet Hours and battery not low
-                    mBatteryLight.turnOff();
-                }
-
             } else if (level < mLowBatteryWarningLevel) {
                 if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
                     // Battery is charging and low
@@ -821,16 +803,6 @@ public final class BatteryService extends Binder {
                         Settings.System.BATTERY_LIGHT_FULL_COLOR), false, this,
                     UserHandle.USER_ALL);
             }
-	   
-            // Quiet Hours
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QUIET_HOURS_ENABLED), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QUIET_HOURS_START), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QUIET_HOURS_END), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QUIET_HOURS_DIM), false, this);
             update();
         }
 
