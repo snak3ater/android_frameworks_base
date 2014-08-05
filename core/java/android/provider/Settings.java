@@ -2727,6 +2727,12 @@ public final class Settings {
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
 
        /**
+	* Quick settings quick pull down option
+	* @hide
+	*/
+        public static final String QUICK_SETTINGS_QUICK_PULL_DOWN = "quick_settings_quick_pull_down";
+
+       /**
 	* Show or hide clock
 	* 0 - hide
 	* 1 - show (default)
@@ -3197,7 +3203,8 @@ public final class Settings {
         public static final String[] SETTINGS_TO_RESET = {
             PIE_STATE,
             NAVBAR_RECENTS_CLEAR_ALL,
-            RECENTS_SWITCH
+            RECENTS_SWITCH,
+	    QUICK_SETTINGS_QUICK_PULL_DOWN
         };
 
         // Settings moved to Settings.Secure
