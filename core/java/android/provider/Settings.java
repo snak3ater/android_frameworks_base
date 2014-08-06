@@ -3201,10 +3201,10 @@ public final class Settings {
 	* @hide
 	*/
         public static final String[] SETTINGS_TO_RESET = {
+            QUICK_SETTINGS_QUICK_PULL_DOWN,
             PIE_STATE,
             NAVBAR_RECENTS_CLEAR_ALL,
-            RECENTS_SWITCH,
-	    QUICK_SETTINGS_QUICK_PULL_DOWN
+            RECENTS_SWITCH
         };
 
         // Settings moved to Settings.Secure
