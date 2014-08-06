@@ -3479,6 +3479,13 @@ public final class Settings {
          */
         public static final String HEADS_UP_EXPANDED = "heads_up_expanded";
 
+	/**
+         * Heads up: Option to exclude from lockscreen, default is 0 (off).
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_EXCLUDE_FROM_LOCK_SCREEN = "heads_up_exclude_from_lock_screen";
+
         /**
          * Pie control panel. Meet him on the spot.
          * State (full/lite) based on immersive mode.
