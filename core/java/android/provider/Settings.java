@@ -2825,12 +2825,6 @@ public final class Settings {
         public static final String VOLUME_KEYS_CONTROL_RING_STREAM = "volume_keys_control_ring_stream";
 
         /**
-         * Whether to prevent loud volume levels when headset is first plugged in.
-         * @hide
-         */
-        public static final String SAFE_HEADSET_VOLUME = "safe_headset_volume";
-
-        /**
          * Either if notification peek is enabled of disabled
          * 0 = disabled (default)
          * 1 = enabled
