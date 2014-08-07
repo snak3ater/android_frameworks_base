@@ -227,7 +227,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private final Object mLock = new Object();
 
     Context mContext;
-    Context mUiContext;
     /**
      * // Theme Engine context, not required yet here
      */
@@ -957,24 +956,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     };
 
-    private final Runnable mRingerChordLongPress = new Runnable() {
-        public void run() {
-            // Do the switch
-            final AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-            final int ringerMode = am.getRingerMode();
-            final VolumePanel volumePanel = new VolumePanel(getUiContext(),
-                                                              (AudioService) getAudioService());
-            volumePanel.postVolumeChanged(AudioManager.STREAM_RING,AudioManager.FLAG_SHOW_UI);
-        }
-    };
-
-    private Context getUiContext() {
-        if (mUiContext == null) {
-            mUiContext = ThemeUtils.createUiContext(mContext);
-        }
-        return mUiContext != null ? mUiContext : mContext;
-    }
-
     void showGlobalActionsDialog() {
         if (mGlobalActions == null) {
             mGlobalActions = new GlobalActions(mContext, mWindowManagerFuncs);
@@ -1210,13 +1191,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         mPowerMenuReceiver = new PowerMenuReceiver(context);
         mPowerMenuReceiver.registerSelf();
-
-        ThemeUtils.registerThemeChangeReceiver(context, new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mUiContext = null;
-            }
-        });
     }
 
     /**
