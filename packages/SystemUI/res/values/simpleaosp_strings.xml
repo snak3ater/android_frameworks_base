@@ -92,17 +92,17 @@
     <string name="pie_am_pm">a</string>
     <string name="enable_pie_control_title">Pie controls</string>
     <string name="enable_pie_control_message">Would you like to use pie controls while in immersive mode?</string>
-    <string name="pie_state">@string/enable_pie_control_title</string>
+    <string name="pie_state" translatable="false">@string/enable_pie_control_title</string>
 
     <!-- Clear recents confirmation dialog -->
     <string name="navbar_recents_clear_all_title">Clear all</string>
     <string name="navbar_recents_clear_all_message">Would you like the "recents button" to clear all apps?</string>
-    <string name="navbar_recents_clear_all">@string/navbar_recents_clear_all_title</string>
+    <string name="navbar_recents_clear_all" translatable="false">@string/navbar_recents_clear_all_title</string>
 
     <!-- Switch apps -->
     <string name="enable_switch_apps_title">Switch apps</string>
     <string name="enable_switch_apps_message">Quickly launch prior app when long pressing recents?</string>
-    <string name="recents_switch">@string/enable_switch_apps_title</string>
+    <string name="recents_switch" translatable="false">@string/enable_switch_apps_title</string>
 
     <!-- Development shortcut -->
     <string name="advanced_dev_option_wipe_app">Wipe app data</string>
@@ -111,7 +111,8 @@
     <!-- Quick pulldown confirmation dialog -->
     <string name="quick_settings_quick_pull_down_title">Quick pull down</string>
     <string name="quick_settings_quick_pull_down_message">Would you like the edge of the status bar to pull down quick settings?</string>
+    <string name="quick_settings_quick_pull_down" translatable="false">@string/quick_settings_quick_pull_down_title</string>
 
     <!-- Safe headset volume -->
-    <string name="safe_headset_volume">Safe headset volume</string>
+    <string name="safe_headset_volume" translatable="false">@*android:string/safe_headset_warning_title</string>
 </resources>
