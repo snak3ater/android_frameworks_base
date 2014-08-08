@@ -1516,7 +1516,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             update(null);
         }
 
-        @Override public void onChange(boolean selfChange, Uri uri) {
+        @Override 
+        public void onChange(boolean selfChange, Uri uri) {
             update(uri);
             updateNotificationPulse();
         }
