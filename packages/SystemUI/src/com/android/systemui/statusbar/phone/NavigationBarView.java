@@ -41,6 +41,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -103,6 +104,7 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
     // used to disable the camera icon in navbar when disabled by DPM
     private boolean mCameraDisabledByDpm;
+    private boolean mCameraDisabledByUser;
 
     // performs manual animation in sync with layout transitions
     private final NavTransitionListener mTransitionListener = new NavTransitionListener();
@@ -226,6 +228,7 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
         mBarTransitions = new NavigationBarTransitions(this);
 
+        disableCameraByUser();
         mCameraDisabledByDpm = isCameraDisabledByDpm();
         watchForDevicePolicyChanges();
     }
@@ -482,12 +485,42 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         setVisibleOrGone(getCameraButton(), showCamera);
 
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
+
+        final boolean shouldShowCamera = disableHome
+            && !((disabledFlags & View.STATUS_BAR_DISABLE_SEARCH) != 0);
+        final View cameraButton = getCameraButton();
+        if (cameraButton != null) {
+            cameraButton.setVisibility(
+                    shouldShowCamera && !mCameraDisabledByDpm
+                    && !mCameraDisabledByUser ? View.VISIBLE : View.GONE);
+        }
+        setMenuVisibility(mShowMenu, true);
     }
 
     private void setVisibleOrGone(View view, boolean visible) {
         if (view != null) {
             view.setVisibility(visible ? VISIBLE : GONE);
         }
+    }
+
+    protected void disableCameraByUser() {
+        Resources keyguardResources;
+        PackageManager pm = mContext.getPackageManager();
+        try {
+            keyguardResources = pm.getResourcesForApplication("com.android.keyguard");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        final boolean cameraDefault = keyguardResources.getBoolean(
+                keyguardResources.getIdentifier(
+                "com.android.keyguard:bool/kg_enable_camera_default_widget", null, null));
+        mCameraDisabledByUser = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_CAMERA_WIDGET,
+                cameraDefault ? 1 : 0,
+                UserHandle.USER_CURRENT) == 0;
     }
 
     private boolean isCameraDisabledByDpm() {
