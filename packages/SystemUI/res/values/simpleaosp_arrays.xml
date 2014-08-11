@@ -17,7 +17,4 @@
     <array name="hover_blacklisted_packages">
         <item>com.google.android.googlequicksearchbox</item>
     </array>
-    <string-array name="heads_up_pkg_whitelist">
-        <item>com.android.mms</item>
-    </string-array>
 </resources>
