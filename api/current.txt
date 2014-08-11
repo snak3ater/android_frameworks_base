@@ -1433,6 +1433,7 @@ package android {
     field public static final int stat_sys_data_bluetooth = 17301632; // 0x1080080
     field public static final int stat_sys_download = 17301633; // 0x1080081
     field public static final int stat_sys_download_done = 17301634; // 0x1080082
+    field public static final int stat_sys_downloadicon = 17301662; // 0x108009e
     field public static final int stat_sys_headset = 17301635; // 0x1080083
     field public static final deprecated int stat_sys_phone_call = 17301636; // 0x1080084
     field public static final deprecated int stat_sys_phone_call_forward = 17301637; // 0x1080085
