@@ -669,7 +669,7 @@ class QuickSettings {
                             public boolean onLongClick(View v) {
                                 collapsePanels();
                                 startSettingsActivity(
-                                        android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                                       android.provider.Settings.ACTION_DISPLAY_SETTINGS);
                                 return true; // Consume click
                             }
                         });
