@@ -35,4 +35,5 @@ public class NavigationRingConstants {
     public static final String ACTION_LIGHTBULB =             "lightbulb";
     public static final String ACTION_LAST_APP =              "lastApp";
     public static final String ACTION_VIBRATE =               "ringVibrate";
+    public static final String ACTION_POWER_MENU =            "powerMenu";
 }

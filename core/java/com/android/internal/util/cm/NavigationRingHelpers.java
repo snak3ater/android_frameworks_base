@@ -143,7 +143,9 @@ public class NavigationRingHelpers {
             resourceId = getLightbulbDrawableResId(context);
         } else if (action.equals(ACTION_ASSIST)) {
             resourceId = com.android.internal.R.drawable.ic_action_assist_generic;
-        }
+        } else if (action.equals(ACTION_POWER_MENU)) {
+            resourceId = com.android.internal.R.drawable.ic_navigation_ring_power_menu;
+        } 
 
         if (resourceId < 0) {
             // No pre-defined action, try to resolve URI
