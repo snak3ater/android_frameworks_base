@@ -2968,6 +2968,26 @@ public final class Settings {
 	*/
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
+	/**
+         *
+         * OverScroll Glow Color
+         * @hide
+         */
+        public static final String OVERSCROLL_GLOW_COLOR = "overscroll_glow_color";
+
+        /**
+         *
+         * OverScroll effects configuration
+         * @hide
+         */
+        public static final String OVERSCROLL_EFFECT = "overscroll_effect";
+
+        /**
+         * Sets the overscroller weight (edge bounce effect on lists)
+         * @hide
+         */
+        public static final String OVERSCROLL_WEIGHT = "overscroll_weight";
+
        /**
 	* Network traffic indicator, goes from least to greatest significant bitwise
 	* 0 = Display up-stream traffic if set
@@ -7429,3 +7449,4 @@ public final class Settings {
         return "android-" + Long.toHexString(androidId);
     }
 }
+
