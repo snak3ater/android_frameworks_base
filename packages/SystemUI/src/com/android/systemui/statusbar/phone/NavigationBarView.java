@@ -55,7 +55,9 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
+import com.android.internal.util.cm.LockscreenTargetUtils;
+import com.android.internal.util.cm.NavigationRingConstants;
+import com.android.internal.util.cm.NavigationRingHelpers;
 import com.android.systemui.R;
 import com.android.systemui.recent.NavigationCallback;
 import com.android.systemui.recent.RecentsActivity;
@@ -481,7 +483,8 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
         final boolean showSearch = disableHome && !disableSearch;
         final boolean showCamera = showSearch && !mCameraDisabledByDpm;
-        setVisibleOrGone(getSearchLight(), showSearch);
+        setVisibleOrGone(getSearchLight(), showSearch 
+		&& NavigationRingHelpers.hasLockscreenTargets(mContext));
         setVisibleOrGone(getCameraButton(), showCamera);
 
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
