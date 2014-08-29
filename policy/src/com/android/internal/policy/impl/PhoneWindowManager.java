@@ -5329,6 +5329,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mBootMsgDialog.setCancelable(false);
                     mBootMsgDialog.show();
                 }
+
+                if (!mBootMsgDialog.isShowing())
+                     mBootMsgDialog.show();
                 mBootMsgDialog.setMessage(msg);
                 if (DEBUG_BOOTMSG) Log.d(TAG, "********** showBootMessage(" + msg +", " + always + ") updated ***********");
                 if (currentPackageName != null) {
