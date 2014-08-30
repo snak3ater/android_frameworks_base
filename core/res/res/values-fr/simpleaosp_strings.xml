@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Intercept outgoing sms -->
+    <string name="permlab_interceptSmsSent">intercepter les SMS sortants</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_interceptSmsSent">Permet à l\'application d\'intercepter un SMS sortant et que des applications malveillantes puissent utiliser cette option pour envoyer des SMS sortant.</string>
+    <!-- kill app long press back -->
+    <string name="app_killed_message">Application tuée</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessThemeService">Accéder au service de thème</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessThemeService">Permet à une application d\'accéder au service de thème et ne devrait jamais être nécessaire pour les applications normales</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readThemes">Lire les informations de votre thème</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readThemesDesc">Permet à l\'application de lire vos thèmes et
+       déterminer quel thème vous avez appliqué</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeThemes">Modifier vos thèmes</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeThemesDesc">Permet à l\'application d\'insérer de nouveaux thèmes et
+       modifiez le thème qui que vous avez appliqué</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+    <string name="permlab_setKeyguardWallpaper">Définir le fond d\'écran de l\'écran de verrouillage</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setKeyguardWallpaper">Permet à une application de modifier le fond d\'écran de l\'écran de verrouillage</string>
+
+    <!-- Label for item that reboots the device in device options dialog -->
+    <string name="global_action_reboot">Redémarrer</string>
+    <!-- Button to reboot the device, within the reboot options dialog -->
+    <string name="reboot_reboot">@string/global_action_reboot</string>
+    <!-- Button to reboot the device into recovery, within the reboot options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the device into fastboot, within the reboot options dialog -->
+    <string name="reboot_fastboot">Démarrage rapide</string>
+
+    <!-- Reboot confirmation dialog title -->
+    <string name="reboot_system" product="tablet">Redémarrer la tablette</string>
+    <string name="reboot_system" product="default">Redémarrer le téléphone</string>
+    <!-- Reboot confirmation dialog.  This is the message shown to the user when he chooses to reboot the device -->
+    <string name="reboot_confirm" product="tablet">Votre tablette redémarre</string>
+    <string name="reboot_confirm" product="default">Votre téléphone redémarre</string>
+
+    <!-- Reboot progress dialog. This is shown if the user chooses to reboot the device. -->
+    <string name="reboot_progress">Redémarrage\u2026</string>
+
+    <string name="global_action_screenshot">Capture d\'écran</string>
+
+    <!-- Immersive mode confirmation: Pick confirmation window from bottom when status bar is visible -->
+    <string name="immersive_mode_confirmation_bottom">Glissez vers le haut à partir du bas pour sortir du plein écran</string>
+
+    <!-- Setting confirmation dialog strings. Shown when any UI interaction can be modified by user input -->
+    <string name="setting_confirmation_ask_me_later">Demandez plus tard</string>
+    <string name="setting_confirmation_yes">Oui</string>
+    <string name="setting_confirmation_no">Non</string>
+
+    <!-- Safe headset volume warning dialog -->
+    <string name="safe_headset_warning_title">Volume sécurisé</string>
+    <string name="safe_headset_warning_message">Voulez-vous désactiver l\'avertissement du niveau de volume recommandé ?</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_security">Sécurité</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_security">Autorisations relatives à l\'information de sécurité de l\'appareil.</string>
+
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readPhoneBlacklist">Lire la liste noir du téléphone</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readPhoneBlacklist">Permet a une application de lire des informations sur les numéros de téléphone qui sont bloqués pour les appels entrants ou les messages.</string>
+
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changePhoneBlacklist">Changer la liste noir du téléphone</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changePhoneBlacklist">Permet à une application de modifier les numéros de téléphone qui sont bloqués pour les appels entrants ou les messages.</string>
+</resources>

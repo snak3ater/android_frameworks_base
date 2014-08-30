@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- QS Battery Tile -->
+    <string name="quick_settings_battery_charging">En charge</string>  
+    <string name="quick_settings_battery_discharging">En décharge</string>
+    <!-- QuickSettings: Immersive global mode [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_immersive_global_on_label">Immersive</string>
+    <!-- QuickSettings: Immersive global mode (On for the app) [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_immersive_global_app_label" translatable="false">@string/quick_settings_immersive_global_off_label</string>
+    <!-- QuickSettings: Immersive global mode (Off) [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_immersive_global_off_label">Immersive Off</string>
+    <!-- QuickSettings: Immersive active modes [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_immersive_mode_off_label">Désactivé</string>
+    <string name="quick_settings_immersive_mode_full_label">Complet</string>
+    <string name="quick_settings_immersive_mode_no_status_bar_label">Barre de navigation</string>
+    <string name="quick_settings_immersive_mode_no_navigation_bar_label">Barre de statut</string>
+    <string name="quick_settings_immersive_mode_app_label">forcé</string>
+    <!-- QuickSettings: LTE On [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_lte">LTE</string>
+    <!-- QuickSettings: LTE Off [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_lte_off">LTE Off</string>
+    <!-- QuickSettings: Mobile Network (2G/3G) [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_network_type">Mode réseau</string>
+    <string name="quick_settings_network_unknown">inconnu</string>
+    <string name="quick_settings_network_disabled">désactivé</string>
+    <string name="quick_settings_network_toast_disabled">Les paramètres réseau ne sont pas disponibles</string>
+    <!-- QuickSettings: Lightbulb tile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_lightbulb_label">Torche</string>
+    <string name="quick_settings_lightbulb_off_label">Torche Off</string>
+    <!-- QuickSettings: USB Tether Tile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_usb_tether_connected_label">Partage de connexion USB Off</string>
+    <string name="quick_settings_usb_tether_on_label">Partage de connexion USB</string>
+    <!-- QuickSettings: Sleep Tile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_sleep_action_label">Veille</string>
+    <string name="quick_settings_sleep_time_15_label">15 seconds</string>
+    <string name="quick_settings_sleep_time_30_label">30 seconds</string>
+    <string name="quick_settings_sleep_time_60_label">60 seconds</string>
+    <string name="quick_settings_sleep_time_120_label">2 minutes</string>
+    <string name="quick_settings_sleep_time_300_label">5 minutes</string>
+    <string name="quick_settings_sleep_time_600_label">10 minutes</string>
+    <string name="quick_settings_sleep_time_1800_label">30 minutes</string>
+    <string name="quick_settings_sleep_time_unknown_label">@string/quick_settings_network_unknown</string>
+    <!-- QuickSettings: Wifi AP Tile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_wifi_ap_label">Wi-Fi AP</string>
+    <string name="quick_settings_wifi_ap_off_label">Wi-Fi AP Off</string>
+    <!-- QuickSettings: Bluetooth Extra Tile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_bluetooth_not_discoverable_label">Non détectable</string>
+    <string name="quick_settings_bluetooth_discoverable_label">détectable</string>
+    <string name="quick_settings_bluetooth_disabled">Désactivé</string>
+    <!-- QuickSettings: Location Extra Tile [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_location_mode_high_label">Haute précision</string>
+    <string name="quick_settings_location_mode_battery_label">Economie de batterie</string>
+    <string name="quick_settings_location_mode_sensors_label">Appareil</string>
+    <!-- QuickSettings: Sound Tile  -->
+    <string name="quick_settings_ringer_mode_silent_label">Silencieux</string>
+    <string name="quick_settings_ringer_mode_vibrate_label">Vibreur</string>
+    <string name="quick_settings_ringer_mode_normal_label">Sonnerie</string>
+    <string name="quick_settings_ringer_mode_normal_vibrate_label">Sonnerie &amp; Vibreur</string>
+    <string name="quick_settings_volume_label">Volume</string>
+
+    <!--App killed message used for navring targets -->
+    <string name="app_killed_message">application tuée</string>
+
+    <!-- Title shown in notification popup for launching notification in floating mode -->
+    <string name="status_bar_notification_floating_item_title">Mode flottant</string>
+
+    <!-- Title shown in recents popup for showing app in floating mode -->
+    <string name="status_bar_recent_floating_item_title">Mode flottant</string>
+
+    <!-- Title shown when app provides no interface -->
+    <string name="status_bar_floating_no_interface">L\'application ne fournit pas d\'interface</string>
+
+    <!-- Blacklisted app for floating mode -->
+    <string name="floating_mode_blacklisted_app">The current app is blacklisted as it may not work as expected in floating-mode</string>
+
+    <!-- First time run hover -->
+    <string name="hover_cling_text">Hover is now enabled.\n\nWhen a new notification arrives, an overlay will show allowing you to respond to it without leaving current app.</string>
+
+    <!-- Screenshot delete -->
+    <string name="screenshot_delete_action">Supprimer</string>
+    <string name="screenshot_delete_confirmation">Capture d\'écran supprimé</string>
+
+    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_HP">HSPA+</string>
+
+    <!-- Pie controls and state -->
+    <string name="pie_date_format">ccc, dd MMM yyyy</string>
+    <string name="pie_hour_format_12">hh:mm</string>
+    <string name="pie_hour_format_24">HH:mm</string>
+    <string name="pie_am_pm">a</string>
+    <string name="enable_pie_control_title">Pie controls</string>
+    <string name="enable_pie_control_message">Voulez-vous utiliser les contrôles PIE en mode immersif ?</string>
+    <string name="pie_state" translatable="false">@string/enable_pie_control_title</string>
+
+    <!-- Clear recents confirmation dialog -->
+    <string name="navbar_recents_clear_all_title">Tout effacer</string>
+    <string name="navbar_recents_clear_all_message">Voulez-vous que le "bouton recents" efface toutes les applications ?</string>
+    <string name="navbar_recents_clear_all" translatable="false">@string/navbar_recents_clear_all_title</string>
+
+    <!-- Switch apps -->
+    <string name="enable_switch_apps_title">Sélecteur d\'application</string>
+    <string name="enable_switch_apps_message">Lancer rapidement l\'application précédante en restant appuyé sur recents ?</string>
+    <string name="recents_switch" translatable="false">@string/enable_switch_apps_title</string>
+
+    <!-- Development shortcut -->
+    <string name="advanced_dev_option_wipe_app">Effacer les données d\'applications</string>
+    <string name="advanced_dev_option_force_stop">Forcé l\'arrêt</string>
+
+    <!-- Quick pulldown confirmation dialog -->
+    <string name="quick_settings_quick_pull_down_title">Quick Pulldown</string>
+    <string name="quick_settings_quick_pull_down_message">Voulez-vous glisser sur le côté de la barre de statut pour afficher les paramètres rapides ?</string>
+    <string name="quick_settings_quick_pull_down" translatable="false">@string/quick_settings_quick_pull_down_title</string>
+
+    <!-- Safe headset volume -->
+    <string name="safe_headset_volume" translatable="false">@*android:string/safe_headset_warning_title</string>
+
+    <!-- NFC Quicksettings tile -->
+    <string name="quick_settings_nfc_label">NFC on</string>
+    <string name="quick_settings_nfc_off_label">NFC off</string>
+
+    <!-- Screenrecord Notification Ticker -->
+    <string name="screenrecord_notif_ticker">L\'écran est en cours d\'enregistrement</string>
+    <!-- Screenrecord notification title -->
+    <string name="screenrecord_notif_title">Enregistrement de l\'écran</string>
+    <!-- Screenrecord notification action: Stop -->
+    <string name="screenrecord_notif_stop">Arrêt</string>
+    <!-- Screenrecord notification action: show/hide pointer -->
+    <string name="screenrecord_notif_pointer_on">Afficher le pointeur</string>
+    <string name="screenrecord_notif_pointer_off">Cacher le pointeur</string>
+    <!-- Screen record notification error title -->
+    <string name="screenrecord_notif_error">Impossible d\'enregistrer l\'écran</string>
+</resources>
