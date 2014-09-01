@@ -48,7 +48,7 @@
     <!-- Reboot progress dialog. This is shown if the user chooses to reboot the device. -->
     <string name="reboot_progress">Rebooting\u2026</string>
 
-    <string name="global_action_screenshot">Screenshot</string>
+    <string name="global_action_screenshot">Screen shot</string>
 
     <!-- Immersive mode confirmation: Pick confirmation window from bottom when status bar is visible -->
     <string name="immersive_mode_confirmation_bottom">Swipe up from the bottom to exit full screen</string>
