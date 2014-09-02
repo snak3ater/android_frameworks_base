@@ -6,11 +6,11 @@
     <string name="quick_settings_battery_charging">En charge</string>  
     <string name="quick_settings_battery_discharging">En décharge</string>
     <!-- QuickSettings: Immersive global mode [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_immersive_global_on_label">Immersive</string>
+    <string name="quick_settings_immersive_global_on_label">Immersif activé</string>
     <!-- QuickSettings: Immersive global mode (On for the app) [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_global_app_label" translatable="false">@string/quick_settings_immersive_global_off_label</string>
     <!-- QuickSettings: Immersive global mode (Off) [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_immersive_global_off_label">Immersive Off</string>
+    <string name="quick_settings_immersive_global_off_label">Immersif désactivé</string>
     <!-- QuickSettings: Immersive active modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_immersive_mode_off_label">Désactivé</string>
     <string name="quick_settings_immersive_mode_full_label">Complet</string>
@@ -20,7 +20,7 @@
     <!-- QuickSettings: LTE On [CHAR LIMIT=NONE] -->
     <string name="quick_settings_lte">LTE</string>
     <!-- QuickSettings: LTE Off [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_lte_off">LTE Off</string>
+    <string name="quick_settings_lte_off">LTE désactivé</string>
     <!-- QuickSettings: Mobile Network (2G/3G) [CHAR LIMIT=NONE] -->
     <string name="quick_settings_network_type">Mode réseau</string>
     <string name="quick_settings_network_unknown">inconnu</string>
@@ -28,9 +28,9 @@
     <string name="quick_settings_network_toast_disabled">Les paramètres réseau ne sont pas disponibles</string>
     <!-- QuickSettings: Lightbulb tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_lightbulb_label">Torche</string>
-    <string name="quick_settings_lightbulb_off_label">Torche Off</string>
+    <string name="quick_settings_lightbulb_off_label">Torche désactivé</string>
     <!-- QuickSettings: USB Tether Tile [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_usb_tether_connected_label">Partage de connexion USB Off</string>
+    <string name="quick_settings_usb_tether_connected_label">Partage de connexion USB désactivé</string>
     <string name="quick_settings_usb_tether_on_label">Partage de connexion USB</string>
     <!-- QuickSettings: Sleep Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_sleep_action_label">Veille</string>
@@ -44,7 +44,7 @@
     <string name="quick_settings_sleep_time_unknown_label">@string/quick_settings_network_unknown</string>
     <!-- QuickSettings: Wifi AP Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_wifi_ap_label">Wi-Fi AP</string>
-    <string name="quick_settings_wifi_ap_off_label">Wi-Fi AP Off</string>
+    <string name="quick_settings_wifi_ap_off_label">Wi-Fi AP désactivé</string>
     <!-- QuickSettings: Bluetooth Extra Tile [CHAR LIMIT=NONE] -->
     <string name="quick_settings_bluetooth_not_discoverable_label">Non détectable</string>
     <string name="quick_settings_bluetooth_discoverable_label">détectable</string>
@@ -73,11 +73,10 @@
     <string name="status_bar_floating_no_interface">L\'application ne fournit pas d\'interface</string>
 
     <!-- Blacklisted app for floating mode -->
-    <string name="floating_mode_blacklisted_app">The current app is blacklisted as it may not work as expected in floating-mode</string>
+    <string name="floating_mode_blacklisted_app">L\'application actuelle est sur liste noire, elle peut ne pas fonctionner comme prévu en mode flottant</string>
 
     <!-- First time run hover -->
-    <string name="hover_cling_text">Hover is now enabled.\n\nWhen a new notification arrives, an overlay will show allowing you to respond to it without leaving current app.</string>
-
+    <string name="hover_cling_text">Hover est à présent activé.\n\nQuand une nouvelle notification arrive, une fenêtre vous permet d\'y répondre sans quitter l\'application en cours.</string>
     <!-- Screenshot delete -->
     <string name="screenshot_delete_action">Supprimer</string>
     <string name="screenshot_delete_confirmation">Capture d\'écran supprimé</string>
@@ -90,7 +89,7 @@
     <string name="pie_hour_format_12">hh:mm</string>
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
-    <string name="enable_pie_control_title">Pie controls</string>
+    <string name="enable_pie_control_title">Contrôles PIE</string>
     <string name="enable_pie_control_message">Voulez-vous utiliser les contrôles PIE en mode immersif ?</string>
     <string name="pie_state" translatable="false">@string/enable_pie_control_title</string>
 
@@ -109,7 +108,7 @@
     <string name="advanced_dev_option_force_stop">Forcé l\'arrêt</string>
 
     <!-- Quick pulldown confirmation dialog -->
-    <string name="quick_settings_quick_pull_down_title">Quick Pulldown</string>
+    <string name="quick_settings_quick_pull_down_title">Paramètres rapides</string>
     <string name="quick_settings_quick_pull_down_message">Voulez-vous glisser sur le côté de la barre de statut pour afficher les paramètres rapides ?</string>
     <string name="quick_settings_quick_pull_down" translatable="false">@string/quick_settings_quick_pull_down_title</string>
 
@@ -117,8 +116,8 @@
     <string name="safe_headset_volume" translatable="false">@*android:string/safe_headset_warning_title</string>
 
     <!-- NFC Quicksettings tile -->
-    <string name="quick_settings_nfc_label">NFC on</string>
-    <string name="quick_settings_nfc_off_label">NFC off</string>
+    <string name="quick_settings_nfc_label">NFC activé</string>
+    <string name="quick_settings_nfc_off_label">NFC désactivé</string>
 
     <!-- Screenrecord Notification Ticker -->
     <string name="screenrecord_notif_ticker">L\'écran est en cours d\'enregistrement</string>
