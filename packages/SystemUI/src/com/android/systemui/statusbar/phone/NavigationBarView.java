@@ -897,11 +897,6 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         public void init() {
             applyModeBackground(-1, getMode(), false /*animate*/);
         }
-
-        @Override
-        protected void onTransition(int oldMode, int newMode, boolean animate) {
-            super.onTransition(oldMode, newMode, animate);
-        }
     }
 
 }
