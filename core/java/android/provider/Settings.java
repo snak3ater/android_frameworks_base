@@ -3138,13 +3138,6 @@ public final class Settings {
          */
         public static final String CALL_UI_IN_BACKGROUND = "call_ui_in_background";
 
-	/**
-	 * Navigation controls to Use
-         *
-         * @hide
-         */
-        public static final String NAV_BUTTONS = "nav_buttons";
-
         /**
          * Whether to enable quiet hours.
          * @hide
@@ -7615,5 +7608,5 @@ public final class Settings {
     public static String getGTalkDeviceId(long androidId) {
         return "android-" + Long.toHexString(androidId);
     }
-}
 
+}
