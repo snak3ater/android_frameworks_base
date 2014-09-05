@@ -3559,6 +3559,18 @@ public final class Settings {
          */
         public static final String CALL_UI_AS_HEADS_UP = "call_ui_as_heads_up";
 
+	/**
+	 * Heads Up background color
+         * @hide
+         */
+        public static final String HEADS_UP_BG_COLOR = "heads_up_bg_color";
+
+        /**
+         * Heads Up text color
+         * @hide
+         */
+        public static final String HEADS_UP_TEXT_COLOR = "heads_up_text_color";
+
         /** @hide */
         public static final int STATUS_BAR_COLLAPSE_NEVER = 0;
         /** @hide */
