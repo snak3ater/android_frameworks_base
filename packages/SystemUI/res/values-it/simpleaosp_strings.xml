@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<!-- QS Battery Tile -->
+<string name="quick_settings_battery_charging">In carica</string>
+<string name="quick_settings_battery_discharging">Non in carica</string>
+<!-- QuickSettings: Immersive global mode [CHAR LIMIT=NONE] -->
+<string name="quick_settings_immersive_global_on_label">Immersiva</string>
+<!-- QuickSettings: Immersive global mode (On for the app) [CHAR LIMIT=NONE] -->
+<string name="quick_settings_immersive_global_app_label" translatable="false">@string/quick_settings_immersive_global_off_label</string>
+<!-- QuickSettings: Immersive global mode (Off) [CHAR LIMIT=NONE] -->
+<string name="quick_settings_immersive_global_off_label">Immersiva Off</string>
+<!-- QuickSettings: Immersive active modes [CHAR LIMIT=NONE] -->
+<string name="quick_settings_immersive_mode_off_label">Disattivata</string>
+<string name="quick_settings_immersive_mode_full_label">Completa</string>
+<string name="quick_settings_immersive_mode_no_status_bar_label">Barra di navigazione</string>
+<string name="quick_settings_immersive_mode_no_navigation_bar_label">Barra di stato</string>
+<string name="quick_settings_immersive_mode_app_label">Forzata</string>
+<!-- QuickSettings: LTE On [CHAR LIMIT=NONE] -->
+<string name="quick_settings_lte">LTE</string>
+<!-- QuickSettings: LTE Off [CHAR LIMIT=NONE] -->
+<string name="quick_settings_lte_off">LTE Acceso</string>
+<!-- QuickSettings: Mobile Network (2G/3G) [CHAR LIMIT=NONE] -->
+<string name="quick_settings_network_type">Rete</string>
+<string name="quick_settings_network_unknown">Sconosciuto</string>
+<string name="quick_settings_network_disabled">Disattivato</string>
+<string name="quick_settings_network_toast_disabled">Impostazioni di rete non disponibili</string>
+<!-- QuickSettings: Lightbulb tile [CHAR LIMIT=NONE] -->
+<string name="quick_settings_lightbulb_label">Torcia</string>
+<string name="quick_settings_lightbulb_off_label">Torcia Off</string>
+<!-- QuickSettings: USB Tether Tile [CHAR LIMIT=NONE] -->
+<string name="quick_settings_usb_tether_connected_label">Tethering USB Off</string>
+<string name="quick_settings_usb_tether_on_label">Tethering USB</string>
+<!-- QuickSettings: Sleep Tile [CHAR LIMIT=NONE] -->
+<string name="quick_settings_sleep_action_label">Blocca schermo</string>
+<string name="quick_settings_sleep_time_15_label">15 secondi</string>
+<string name="quick_settings_sleep_time_30_label">30 secondi</string>
+<string name="quick_settings_sleep_time_60_label">60 secondi</string>
+<string name="quick_settings_sleep_time_120_label">2 minuti</string>
+<string name="quick_settings_sleep_time_300_label">5 minuti</string>
+<string name="quick_settings_sleep_time_600_label">10 minuti</string>
+<string name="quick_settings_sleep_time_1800_label">30 minuti</string>
+<string name="quick_settings_sleep_time_unknown_label">@string/quick_settings_network_unknown</string>
+<!-- QuickSettings: Wifi AP Tile [CHAR LIMIT=NONE] -->
+<string name="quick_settings_wifi_ap_label">Wi-Fi AP</string>
+<string name="quick_settings_wifi_ap_off_label">Wi-Fi AP Off</string>
+<!-- QuickSettings: Bluetooth Extra Tile [CHAR LIMIT=NONE] -->
+<string name="quick_settings_bluetooth_not_discoverable_label">Non visibile</string>
+<string name="quick_settings_bluetooth_discoverable_label">Visibile</string>
+<string name="quick_settings_bluetooth_disabled">Disattivato</string>
+<!-- QuickSettings: Location Extra Tile [CHAR LIMIT=NONE] -->
+<string name="quick_settings_location_mode_high_label">Alta precisione</string>
+<string name="quick_settings_location_mode_battery_label">Batteria</string>
+<string name="quick_settings_location_mode_sensors_label">Dispositivo</string>
+<!-- QuickSettings: Sound Tile -->
+<string name="quick_settings_ringer_mode_silent_label">Silenzioso</string>
+<string name="quick_settings_ringer_mode_vibrate_label">Vibrazine</string>
+<string name="quick_settings_ringer_mode_normal_label">Suoneria</string>
+<string name="quick_settings_ringer_mode_normal_vibrate_label">Suoneria &amp; Vibrazione</string>
+<string name="quick_settings_volume_label">Volume</string>
+<!--App killed message used for navring targets -->
+<string name="app_killed_message">Applicazioni terminate</string>
+<!-- Title shown in notification popup for launching notification in floating mode -->
+<string name="status_bar_notification_floating_item_title">Modalita\' fluttuante</string>
+<!-- Title shown in recents popup for showing app in floating mode -->
+<string name="status_bar_recent_floating_item_title">Modalita\' fluttuante</string>
+<!-- Title shown when app provides no interface -->
+<string name="status_bar_floating_no_interface">L\'app non provvede alcuna interfaccia</string>
+<!-- Blacklisted app for floating mode -->
+<string name="floating_mode_blacklisted_app">L\'app attuale e\' in black list e potrebbe non funzionare in modalita\' fluttuante</string>
+<!-- First time run hover -->
+<string name="hover_cling_text">Hover ora e\' attivo.\n\nQuando arriva una nuova notifica verra\' mostrata una finestra che permettera\' di rispondere senza lasciare l\'app corrente.</string>
+<!-- Screenshot delete -->
+<string name="screenshot_delete_action">Elimina</string>
+<string name="screenshot_delete_confirmation">Screen shot eliminato</string>
+<!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+<string name="accessibility_data_connection_HP">HSPA+</string>
+<!-- Pie controls and state -->
+<string name="pie_date_format">ccc, dd MMM yyyy</string>
+<string name="pie_hour_format_12">hh:mm</string>
+<string name="pie_hour_format_24">HH:mm</string>
+<string name="pie_am_pm">a</string>
+<string name="enable_pie_control_title">Pie controls</string>
+<string name="enable_pie_control_message">Vorresti usare i Pie controls quando in modalita\' immersiva?</string>
+<string name="pie_state" translatable="false">@string/enable_pie_control_title</string>
+<!-- Clear recents confirmation dialog -->
+<string name="navbar_recents_clear_all_title">Termina tutte</string>
+<string name="navbar_recents_clear_all_message">Desideri terminare tutte le app alla pressione del tasto "app recenti" ?</string>
+<string name="navbar_recents_clear_all" translatable="false">@string/navbar_recents_clear_all_title</string>
+<!-- Switch apps -->
+<string name="enable_switch_apps_title">Cambia app</string>
+<string name="enable_switch_apps_message">Lanciare rapidamente l\'ultima applicazione quando si preme a lungo il tasto app recenti?</string>
+<string name="recents_switch" translatable="false">@string/enable_switch_apps_title</string>
+<!-- Development shortcut -->
+<string name="advanced_dev_option_wipe_app">Cancella dati app</string>
+<string name="advanced_dev_option_force_stop">Forza interruzione</string>
+<!-- Quick pulldown confirmation dialog -->
+<string name="quick_settings_quick_pull_down_title">Quick pull down</string>
+<string name="quick_settings_quick_pull_down_message">Vorresti passare ai quick settings tirando giu\' la barra di stato da un angolo?</string>
+<string name="quick_settings_quick_pull_down" translatable="false">@string/quick_settings_quick_pull_down_title</string>
+<!-- Safe headset volume -->
+<string name="safe_headset_volume" translatable="false">@*android:string/safe_headset_warning_title</string>
+<!-- NFC Quicksettings tile -->
+<string name="quick_settings_nfc_label">NFC on</string>
+<string name="quick_settings_nfc_off_label">NFC off</string>
+<!-- Screenrecord Notification Ticker -->
+<string name="screenrecord_notif_ticker">E\' in corso la registrazione dello schermo</string>
+<!-- Screenrecord notification title -->
+<string name="screenrecord_notif_title">Registrando schermo</string>
+<!-- Screenrecord notification action: Stop -->
+<string name="screenrecord_notif_stop">Termina</string>
+<!-- Screenrecord notification action: show/hide pointer -->
+<string name="screenrecord_notif_pointer_on">Mostra puntatore</string>
+<string name="screenrecord_notif_pointer_off">Nascondi puntatore</string>
+<!-- Screen record notification error title -->
+<string name="screenrecord_notif_error">Impossibile registrare lo schermo</string>
+</resources>
