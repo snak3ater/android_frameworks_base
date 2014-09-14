@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- kill app long press back -->
+    <string name="app_killed_message">Aplicación matada</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessThemeService">Servicio de temas de acceso</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessThemeService">Permite a una aplicación acceder al servicio de temas y nunca debe ser necesaria para las aplicaciones normales</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readThemes">Leer la información de tu tema</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readThemesDesc">Permite que la aplicación lea tus temas y determina qué tema has aplicado</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeThemes">Modificar tus temas</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeThemesDesc">Permitir que la aplicación añada un nuevo tema y modifique el tema que has aplicado</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+    <string name="permlab_setKeyguardWallpaper">Establecer fondo de pantalla Bloqueo de teclas</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setKeyguardWallpaper">Permite que una aplicación cambie el fondo de la pantalla de bloqueo</string>
+
+    <!-- Label for item that reboots the device in device options dialog -->
+    <string name="global_action_reboot">Reiniciar</string>
+    <!-- Button to reboot the device, within the reboot options dialog -->
+    <string name="reboot_reboot">@string/global_action_reboot</string>
+    <!-- Button to reboot the device into recovery, within the reboot options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the device into fastboot, within the reboot options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+
+    <!-- Reboot confirmation dialog title -->
+    <string name="reboot_system" product="tablet">Reiniciar la tableta</string>
+    <string name="reboot_system" product="default">Reiniciar el teléfono</string>
+    <!-- Reboot confirmation dialog.  This is the message shown to the user when he chooses to reboot the device -->
+    <string name="reboot_confirm" product="tablet">Tu tableta se reiniciará</string>
+    <string name="reboot_confirm" product="default">Tu teléfono se reiniciará</string>
+
+    <!-- Reboot progress dialog. This is shown if the user chooses to reboot the device. -->
+    <string name="reboot_progress">Reiniciando\u2026</string>
+
+    <string name="global_action_screenshot">Captura de pantalla</string>
+
+    <!-- Immersive mode confirmation: Pick confirmation window from bottom when status bar is visible -->
+    <string name="immersive_mode_confirmation_bottom">Deslice hacia arriba desde la parte inferior para salir de la pantalla completa</string>
+
+    <!-- Setting confirmation dialog strings. Shown when any UI interaction can be modified by user input -->
+    <string name="setting_confirmation_ask_me_later">Preguntar después</string>
+    <string name="setting_confirmation_yes">sí</string>
+    <string name="setting_confirmation_no">No</string>
+
+    <!-- Safe headset volume warning dialog -->
+    <string name="safe_headset_warning_title">Volumen de los auriculares de seguridad</string>
+    <string name="safe_headset_warning_message">¿Deseas deshabilitar el aviso de nivel de volumen recomendado?</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_security">Seguridad</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_security">Permisos relacionados con la información de seguridad del dispositivo.</string>
+
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readPhoneBlacklist">Leer la lista negra del teléfono</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readPhoneBlacklist">Permite que una aplicación lea la información acerca de los números de teléfono que están bloqueados para llamadas o mensajes entrantes.</string>
+
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changePhoneBlacklist">Modificar la lista negra del teléfono</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changePhoneBlacklist">Permite que una aplicación cambie los números de teléfono que están bloqueados para llamadas o mensajes entrantes.</string>
+</resources>
