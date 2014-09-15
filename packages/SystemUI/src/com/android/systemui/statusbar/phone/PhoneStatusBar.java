@@ -164,6 +164,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             View.STATUS_BAR_TRANSIENT | View.NAVIGATION_BAR_TRANSIENT;
     private static final long AUTOHIDE_TIMEOUT_MS = 3000;
 
+    // Extended SwipeHelper params
+    public static final int GESTURE_POSITIVE = 0;
+    public static final int GESTURE_NEGATIVE = 1;
+
     // status bar brightness control
     private static final float BRIGHTNESS_CONTROL_PADDING = 0.15f;
     private static final int BRIGHTNESS_CONTROL_LONG_PRESS_TIMEOUT = 750; // ms
@@ -2869,7 +2873,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 final ArrayList<View> snapshot = new ArrayList<View>(numChildren);
                 for (int i=0; i<numChildren; i++) {
                     final View child = mPile.getChildAt(i);
-                    if (mPile.canChildBeDismissed(child) && child.getBottom() > scrollTop &&
+                    if (mPile.canChildBeDismissed(GESTURE_POSITIVE, child) && child.getBottom() > scrollTop &&
                             child.getTop() < scrollBottom) {
                         snapshot.add(child);
                     }
