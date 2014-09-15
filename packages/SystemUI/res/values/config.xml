@@ -103,7 +103,7 @@
     <bool name="config_hasFlipSettingsPanel">true</bool>
 
     <!-- Should "4G" be shown instead of "LTE" when the network is NETWORK_TYPE_LTE? -->
-    <bool name="config_show4GForLTE">true</bool>
+    <bool name="config_show4GForLTE">false</bool>
 
     <!-- Enable Pie relocation to either stick to a physical side or default to the right side -->
     <bool name="config_relocatePieOnRotation">true</bool>
