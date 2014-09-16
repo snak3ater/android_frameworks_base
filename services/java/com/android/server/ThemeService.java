@@ -87,6 +87,8 @@ import java.util.List;
 public class ThemeService extends IThemeService.Stub {
     private static final String TAG = ThemeService.class.getName();
 
+    private static final boolean DEBUG = false;
+
     private static final long MAX_ICON_CACHE_SIZE = 33554432L; // 32MB
     private static final long PURGED_ICON_CACHE_SIZE = 25165824L; // 24 MB
 
@@ -104,10 +106,14 @@ public class ThemeService extends IThemeService.Stub {
     private final RemoteCallbackList<IThemeChangeListener> mClients =
             new RemoteCallbackList<IThemeChangeListener>();
 
+    final private ArrayList<String> mThemesToProcessQueue = new ArrayList<String>(0);
+
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
         private static final int MESSAGE_APPLY_DEFAULT_THEME = 2;
         private static final int MESSAGE_BUILD_ICON_CACHE = 3;
+        private static final int MESSAGE_QUEUE_THEME_FOR_PROCESSING = 4;
+        private static final int MESSAGE_DEQUEUE_AND_PROCESS_THEME = 5;
 
         public ThemeWorkerHandler(Looper looper) {
             super(looper);
@@ -125,6 +131,33 @@ public class ThemeService extends IThemeService.Stub {
                     break;
                 case MESSAGE_BUILD_ICON_CACHE:
                     doBuildIconCache();
+                    break;
+                case MESSAGE_QUEUE_THEME_FOR_PROCESSING:
+                    String pkgName = (String) msg.obj;
+                    synchronized (mThemesToProcessQueue) {
+                        if (!mThemesToProcessQueue.contains(pkgName)) {
+                            if (DEBUG) Log.d(TAG, "Adding " + pkgName + " for processing");
+                            mThemesToProcessQueue.add(pkgName);
+                            if (mThemesToProcessQueue.size() == 1) {
+                                this.sendEmptyMessage(MESSAGE_DEQUEUE_AND_PROCESS_THEME);
+                            }
+                        }
+                    }
+                    break;
+                case MESSAGE_DEQUEUE_AND_PROCESS_THEME:
+                    synchronized (mThemesToProcessQueue) {
+                        pkgName = mThemesToProcessQueue.get(0);
+                    }
+                    if (pkgName != null) {
+                        if (DEBUG) Log.d(TAG, "Processing " + pkgName);
+                        mContext.getPackageManager().processThemeResources(pkgName);
+                        synchronized (mThemesToProcessQueue) {
+                            mThemesToProcessQueue.remove(0);
+                            if (mThemesToProcessQueue.size() > 0) {
+                                this.sendEmptyMessage(MESSAGE_DEQUEUE_AND_PROCESS_THEME);
+                            }
+                        }
+                    }
                     break;
                 default:
                     Log.w(TAG, "Unknown message " + msg.what);
@@ -154,6 +187,7 @@ public class ThemeService extends IThemeService.Stub {
         // listen for wallpaper changes
         IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
         mContext.registerReceiver(mWallpaperChangeReceiver, filter);
+        processInstalledThemes();
     }
 
     private void doApplyTheme(Map<String, String> componentMap) {
@@ -930,6 +964,27 @@ public class ThemeService extends IThemeService.Stub {
                         info.activityInfo.name));
             } catch (Exception e) {
                 Log.w(TAG, "Unable to fetch icon for " + info, e);
+            }
+        }
+    }
+
+    private void processInstalledThemes() {
+        final String defaultTheme = ThemeUtils.getDefaultThemePackageName(mContext);
+        Message msg;
+        // Make sure the default theme is the first to get processed!
+        if (!ThemeConfig.HOLO_DEFAULT.equals(defaultTheme)) {
+            msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
+                    0, 0, defaultTheme);
+            mHandler.sendMessage(msg);
+        }
+        // Iterate over all installed packages and queue up the ones that are themes or icon packs
+        List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
+        for (PackageInfo info : packages) {
+            if (!defaultTheme.equals(info.packageName) &&
+                    (info.isThemeApk || info.isLegacyThemeApk || info.isLegacyIconPackApk)) {
+                msg = mHandler.obtainMessage(ThemeWorkerHandler.MESSAGE_QUEUE_THEME_FOR_PROCESSING,
+                        0, 0, info.packageName);
+                mHandler.sendMessage(msg);
             }
         }
     }
