@@ -38,6 +38,7 @@ import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -682,6 +683,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         mHoverButton = (ImageView) mStatusBarWindow.findViewById(R.id.hover_button);
         if (mHoverButton != null) {
             mHoverButton.setOnClickListener(mHoverButtonListener);
+	    mHoverButton.setOnLongClickListener(mHoverButtonListenerLong);
             mHoverButton.setVisibility(View.VISIBLE);
         }
 
@@ -2996,6 +2998,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             updateHoverState();
         }
     };
+
+	private View.OnLongClickListener mHoverButtonListenerLong = new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                             Intent intent = new Intent();
+				intent.setClassName("com.android.settings",
+				"com.android.settings.Settings$HoverSettingsActivity");
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+				| Intent.FLAG_ACTIVITY_SINGLE_TOP
+				| Intent.FLAG_ACTIVITY_CLEAR_TOP
+				| Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+ 				 mStatusBarView.mNotificationPanel.collapse();
+				 mContext.startActivity(intent);
+				return true;
+                        }
+                    };
 
     private View.OnClickListener mNotificationButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
