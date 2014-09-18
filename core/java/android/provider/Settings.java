@@ -3455,6 +3455,21 @@ public final class Settings {
          */
         public static final String PIE_GRAVITY = "pie_gravity";
 
+	/**
+	 * @hide
+	 */
+	 public static final String PIE_ANGLE = "pie_angle";
+
+	/**
+	 * @hide
+	 */
+	 public static final String PIE_GAP = "pie_gap";
+
+	/**
+	 * @hide
+	 */
+	 public static final String PIE_SIZE = "pie_size";
+
         /**
          * Whether or not to show circle battery around the lockscreen ring
          * @hide
