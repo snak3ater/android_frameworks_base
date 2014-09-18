@@ -668,12 +668,14 @@ class QuickSettings {
                         rotationLockTile.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
-                                collapsePanels();
-                                startSettingsActivity(
-                                       android.provider.Settings.ACTION_DISPLAY_SETTINGS);
-                                return true; // Consume click
+                                Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.setClassName("com.android.settings",
+				"com.android.settings.Settings$DisplayRotationSettingsActivity");
+				startSettingsActivity(intent);
+				return true;
                             }
                         });
+
                         mModel.addRotationLockTile(rotationLockTile, mRotationLockController,
                                 new QuickSettingsModel.RefreshCallback() {
                                     @Override
