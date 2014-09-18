@@ -265,6 +265,15 @@ public class PieMenu extends FrameLayout {
     private float mX = 0;
     private float mY = 0;
 
+ 	private void updatePieSettings() {
+	mPieAngle = (Settings.System.getInt(mContext.getContentResolver(),
+	Settings.System.PIE_ANGLE, ANGLE_BASE));
+	mPieGap = (Settings.System.getInt(mContext.getContentResolver(),
+	Settings.System.PIE_GAP, GAP_BASE));
+	mPieSize = (Settings.System.getFloat(mContext.getContentResolver(),
+	Settings.System.PIE_SIZE, SIZE_BASE));
+	}
+
     private void getDimensions() {
         // fetch colors
         mBatteryBackgroundColor = mResources.getColor(R.color.pie_battery_background);
@@ -289,10 +298,11 @@ public class PieMenu extends FrameLayout {
                 Settings.System.HAPTIC_FEEDBACK_ENABLED, 1, UserHandle.USER_CURRENT) != 0;
         mIsProtected = mPanel.isKeyguardSecureShowing();
 
-        // hardcode for now
+        /* hardcode for now
         mPieAngle = ANGLE_BASE;
         mPieGap = GAP_BASE;
-        mPieSize = SIZE_BASE;
+        mPieSize = SIZE_BASE;*/
+	updatePieSettings();
 
         // snap
         mSnapRadius = (int) (mResources.getDimensionPixelSize(R.dimen.pie_snap_radius) * mPieSize);
