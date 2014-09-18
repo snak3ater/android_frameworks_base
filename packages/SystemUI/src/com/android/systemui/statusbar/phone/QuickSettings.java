@@ -59,6 +59,7 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Profile;
 import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.security.KeyChain;
 import android.telephony.TelephonyManager;
 import android.provider.Settings.SettingNotFoundException;
@@ -942,6 +943,16 @@ class QuickSettings {
                             }
                         }
                     });
+			immersiveTile.setFrontOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_MAIN);
+				intent.setClassName("com.android.settings",
+				"com.android.settings.Settings$PieSettingsActivity");
+				startSettingsActivity(intent);
+				return true;
+				}
+			});
                     mModel.addImmersiveGlobalTile(immersiveTile.getFront(),
                             new QuickSettingsModel.RefreshCallback() {
                         @Override
