@@ -13,7 +13,6 @@
 
 package com.android.systemui;
 
-import android.view.ViewGroup.LayoutParams;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -27,22 +26,50 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Rect;
+import android.graphics.Region;
+import android.util.Log;
 import com.android.internal.R;
 import com.android.systemui.BatteryMeterView;
 
-public class BatteryPercentMeterView extends TextView {
+
+public class BatteryPercentMeterView extends ImageView {
     final static String QuickSettings = "quicksettings";
+    final static String QuickSettingsBack = "quicksettings_back";
     final static String StatusBar = "statusbar";
+
     private Handler mHandler;
-    private Context mContext;
     private BatteryReceiver mBatteryReceiver = null;
 
     // state variables
     private boolean mAttached;      // whether or not attached to a window
     private boolean mActivated;     // whether or not activated due to system settings
     private int     mLevel;         // current battery level
+    private String mLevelString = "";
     private String  mPercentBatteryView;
+    private boolean mIsCharging;    // whether or not device is currently charging
+    private Paint   mPaintFontFg;
+    private Paint   mPaintFontBg;
+    private float   mTextX;     // precalculated x position for drawText() to appear centered
+    private float   mTextY;         // precalculated y position for drawText() to appear vertical-centered
+    private int    mSize;
+    private int    mTextSize;
+    private int    mCurrentYTop;
+    private int    mCurrentYBottom;
+    private int    mWidth;
+    private int    mChargingColorBg;
+    private int    mChargingColorFg;
+    private int    mChargingColorDefault;
+    private int    mChargingBandHeight;
 
     // runnable to invalidate view via mHandler.postDelayed() call
     private final Runnable mInvalidate = new Runnable() {
@@ -55,51 +82,31 @@ public class BatteryPercentMeterView extends TextView {
 
     // keeps track of current battery level and charger-plugged-state
     class BatteryReceiver extends BroadcastReceiver {
-        private boolean mIsRegistered = false;
-
-        public BatteryReceiver(Context context) {
-        }
 
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 mLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                setText(Integer.toString(mLevel) + "%");
-                if (mLevel < mContext.getResources().getInteger(com.android.internal.R.integer.config_lowBatteryWarningLevel)) {
-                    setTextColor(getResources().getColor(com.android.systemui.R.color.batterymeter_percent_warn_color));
-                } else if (mLevel <= mContext.getResources().getInteger(com.android.internal.R.integer.config_criticalBatteryWarningLevel)) {
-                    setTextColor(getResources().getColor(com.android.systemui.R.color.batterymeter_percent_critical_color));
-                } else {
-                    setTextColor(getResources().getColor(com.android.systemui.R.color.batterymeter_percent_color));
+                mLevelString = Integer.toString(mLevel) + "%";
+                boolean isCharging = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
+
+                mChargingColorFg = mChargingColorDefault;
+                if (mLevel < getContext().getResources().getInteger(com.android.internal.R.integer.config_lowBatteryWarningLevel)) {
+                    mChargingColorFg = getResources().getColor(com.android.systemui.R.color.batterymeter_percent_warn_color);
+                } else if (mLevel <= getContext().getResources().getInteger(com.android.internal.R.integer.config_criticalBatteryWarningLevel)) {
+                    mChargingColorFg = getResources().getColor(com.android.systemui.R.color.batterymeter_percent_critical_color);
                 }
+                mPaintFontBg.setColor(mChargingColorFg);
                 if (mActivated && mAttached) {
                     invalidate();
+
+                    if (isCharging) {
+                        startChargingAnimation();
+                    } else {
+                        stopChargingAnimation();
+                    }
                 }
-            }
-        }
-
-        private void registerSelf() {
-            if (!mIsRegistered) {
-                mIsRegistered = true;
-                IntentFilter filter = new IntentFilter();
-                filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-                mContext.registerReceiver(mBatteryReceiver, filter);
-            }
-        }
-
-        private void unregisterSelf() {
-            if (mIsRegistered) {
-                mIsRegistered = false;
-                mContext.unregisterReceiver(this);
-            }
-        }
-
-        private void updateRegistration() {
-            if (mActivated && mAttached) {
-                registerSelf();
-            } else {
-                unregisterSelf();
             }
         }
     }
@@ -125,9 +132,9 @@ public class BatteryPercentMeterView extends TextView {
             mPercentBatteryView = StatusBar;
         }
 
-        mContext = context;
         mHandler = new Handler();
-        mBatteryReceiver = new BatteryReceiver(mContext);
+        mBatteryReceiver = new BatteryReceiver();
+        initSizeMeasureIconHeight();
         updateSettings();
     }
 
@@ -136,8 +143,13 @@ public class BatteryPercentMeterView extends TextView {
         super.onAttachedToWindow();
         if (!mAttached) {
             mAttached = true;
-            mBatteryReceiver.updateRegistration();
-            updateSettings();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+            final Intent sticky = getContext().registerReceiver(mBatteryReceiver, filter);
+            if (sticky != null) {
+                // preload the battery level
+                mBatteryReceiver.onReceive(getContext(), sticky);
+            }
             mHandler.postDelayed(mInvalidate, 250);
         }
     }
@@ -146,30 +158,124 @@ public class BatteryPercentMeterView extends TextView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mAttached) {
+            stopChargingAnimation();
             mAttached = false;
-            mBatteryReceiver.updateRegistration();
+            getContext().unregisterReceiver(mBatteryReceiver);
         }
     }
 
-    final void updatePercent() {
-        setText(Integer.toString(mLevel) + "%");
+    private void updateChargeAnim() {
+        mCurrentYTop++;
+        if (mCurrentYTop >= mChargingBandHeight) {
+            mCurrentYBottom++;
+        }
+        if (mCurrentYTop >= mSize) {
+            mCurrentYTop = mSize;
+        }
+        mHandler.removeCallbacks(mInvalidate);
+        mHandler.postDelayed(mInvalidate, 50);
     }
 
     public void updateSettings() {
         Resources res = getResources();
         ContentResolver resolver = mContext.getContentResolver();
-        int batteryStyle = Settings.System.getInt(getContext().getContentResolver(),
-                                Settings.System.STATUS_BAR_BATTERY_STYLE, 0);
-        mActivated = batteryStyle == 4
-            || (batteryStyle == 2 && mPercentBatteryView.equals(StatusBar));
+        int batteryStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
+                                Settings.System.STATUS_BAR_BATTERY_STYLE, 0
+                                , UserHandle.USER_CURRENT);
+        mActivated = batteryStyle == 4 && mPercentBatteryView.equals(StatusBar);
         setVisibility(mActivated ? View.VISIBLE : View.GONE);
 
-        if (mBatteryReceiver != null) {
-            mBatteryReceiver.updateRegistration();
-        }
+        mChargingColorBg = getResources().getColor(com.android.systemui.R.color.batterymeter_percent_charging);
+        mChargingColorDefault = getResources().getColor(com.android.systemui.R.color.batterymeter_percent_color);
+        mChargingColorFg = mChargingColorDefault;
+
+        mPaintFontBg = new Paint();
+        mPaintFontBg.setAntiAlias(true);
+        mPaintFontBg.setDither(true);
+        mPaintFontBg.setStyle(Paint.Style.STROKE);
+        mPaintFontBg.setTextAlign(Align.CENTER);
+        mPaintFontBg.setTextSize(mTextSize);
+        mPaintFontBg.setColor(mChargingColorFg);
+
+        Rect bounds = new Rect();
+        mPaintFontBg.getTextBounds("100%", 0, "100%".length(), bounds);
+        mWidth = bounds.width();
+        mTextX = mWidth / 2.0f + getPaddingLeft();
+        mTextY = mSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f;
+
+        mPaintFontFg = new Paint(mPaintFontBg);
+        mPaintFontFg.setColor(mChargingColorBg);
 
         if (mActivated && mAttached) {
             invalidate();
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        canvas.drawText(mLevelString, mTextX, mTextY, mPaintFontBg);
+
+        if (mIsCharging) {
+            canvas.clipRect(new Rect(0, mSize - mCurrentYTop,
+                    mWidth + getPaddingLeft() + getPaddingRight(), mSize), Region.Op.REPLACE);
+            canvas.drawText(mLevelString, mTextX, mTextY, mPaintFontFg);
+
+            if (mCurrentYBottom != 0) {
+                canvas.clipRect(new Rect(0, mSize - mCurrentYBottom,
+                        mWidth + getPaddingLeft() + getPaddingRight(), mSize), Region.Op.REPLACE);
+                canvas.drawText(mLevelString, mTextX, mTextY, mPaintFontBg);
+            }
+            if (mCurrentYBottom >= mSize) {
+                mCurrentYTop = 0;
+                mCurrentYBottom = 0;
+            }
+            updateChargeAnim();
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(mWidth + getPaddingLeft() + getPaddingRight(), mSize);
+    }
+
+    private void initSizeMeasureIconHeight() {
+        Bitmap measure = null;
+        if (mPercentBatteryView.equals(QuickSettings)) {
+            measure = BitmapFactory.decodeResource(getResources(),
+                    com.android.systemui.R.drawable.ic_qs_wifi_full_4);
+        } else if (mPercentBatteryView.equals(QuickSettingsBack)) {
+            measure = BitmapFactory.decodeResource(getResources(),
+                    com.android.systemui.R.drawable.stat_sys_wifi_signal_4_fully);
+        } else if (mPercentBatteryView.equals(StatusBar)) {
+            measure = BitmapFactory.decodeResource(getResources(),
+                    com.android.systemui.R.drawable.stat_sys_wifi_signal_4_fully);
+        }
+        if (measure == null) {
+            mSize = getResources().getDimensionPixelSize(com.android.systemui.R.dimen.status_bar_icon_drawing_size);
+        } else {
+            mSize = measure.getHeight();
+        }
+        mTextSize = (int)(mSize * 0.9f);
+        mChargingBandHeight = mTextSize;
+    }
+
+    private void startChargingAnimation() {
+        if (!mIsCharging) {
+            mIsCharging = true;
+            mHandler.removeCallbacks(mInvalidate);
+            mCurrentYTop = 0;
+            mCurrentYBottom = 0;
+            updateChargeAnim();
+        }
+    }
+
+    private void stopChargingAnimation() {
+        if (mIsCharging) {
+            mIsCharging = false;
+            mHandler.removeCallbacks(mInvalidate);
+            mCurrentYTop = 0;
+            mCurrentYBottom = 0;
+            mHandler.post(mInvalidate);
         }
     }
 }
