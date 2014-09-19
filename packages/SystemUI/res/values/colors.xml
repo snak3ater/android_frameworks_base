@@ -56,4 +56,7 @@
     <color name="sb_batterymeter_circle_fg">#FFFFFFFF</color>
     <color name="sb_batterymeter_circle_text">#FFFFFFFF</color>
     <color name="sb_batterymeter_circle_text_charging">#FFFFFFFF</color>
+    <color name="batterymeter_percent_color">#FFFFFFFF</color>
+    <color name="batterymeter_percent_warn_color">#FFFF0000</color><!-- red -->
+    <color name="batterymeter_percent_critical_color">#FFFFFF00</color><!-- yellow -->
 </resources>
