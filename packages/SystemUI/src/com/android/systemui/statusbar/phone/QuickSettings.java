@@ -113,6 +113,7 @@ class QuickSettings {
         BLUETOOTH,
         LOCATION,
         IMMERSIVE,
+	HEADSUP,
 	NFC,
 	LIGHTBULB,
         SLEEP,
@@ -124,7 +125,8 @@ class QuickSettings {
     public static final String DEFAULT_TILES = Tile.USER + DELIMITER + Tile.BRIGHTNESS
         + DELIMITER + Tile.SETTINGS + DELIMITER + Tile.WIFI + DELIMITER + Tile.RSSI
         + DELIMITER + Tile.ROTATION + DELIMITER + Tile.BATTERY + DELIMITER + Tile.BLUETOOTH
-        + DELIMITER + Tile.LOCATION + DELIMITER + Tile.IMMERSIVE + DELIMITER + Tile.LIGHTBULB;
+        + DELIMITER + Tile.LOCATION + DELIMITER + Tile.IMMERSIVE + DELIMITER + Tile.HEADSUP 
+	+ DELIMITER + Tile.LIGHTBULB;
 
     private Context mContext;
     private PanelBar mBar;
@@ -987,6 +989,40 @@ class QuickSettings {
                     });
                     parent.addView(immersiveTile);
                     if(addMissing) immersiveTile.setVisibility(View.GONE);
+ 			} else if(Tile.HEADSUP.toString().equals(tile.toString())) { // HeadsUp
+			final QuickSettingsBasicTile headsupTile
+			= new QuickSettingsBasicTile(mContext);
+			headsupTile.setTileId(Tile.HEADSUP);
+			headsupTile.setImageResource(R.drawable.ic_qs_heads_up_off);
+			headsupTile.setTextResource(R.string.quick_settings_heads_up_off_label);
+			headsupTile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			boolean headsupModeOn = Settings.System.getInt(mContext
+			.getContentResolver(), Settings.System.HEADS_UP_NOTIFICATION, 0) == 1;
+			headsupTile.setImageResource(headsupModeOn
+			? R.drawable.ic_qs_heads_up_off :
+			R.drawable.ic_qs_heads_up_on);
+			headsupTile.setTextResource(headsupModeOn
+			? R.string.quick_settings_heads_up_off_label :
+			R.string.quick_settings_heads_up_on_label);
+			Settings.System.putInt(mContext.getContentResolver(),
+			Settings.System.HEADS_UP_NOTIFICATION, headsupModeOn ? 0 : 1);
+				}
+			});
+
+			headsupTile.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.setClassName("com.android.settings",
+			"com.android.settings.Settings$HeadsupSettingsActivity");
+			startSettingsActivity(intent);
+			return true;
+				}
+			});
+			parent.addView(headsupTile);
+			if(addMissing) headsupTile.setVisibility(View.GONE);
                 } else if(Tile.NFC.toString().equals(tile.toString()) && isNfcSupported()) {
                     final QuickSettingsBasicTile nfcTile = new QuickSettingsBasicTile(mContext);
                     nfcTile.setTileId(Tile.NFC);
