@@ -115,6 +115,7 @@ class QuickSettings {
         LOCATION,
         IMMERSIVE,
 	HOVER,
+	HEADSUP,
 	NFC,
 	LIGHTBULB,
         SLEEP,
@@ -1034,6 +1035,35 @@ class QuickSettings {
                                             new QuickSettingsModel.BasicRefreshCallback(hoverTile));
 			parent.addView(hoverTile);
 			if(addMissing) hoverTile.setVisibility(View.GONE);
+			} else if(Tile.HEADSUP.toString().equals(tile.toString())) { // HeadsUp
+			final QuickSettingsBasicTile headsupTile
+			= new QuickSettingsBasicTile(mContext);
+			headsupTile.setTileId(Tile.HEADSUP);
+			headsupTile.setImageResource(R.drawable.ic_qs_heads_up_off);
+			headsupTile.setTextResource(R.string.quick_settings_heads_up_off_label);
+			headsupTile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			boolean headsupModeOn = Settings.System.getInt(mContext
+			.getContentResolver(), Settings.System.HEADS_UP_MASTER_SWITCH, 0) == 1;
+			Settings.System.putInt(mContext.getContentResolver(),
+			Settings.System.HEADS_UP_MASTER_SWITCH, headsupModeOn ? 0 : 1);
+				}
+			});
+			headsupTile.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.setClassName("com.android.settings",
+			"com.android.settings.Settings$HeadsupSettingsActivity");
+			startSettingsActivity(intent);
+			return true;
+				}
+			});
+			mModel.addHeadsupTile(headsupTile,
+                                            new QuickSettingsModel.BasicRefreshCallback(headsupTile));
+			parent.addView(headsupTile);
+			if(addMissing) headsupTile.setVisibility(View.GONE);
                 } else if(Tile.NFC.toString().equals(tile.toString()) && isNfcSupported()) {
                     final QuickSettingsBasicTile nfcTile = new QuickSettingsBasicTile(mContext);
                     nfcTile.setTileId(Tile.NFC);

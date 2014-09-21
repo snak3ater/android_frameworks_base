@@ -59,6 +59,9 @@
     <string name="quick_settings_ringer_mode_normal_label">Sound</string>
     <string name="quick_settings_ringer_mode_normal_vibrate_label">Sound &amp; Vibration</string>
     <string name="quick_settings_volume_label">Volume</string>
+    <!-- QuickSettings: HeadsUp active modes [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_heads_up_off_label">HeadsUp Off</string>
+    <string name="quick_settings_heads_up_on_label">HeadsUp On</string>
 
     <!-- QuickSettings: Hover active modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_hover_off_label">Hover Off</string>
