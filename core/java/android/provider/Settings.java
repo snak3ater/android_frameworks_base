@@ -3493,6 +3493,13 @@ public final class Settings {
         */
        public static final String SHOW_HEADS_UP_BOTTOM = "show_heads_up_bottom";
 
+       /**
+	* Whether incomming call UI stays in background and shows as heads up notification
+	*
+	* @hide
+	*/
+	public static final String CALL_UI_AS_HEADS_UP = "call_ui_as_heads_up";
+
         /**
          * Pie control panel. Meet him on the spot.
          * State (full/lite) based on immersive mode.
