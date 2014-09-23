@@ -438,9 +438,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         if (mQS != null) {
             mQS.updateBattery();
         }
-        if (mBattery != null && mCircleBattery != null && mBatPercent != null) {
+        if (mBattery != null) {
             mBattery.updateSettings(false);
             mBattery.setColors(false);
+        }
+        if (mCircleBattery != null && mBatPercent != null) {
             mCircleBattery.updateUser(mCurrentUserId);
             mCircleBattery.updateSettings(false);
             mCircleBattery.setColors(false);
@@ -870,12 +872,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         // listen for USER_SETUP_COMPLETE setting (per-user)
         resetUserSetupObserver();
         mBattery = (BatteryMeterView) mStatusBarView.findViewById(R.id.battery);
-        mBattery.updateSettings(false);
-        mBattery.setColors(false);
+        if (mBattery != null) {
+            mBattery.updateSettings(false);
+            mBattery.setColors(false);
+        }
         mCircleBattery = (BatteryCircleMeterView) mStatusBarView.findViewById(R.id.circle_battery);
-        mCircleBattery.updateUser(mCurrentUserId);
-        mCircleBattery.updateSettings(false);
-        mCircleBattery.setColors(false);
+        if (mCircleBattery != null) {
+            mCircleBattery.updateUser(mCurrentUserId);
+            mCircleBattery.updateSettings(false);
+            mCircleBattery.setColors(false);
+        }
  	mBatPercent = (BatteryPercentMeterView) mStatusBarView.findViewById(R.id.percent_battery);
 
         return mStatusBarView;
