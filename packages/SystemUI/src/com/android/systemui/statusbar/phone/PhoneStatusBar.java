@@ -225,6 +225,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
 
     ClockCenter mClockCenter;
     View mCenterSpacer;
+    private boolean showClockOnLockscreen = false;
 
     // the icons themselves
     IconMerger mNotificationIcons;
@@ -386,6 +387,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_GRAVITY_BOTTOM), false, this,
                     UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CLOCK_LOCKSCREEN), false, this,
+                    UserHandle.USER_ALL);
             update();
         }
 
@@ -445,6 +449,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
             mBrightnessControl = !autoBrightness && Settings.System.getInt(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
+
+	    showClockOnLockscreen = Settings.System.getIntForUser(
+                resolver, Settings.System.STATUS_BAR_CLOCK_LOCKSCREEN, 0
+                , UserHandle.USER_CURRENT) == 1;
         }
     }
 
@@ -1728,7 +1736,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
         }
 
         if ((diff & StatusBarManager.DISABLE_CLOCK) != 0) {
-            boolean show = (state & StatusBarManager.DISABLE_CLOCK) == 0;
+            boolean show = ((state & StatusBarManager.DISABLE_CLOCK) == 0) || showClockOnLockscreen;
             showClock(show);
         }
         if ((diff & StatusBarManager.DISABLE_EXPAND) != 0) {

@@ -3027,6 +3027,14 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
 	/**
+        * Show or hide clock on lockscreen
+        * 0 - hide (default)
+        * 1 - show
+        * @hide
+        */
+        public static final String STATUS_BAR_CLOCK_LOCKSCREEN = "status_bar_clock_lockscreen";
+
+	/**
          *
          * OverScroll Glow Color
          * @hide
