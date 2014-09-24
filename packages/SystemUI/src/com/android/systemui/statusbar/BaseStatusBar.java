@@ -126,6 +126,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected static final int MSG_HIDE_HEADS_UP = 1027;
     protected static final int MSG_ESCALATE_HEADS_UP = 1028;
 
+    protected static final boolean ENABLE_HEADS_UP = true;
     // Scores above this threshold should be displayed in heads up mode.
     // We allow everything between PRIORITY_HIGH and PRIORITY_MAX (10 - 20) as long
     // the application explicit sends meta information to request a
@@ -181,6 +182,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected int mLayoutDirection = -1; // invalid
     private Locale mLocale;
+    protected boolean mUseHeadsUp = false;
     private int mHeadsUpSnoozeTime = DEFAULT_TIME_HEADS_UP_SNOOZE;
     private long mHeadsUpSnoozeStartTime;
     protected String mHeadsUpPackageName;
@@ -1538,7 +1540,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             try {
                 updateNotificationViews(oldEntry, notification);
 
-                if (mInterruptingNotificationEntry != null
+                if (ENABLE_HEADS_UP && mInterruptingNotificationEntry != null
                         && oldNotification == mInterruptingNotificationEntry.notification) {
                     if (!shouldInterrupt(notification)) {
                         if (DEBUG) Log.d(TAG, "no longer interrupts!");
