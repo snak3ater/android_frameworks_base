@@ -3408,7 +3408,14 @@ public final class Settings {
          */
         public static final String QUIET_HOURS_ACTIVE = "quiet_hours_active";
 
-       /**
+        /**
+         * Heads Up Master Switch
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_MASTER_SWITCH = "heads_up_master_switch";
+
+        /**
          * Whether heads up notification is shown on the bottom of the screen (default = disabled)
          *
          * @hide
