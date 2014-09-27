@@ -1183,7 +1183,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         return new NotificationClicker(intent);
     }
 
-    public class NotificationClicker implements View.OnClickListener {
+    public class NotificationClicker implements View.OnClickListener, View.OnLongClickListener {
         private KeyguardTouchDelegate mKeyguard;
         private PendingIntent mPendingIntent;
         private Intent mIntent;
@@ -1211,6 +1211,12 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         public void makeFloating(boolean floating) {
             mFloat = floating;
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            onClick(v);
+            return true;
         }
 
         public void onClick(View v) {
