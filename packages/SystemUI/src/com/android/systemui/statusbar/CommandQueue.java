@@ -57,9 +57,9 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_PRELOAD_RECENT_APPS        = 14 << MSG_SHIFT;
     private static final int MSG_CANCEL_PRELOAD_RECENT_APPS = 15 << MSG_SHIFT;
     private static final int MSG_SET_WINDOW_STATE           = 16 << MSG_SHIFT;
-    private static final int MSG_HIDE_HEADS_UP              = 25 << MSG_SHIFT;
-    private static final int MSG_HIDE_HEADS_UP_CANDIDATE    = 26 << MSG_SHIFT;
-    private static final int MSG_UPDATE_HEADS_UP_POSITION   = 27 << MSG_SHIFT;
+    private static final int MSG_HIDE_HEADS_UP              = 17 << MSG_SHIFT;
+    private static final int MSG_HIDE_HEADS_UP_CANDIDATE    = 18 << MSG_SHIFT;
+    private static final int MSG_UPDATE_HEADS_UP_POSITION   = 19 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
