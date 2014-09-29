@@ -5977,6 +5977,7 @@ package android.content {
     field public static final int BIND_NOT_FOREGROUND = 4; // 0x4
     field public static final int BIND_WAIVE_PRIORITY = 32; // 0x20
     field public static final java.lang.String BLUETOOTH_SERVICE = "bluetooth";
+    field public static final java.lang.String BLUR_SERVICE = "blur";
     field public static final java.lang.String CAPTIONING_SERVICE = "captioning";
     field public static final java.lang.String CLIPBOARD_SERVICE = "clipboard";
     field public static final java.lang.String CONNECTIVITY_SERVICE = "connectivity";
@@ -17405,6 +17406,21 @@ package android.os {
     method public boolean unlinkToDeath(android.os.IBinder.DeathRecipient, int);
   }
 
+  public class BlurManager {
+    ctor public BlurManager(android.content.Context, android.os.IBlurService);
+    method public android.graphics.Bitmap getBlurBmp(android.graphics.Bitmap, int);
+    method public android.graphics.Bitmap getBlurWallpaper(int);
+    method public android.graphics.Bitmap getFullBlurBmp(int);
+    method public android.graphics.Bitmap prepare();
+    method public void setOnBitmapReady(android.os.BlurManager.OnBitmapReady);
+    field public static final boolean DEBUG = false;
+    field public static final java.lang.String TAG = "blur_manager";
+  }
+
+  public static abstract interface BlurManager.OnBitmapReady {
+    method public abstract void onBitmapReady(android.graphics.Bitmap);
+  }
+
   public class Build {
     ctor public Build();
     method public static java.lang.String getRadioVersion();
@@ -17851,6 +17867,20 @@ package android.os {
 
   public static abstract interface IBinder.DeathRecipient {
     method public abstract void binderDied();
+  }
+
+  public abstract interface IBlurService implements android.os.IInterface {
+    method public abstract android.graphics.Bitmap getBlurBmp(android.graphics.Bitmap, int) throws android.os.RemoteException;
+    method public abstract android.graphics.Bitmap getBlurWallpaper(int) throws android.os.RemoteException;
+    method public abstract android.graphics.Bitmap getFullBlurBmp(int) throws android.os.RemoteException;
+    method public abstract android.graphics.Bitmap prepare() throws android.os.RemoteException;
+  }
+
+  public static abstract class IBlurService.Stub extends android.os.Binder implements android.os.IBlurService {
+    ctor public IBlurService.Stub();
+    method public android.os.IBinder asBinder();
+    method public static android.os.IBlurService asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int) throws android.os.RemoteException;
   }
 
   public abstract interface IInterface {
