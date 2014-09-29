@@ -24,6 +24,8 @@ import android.view.View;
 
 import com.android.systemui.R;
 
+import java.util.ArrayList;
+
 public final class PhoneStatusBarTransitions extends BarTransitions {
     private static final float ICON_ALPHA_WHEN_NOT_OPAQUE = 1;
     private static final float ICON_ALPHA_WHEN_LIGHTS_OUT_BATTERY_CLOCK = 0.5f;
@@ -92,17 +94,50 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mCurrentAnimation.cancel();
         }
         if (animate) {
+            ArrayList<Animator> animList = new ArrayList<Animator>();
+                    
+            ObjectAnimator leftSideAnim = animateTransitionTo(mLeftSide, newAlpha);
+            if (leftSideAnim != null) {
+                animList.add(leftSideAnim);
+            }
+
+            ObjectAnimator statusIconsAnim = animateTransitionTo(mStatusIcons, newAlpha);
+            if (statusIconsAnim != null) {
+                animList.add(statusIconsAnim);
+            }
+
+            ObjectAnimator signalClusterAnim = animateTransitionTo(mSignalCluster, newAlpha);
+            if (signalClusterAnim != null) {
+                animList.add(signalClusterAnim);
+            }
+
+            ObjectAnimator networkTrafficAnim = animateTransitionTo(mNetworkTraffic, newAlpha);
+            if (networkTrafficAnim != null) {
+                animList.add(networkTrafficAnim);
+            }
+
+            ObjectAnimator batteryAnim = animateTransitionTo(mBattery, newAlphaBC);
+            if (batteryAnim != null) {
+                animList.add(batteryAnim);
+            }
+
+            ObjectAnimator batteryCircleAnim = animateTransitionTo(mBatteryCircle, newAlphaBC);
+            if (batteryCircleAnim != null) {
+                animList.add(batteryCircleAnim);
+            }
+
+            ObjectAnimator batteryPercentAnim = animateTransitionTo(mBatteryPercent, newAlphaBC);
+            if (batteryPercentAnim != null) {
+                animList.add(batteryPercentAnim);
+            }
+  
+            ObjectAnimator clockAnim = animateTransitionTo(mClock, newAlphaBC);
+            if (clockAnim != null) {
+                animList.add(clockAnim);
+            }
+            
             AnimatorSet anims = new AnimatorSet();
-            anims.playTogether(
-                    animateTransitionTo(mLeftSide, newAlpha),
-                    animateTransitionTo(mStatusIcons, newAlpha),
-                    animateTransitionTo(mSignalCluster, newAlpha),
-                    animateTransitionTo(mNetworkTraffic, newAlpha),
-                    animateTransitionTo(mBattery, newAlphaBC),
-                    animateTransitionTo(mBatteryCircle, newAlphaBC),
-		    animateTransitionTo(mBatteryPercent, newAlphaBC),
-                    animateTransitionTo(mClock, newAlphaBC)
-                    );
+            anims.playTogether(animList);
             if (mode == MODE_LIGHTS_OUT) {
                 anims.setDuration(LIGHTS_OUT_DURATION);
             }
@@ -119,7 +154,9 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
                 mSignalCluster.setAlpha(newAlpha);
             }
             
-            mNetworkTraffic.setAlpha(newAlpha);
+            if (mNetworkTraffic != null) {
+                mNetworkTraffic.setAlpha(newAlpha);
+            }
             
             if (mBattery != null) {
                 mBattery.setAlpha(newAlphaBC);
