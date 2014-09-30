@@ -20,6 +20,7 @@ package android.widget;
 import com.android.internal.R;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -61,6 +62,8 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 import android.widget.RemoteViews.RemoteView;
 import android.widget.SmoothProgressDrawable.Builder;
+
+import com.android.internal.R;
 
 import java.util.ArrayList;
 
@@ -300,6 +303,8 @@ public class ProgressBar extends View {
 		setSecondaryProgress(
 		    a.getInt(R.styleable.ProgressBar_secondaryProgress, mSecondaryProgress));
 
+                final Resources res = context.getResources();
+
 		drawable = a.getDrawable(R.styleable.ProgressBar_indeterminateDrawable);
 		if (String.valueOf(drawable).contains("android.graphics.drawable.AnimationDrawabl")) {
 			boolean IsMirrorMode = Settings.System.getInt(mContext.getContentResolver(),
@@ -317,12 +322,24 @@ public class ProgressBar extends View {
 			                                   Settings.System.PROGRESSBAR_COUNT, 6);
 			int Color1 = Settings.System.getInt(mContext.getContentResolver(),
 			                                    Settings.System.PROGRESSBAR_COLOR_1, -1);
+                        if (Color1 == -1) {
+                            Color1 = res.getColor(R.color.pg_color_1);
+                        }
 			int Color2 = Settings.System.getInt(mContext.getContentResolver(),
 			                                    Settings.System.PROGRESSBAR_COLOR_2, -1);
+                        if (Color2 == -1) {
+                            Color2 = res.getColor(R.color.pg_color_2);
+                        }
 			int Color3 = Settings.System.getInt(mContext.getContentResolver(),
 			                                    Settings.System.PROGRESSBAR_COLOR_3, -1);
+                        if (Color3 == -1) {
+                            Color3 = res.getColor(R.color.pg_color_3);
+                        }
 			int Color4 = Settings.System.getInt(mContext.getContentResolver(),
 			                                    Settings.System.PROGRESSBAR_COLOR_4, -1);
+                        if (Color4 == -1) {
+                            Color4 = res.getColor(R.color.pg_color_4);
+                        }
 			int Colors[] = { Color1, Color2, Color3, Color4 };
 
 			Interpolator interpolator = null;
