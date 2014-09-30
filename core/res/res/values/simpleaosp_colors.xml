@@ -20,6 +20,7 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds.  Do not translate. -->
 <resources>
+
     <!-- progress bar color -->
     <integer-array name="pgcolors">
         <item>@color/holo_blue_dark</item>
@@ -43,6 +44,11 @@
 
     <color name="holo_yellow_dark">#ff8800</color>
     <color name="holo_purple_dark">#9933cc</color>
+
+    <color name="pg_color_1">@android:color/holo_blue_light</color>
+    <color name="pg_color_2">@android:color/holo_blue_light</color>
+    <color name="pg_color_3">@android:color/holo_blue_light</color>
+    <color name="pg_color_4">@android:color/holo_blue_light</color>
 
     <!-- PA new volume panel style background -->
     <color name="volume_panel_bg">#80000000</color>
