@@ -33,6 +33,10 @@
   <java-symbol type="color" name="holo_green_dark" />
   <java-symbol type="color" name="holo_purple_dark" />
   <java-symbol type="color" name="holo_red_dark" />
+  <java-symbol type="color" name="pg_color_1" />
+  <java-symbol type="color" name="pg_color_2" />
+  <java-symbol type="color" name="pg_color_3" />
+  <java-symbol type="color" name="pg_color_4" />
 
   <!-- From power menu -->
   <java-symbol type="array" name="shutdown_reboot_options" />
