@@ -3088,6 +3088,12 @@ public final class Settings {
        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
 
        /**
+       	* Padding above and below dialpad keys in dialer
+	* @hide
+	*/
+	public static final String DIALKEY_PADDING = "dialkey_padding";
+
+        /**
          * Volume key controls ringtone or media sound stream
          *
          * @hide
