@@ -72,4 +72,8 @@
     <string name="permlab_changePhoneBlacklist">Changer la liste noir du téléphone</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changePhoneBlacklist">Permet à une application de modifier les numéros de téléphone qui sont bloqués pour les appels entrants ou les messages.</string>
+
+    <!-- Theme installation error notification -->
+    <string name="theme_install_error_title">Echec de l\'installation du thème</string>
+    <string name="theme_install_error_message">%s échec de l\'installation</string>
 </resources>
