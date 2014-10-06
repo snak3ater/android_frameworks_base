@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:id="@+id/content_holder"
-                android:background="@drawable/heads_up_window_bg"
+                android:background="@drawable/notification_bg_normal"
                 />
        <ImageButton
                 android:id="@+id/heads_up_snooze_button"
