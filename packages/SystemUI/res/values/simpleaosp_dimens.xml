@@ -64,4 +64,7 @@
 
     <!-- QuickSettings dimens -->
     <dimen name="qs_tile_corner_switch_icon_size">32dp</dimen>
+
+    <!-- Heads up -->
+    <dimen name="heads_up_bottom_gap">5dp</dimen>
 </resources>
