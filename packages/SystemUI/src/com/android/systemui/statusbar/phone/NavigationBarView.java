@@ -304,6 +304,18 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
     private H mHandler = new H();
 
+    private View getHomeButton() {
+        return mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
+    }
+
+    private View getRecentsButton() {
+        return mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
+    }
+
+    private View getBackButton() {
+        return mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_BACK);
+    }
+
     public View getCurrentView() {
         return mCurrentView;
     }
@@ -333,7 +345,7 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
     }
 
     protected void updateButtonListeners() {
-        View recentView = mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
+        View recentView = getRecentsButton();
         if (recentView != null) {
             recentView.setOnClickListener(mRecentsClickListener);
             recentView.setOnTouchListener(mRecentsPreloadListener);
@@ -493,25 +505,36 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
         mNavigationIconHints = hints;
 
-        findViewWithTag(NavbarEditor.NAVBAR_BACK).setAlpha(
-            (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
         findViewWithTag(NavbarEditor.NAVBAR_HOME).setAlpha(
             (0 != (hints & StatusBarManager.NAVIGATION_HINT_HOME_NOP)) ? 0.5f : 1.0f);
-        findViewWithTag(NavbarEditor.NAVBAR_RECENT).setAlpha(
-            (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
+
+	View back = getBackButton();
+        if(back != null) {
+            back.setAlpha(
+                (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
+        }
+
+        View recent = getRecentsButton();
+        if (recent != null) {
+            recent.setAlpha(
+                (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
+        }
 
         if(button == NavigationCallback.NAVBAR_BACK_HINT) {
-            ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_BACK)).setImageDrawable(
+	if(back != null) {
+            ((ImageView)back).setImageDrawable(
                 (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT))
                     ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
                     : (mVertical ? mBackLandIcon : mBackIcon));
+		}
         } else if (button == NavigationCallback.NAVBAR_RECENTS_HINT) {
-
-            ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_RECENT)).setImageDrawable(
+	if (recent != null) {
+            ((ImageView)recent).setImageDrawable(
                 (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_ALT)) && Settings.System.getInt(
                     mContext.getContentResolver(), Settings.System.NAVBAR_RECENTS_CLEAR_ALL, 0) != 2
                         ? (mVertical ? mRecentAltLandIcon : mRecentAltIcon)
                         : (mVertical ? mRecentLandIcon : mRecentIcon));
+		}
 	} else if (button == NavigationCallback.NAVBAR_HOME_HINT) {
             ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_HOME)).setImageDrawable(
 		mVertical ? mHomeLandIcon : mHomeIcon);
@@ -750,8 +773,11 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
         setNavigationIconHints(mNavigationIconHints, true);
         // Reset recents hints after reorienting
-        ((ImageView)findViewWithTag(NavbarEditor.NAVBAR_RECENT)).setImageDrawable(mVertical
+	View recent = getRecentsButton();
+	if(recent != null) {
+            ((ImageView)recent).setImageDrawable(mVertical
                 ? mRecentLandIcon : mRecentIcon);
+	}
     }
 
     @Override
@@ -784,28 +810,6 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         postCheckForInvalidLayout("sizeChanged");
         super.onSizeChanged(w, h, oldw, oldh);
     }
-
-    /*
-    @Override
-    protected void onLayout (boolean changed, int left, int top, int right, int bottom) {
-        if (DEBUG) Log.d(TAG, String.format(
-                    "onLayout: %s (%d,%d,%d,%d)",
-                    changed?"changed":"notchanged", left, top, right, bottom));
-        super.onLayout(changed, left, top, right, bottom);
-    }
-
-    // uncomment this for extra defensiveness in WORKAROUND_INVALID_LAYOUT situations: if all else
-    // fails, any touch on the display will fix the layout.
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (DEBUG) Log.d(TAG, "onInterceptTouchEvent: " + ev.toString());
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            postCheckForInvalidLayout("touch");
-        }
-        return super.onInterceptTouchEvent(ev);
-    }
-    */
-
 
     private String getResourceName(int resId) {
         if (resId != 0) {
