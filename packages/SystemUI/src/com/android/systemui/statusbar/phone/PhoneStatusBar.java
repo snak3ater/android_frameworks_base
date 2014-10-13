@@ -1040,11 +1040,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
     }
 
     private void prepareNavigationBarView() {
-        mNavigationBarView.reorient();
-
         mNavigationBarView.setListeners(mRecentsClickListener,
                 mRecentsPreloadOnTouchListener, mHomeSearchActionListener);
         updateSearchPanel();
+        mNavigationBarView.reorient();
     }
 
     // For small-screen devices (read: phones) that lack hardware navigation buttons
