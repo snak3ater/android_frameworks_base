@@ -212,7 +212,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                             }
                         }
                     }
-                },
+                }, 200);
             }
             context.unregisterReceiver(mBootReceiver);
         }
