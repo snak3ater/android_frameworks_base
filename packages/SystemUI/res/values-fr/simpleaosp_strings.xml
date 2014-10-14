@@ -131,4 +131,15 @@
     <string name="screenrecord_notif_pointer_off">Cacher le pointeur</string>
     <!-- Screen record notification error title -->
     <string name="screenrecord_notif_error">Impossible d\'enregistrer l\'écran</string>
+    
+    <!-- Dialog title for navigation bar button selection -->
+    <string name="navbar_dialog_title">Choisir une action à attribuer</string>
+    <string name="navbar_home_button">Bouton accueil</string>
+    <string name="navbar_recent_button">Bouton récent</string>
+    <string name="navbar_search_button">Bouton rechercher</string>
+    <string name="navbar_back_button">Bouton retour</string>
+    <string name="navbar_empty_button">Bouton vide</string>
+    <string name="navbar_menu_conditional_button">Bouton (Masquer automatiquement) Menu</string>
+    <string name="navbar_menu_always_button">Bouton (toujours afficher) Menu</string>
+    <string name="navbar_menu_big_button">Bouton menu</string>
 </resources>
