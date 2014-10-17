@@ -206,7 +206,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     // Hover
     protected Hover mHover;
     protected int mHoverState;
-    protected ImageView mHoverButton;
     protected HoverCling mHoverCling;
 
     // UI-specific methods
@@ -502,12 +501,16 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void updateHoverState() {
+	if (mHoverCling != null) {
+            boolean firstRun = mHoverCling.loadSetting();
+            // we're pushing the button, so use inverse logic
+            mHoverCling.hoverChanged(mHoverState == HOVER_DISABLED);
+            if (firstRun) {
+                animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+            }
+        }
         mHoverState = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.HOVER_STATE, HOVER_DISABLED, UserHandle.USER_CURRENT);
-
-        mHoverButton.setImageResource(mHoverState != HOVER_DISABLED
-                ? R.drawable.ic_notify_hover_pressed
-                        : R.drawable.ic_notify_hover_normal);
 
         mHover.setHoverActive(mHoverState == HOVER_ENABLED);
     }
