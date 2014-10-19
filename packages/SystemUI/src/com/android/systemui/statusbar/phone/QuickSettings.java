@@ -1036,12 +1036,15 @@ class QuickSettings {
 			parent.addView(hoverTile);
 			if(addMissing) hoverTile.setVisibility(View.GONE);
 			} else if(Tile.HEADSUP.toString().equals(tile.toString())) { // HeadsUp
-			final QuickSettingsBasicTile headsupTile
-			= new QuickSettingsBasicTile(mContext);
+			final QuickSettingsDualBasicTile headsupTile
+			= new QuickSettingsDualBasicTile(mContext);
 			headsupTile.setTileId(Tile.HEADSUP);
-			headsupTile.setImageResource(R.drawable.ic_qs_heads_up_off);
-			headsupTile.setTextResource(R.string.quick_settings_heads_up_off_label);
-			headsupTile.setOnClickListener(new View.OnClickListener() {
+			headsupTile.setDefaultContent();
+ 			
+			// Front side
+			headsupTile.setFrontImageResource(R.drawable.ic_qs_heads_up_off);
+			headsupTile.setFrontTextResource(R.string.quick_settings_heads_up_off_label);
+			headsupTile.setFrontOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 			boolean headsupModeOn = Settings.System.getInt(mContext
@@ -1050,7 +1053,7 @@ class QuickSettings {
 			Settings.System.HEADS_UP_MASTER_SWITCH, headsupModeOn ? 0 : 1);
 				}
 			});
-			headsupTile.setOnLongClickListener(new View.OnLongClickListener() {
+			headsupTile.setFrontOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
 			Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -1060,8 +1063,42 @@ class QuickSettings {
 			return true;
 				}
 			});
-			mModel.addHeadsupTile(headsupTile,
-                                            new QuickSettingsModel.BasicRefreshCallback(headsupTile));
+			mModel.addHeadsupTile(headsupTile.getFront(),
+                                            new QuickSettingsModel.RefreshCallback(){
+			@Override
+                        public void refreshView(QuickSettingsTileView unused, State state) {
+                            headsupTile.setFrontImageResource(state.iconId);
+                            headsupTile.setFrontText(state.label);
+                        }
+                    });
+			// Back side
+			headsupTile.setBackImageResource(R.drawable.ic_qs_immersive_off);
+			headsupTile.setBackTextResource(R.string.quick_settings_heads_up_float_off);
+			headsupTile.setBackOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			if(mModel.isModeEnabled()) {
+                                Settings.System.putIntForUser(mContext.getContentResolver(),
+                                    Settings.System.HEADS_UP_FLOATING_WINDOW,
+                                    mModel.isChanged()? 1 : 0, UserHandle.USER_CURRENT);
+                                mModel.refreshHeadsUpModeTile();
+                            } else {
+                                headsupTile.setBackImageResource(R.drawable.ic_qs_immersive_off);
+                                headsupTile.setBackTextResource(R.string.quick_settings_heads_up_float_off);
+                                mModel.refreshHeadsUpModeTile();
+                                headsupTile.swapTiles(true);
+                                return;
+                            }
+                        }
+                    });
+			mModel.addHeadsUpModeTile(headsupTile.getBack(),
+                                            new QuickSettingsModel.RefreshCallback(){
+			@Override
+                        public void refreshView(QuickSettingsTileView unused, State state) {
+                            headsupTile.setBackImageResource(state.iconId);
+                            headsupTile.setBackText(state.label);
+                        }
+                    });
 			parent.addView(headsupTile);
 			if(addMissing) headsupTile.setVisibility(View.GONE);
                 } else if(Tile.NFC.toString().equals(tile.toString()) && isNfcSupported()) {

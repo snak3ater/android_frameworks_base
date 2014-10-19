@@ -231,8 +231,7 @@ public class NotificationHelper {
                 makeFloating = floating
                         // if the notification is from the foreground app, don't open in floating mode
                         && !entry.notification.getPackageName().equals(getForegroundPackageName())
-                        && (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.HEADS_UP_FLOATING_WINDOW, 1) == 1);
+                        && openInFloatingMode();
             }
 
             intent.makeFloating(makeFloating);
@@ -429,4 +428,9 @@ public class NotificationHelper {
                 | state == TelephonyManager.SIM_STATE_PUK_REQUIRED
                 | state == TelephonyManager.SIM_STATE_NETWORK_LOCKED;
     }
+
+	public boolean openInFloatingMode() {
+	return Settings.System.getInt(mContext.getContentResolver(),
+	Settings.System.HEADS_UP_FLOATING_WINDOW, 1) == 0;
+	}
 }

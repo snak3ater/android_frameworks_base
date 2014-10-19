@@ -411,6 +411,25 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
             }
     }
 
+    /** ContentObserver to watch headsup floatings mode **/
+    private class HeadsUpModeObserver extends ContentObserver {
+        public HeadsUpModeObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            onHeadsUpModeChanged();
+        }
+
+        public void startObserving() {
+            final ContentResolver cr = mContext.getContentResolver();
+            cr.unregisterContentObserver(this);
+            cr.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_FLOATING_WINDOW), false, this);
+        }
+    }
+
     /** Callback for changes to remote display routes. */
     private class RemoteDisplayRouteCallback extends MediaRouter.SimpleCallback {
         @Override
@@ -487,6 +506,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
 
     private final HoverObserver mHoverObserver;
     private final HeadsupObserver mHeadsupObserver;
+    private final HeadsUpModeObserver mHeadsUpModeObserver;
 
     private final boolean mHasMobileData;
     protected boolean mLightbulbActive;
@@ -566,6 +586,10 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private RefreshCallback mHeadsupCallback;
     private HeadsupState mHeadsupState = new HeadsupState();
 
+    private QuickSettingsTileView mHeadsUpModeTile;
+    private RefreshCallback mHeadsUpModeCallback;
+    private State mHeadsUpModeState = new State();
+
     private QuickSettingsTileView mBugreportTile;
     private RefreshCallback mBugreportCallback;
     private State mBugreportState = new State();
@@ -626,6 +650,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                 rebindMediaRouterAsCurrentUser();
 		mHoverObserver.startObserving();
 		mHeadsupObserver.startObserving();
+ 		mHeadsUpModeObserver.startObserving();
                 onUsbChanged();
                 onRingerModeChanged();
             }
@@ -646,6 +671,8 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         mHoverObserver.startObserving();
 	mHeadsupObserver = new HeadsupObserver(mHandler);
         mHeadsupObserver.startObserving();
+	mHeadsUpModeObserver = new HeadsUpModeObserver(mHandler);
+	mHeadsUpModeObserver.startObserving();
         mRingerObserver = new RingerObserver(mHandler);
         mRingerObserver.startObserving();
 
@@ -713,6 +740,7 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         refreshImmersiveModeTile();
  	refreshHoverTile();
  	refreshHeadsupTile();
+	refreshHeadsUpModeTile();
         refreshWifiApTile();
         refreshRingerModeTile();
     }
@@ -1819,6 +1847,42 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     }
     void refreshHeadsupTile() {
         onHeadsupChanged();
+    }
+
+    // HeadsUp FloatingWindow Mode
+
+    void addHeadsUpModeTile(QuickSettingsTileView view, RefreshCallback cb) {
+        mHeadsUpModeTile = view;
+        mHeadsUpModeCallback = cb;
+        onHeadsUpModeChanged();
+    }
+
+    private void onHeadsUpModeChanged() {
+        Resources r = mContext.getResources();
+        if (isModeEnabled()) {
+            if (isChanged()) {
+                mHeadsUpModeState.iconId = R.drawable.ic_qs_immersive_full;
+                mHeadsUpModeState.label = r.getString(R.string.quick_settings_heads_up_float_on);
+            } else {
+                mHeadsUpModeState.iconId = R.drawable.ic_qs_immersive_off;
+                mHeadsUpModeState.label = r.getString(R.string.quick_settings_heads_up_float_off);
+            }
+        }
+        mHeadsUpModeCallback.refreshView(mHeadsUpModeTile, mHeadsUpModeState);
+    }
+
+    public void refreshHeadsUpModeTile() {
+        onHeadsUpModeChanged();
+    }
+
+    public boolean isChanged() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HEADS_UP_FLOATING_WINDOW, 1, UserHandle.USER_CURRENT) != 1;
+    }
+
+    public boolean isModeEnabled() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HEADS_UP_MASTER_SWITCH, 0, UserHandle.USER_CURRENT) != 0;
     }
 
     // Wifi Ap

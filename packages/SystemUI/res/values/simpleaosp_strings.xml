@@ -62,6 +62,9 @@
     <!-- QuickSettings: HeadsUp active modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_heads_up_off_label">HeadsUp Off</string>
     <string name="quick_settings_heads_up_on_label">HeadsUp On</string>
+    <!-- QuickSettings: HeadsUp active floating modes [CHAR LIMIT=NONE] -->
+    <string name="quick_settings_heads_up_float_off">Floating Off</string>
+    <string name="quick_settings_heads_up_float_on">Floating On</string>
 
     <!-- QuickSettings: Hover active modes [CHAR LIMIT=NONE] -->
     <string name="quick_settings_hover_off_label">Hover Off</string>
