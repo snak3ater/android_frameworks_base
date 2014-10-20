@@ -1867,6 +1867,9 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                 mHeadsUpModeState.iconId = R.drawable.ic_qs_immersive_off;
                 mHeadsUpModeState.label = r.getString(R.string.quick_settings_heads_up_float_off);
             }
+        } else {
+            mHeadsUpModeState.iconId = R.drawable.ic_qs_immersive_off;
+            mHeadsUpModeState.label = r.getString(R.string.quick_settings_heads_up_float_off);
         }
         mHeadsUpModeCallback.refreshView(mHeadsUpModeTile, mHeadsUpModeState);
     }
