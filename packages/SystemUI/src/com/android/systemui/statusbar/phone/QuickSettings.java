@@ -1082,11 +1082,8 @@ class QuickSettings {
                                     Settings.System.HEADS_UP_FLOATING_WINDOW,
                                     mModel.isChanged()? 1 : 0, UserHandle.USER_CURRENT);
                                 mModel.refreshHeadsUpModeTile();
-                            } else {
-                                headsupTile.setBackImageResource(R.drawable.ic_qs_immersive_off);
-                                headsupTile.setBackTextResource(R.string.quick_settings_heads_up_float_off);
-                                mModel.refreshHeadsUpModeTile();
-                                headsupTile.swapTiles(true);
+			} else {
+				headsupTile.swapTiles(true);
                                 return;
                             }
                         }
