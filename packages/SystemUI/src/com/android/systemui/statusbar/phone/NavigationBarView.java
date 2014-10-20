@@ -17,9 +17,12 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
 import android.animation.LayoutTransition.TransitionListener;
 import android.animation.ObjectAnimator;
+import android.animation.ArgbEvaluator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.ActivityManagerNative;
@@ -36,6 +39,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -69,6 +73,7 @@ import com.android.systemui.statusbar.policy.KeyButtonView;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class NavigationBarView extends LinearLayout implements NavigationCallback {
     private static final int CAMERA_BUTTON_FADE_DURATION = 200;
@@ -102,6 +107,10 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
     int mNavigationIconHints = 0;
 
     boolean mWasNotifsButtonVisible = false;
+
+    private int mPreviousOverrideIconColor = 0;
+    private int mOverrideIconColor = 0;
+
     private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon,
             mRecentIcon, mRecentLandIcon, mRecentAltIcon, mRecentAltLandIcon,
             mHomeIcon, mHomeLandIcon;
@@ -122,6 +131,8 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
     private final NavTransitionListener mTransitionListener = new NavTransitionListener();
 
     private Resources mThemedResources;
+
+    private final int mDSBDuration;
 
     private class NavTransitionListener implements TransitionListener {
         private boolean mBackTransitioning;
@@ -251,6 +262,59 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         mNavBarReceiver = new NavBarReceiver();
         mContext.registerReceiverAsUser(mNavBarReceiver, UserHandle.ALL,
                 new IntentFilter(NAVBAR_EDIT_ACTION), null, null);
+
+        mDSBDuration = context.getResources().getInteger(R.integer.dsb_transition_duration);
+        BarBackgroundUpdater.addListener(new BarBackgroundUpdater.UpdateListener(this) {
+
+            @Override
+            public Animator onUpdateNavigationBarIconColor(final int previousIconColor,
+                    final int iconColor) {
+                mPreviousOverrideIconColor = previousIconColor;
+                mOverrideIconColor = iconColor;
+
+                return generateButtonColorsAnimatorSet();
+            }
+
+        });
+    }
+
+    private AnimatorSet generateButtonColorsAnimatorSet() {
+        final ImageView[] buttons = new ImageView[] {
+            (ImageView) getRecentsButton(),
+            (ImageView) getBackButton(),
+            (ImageView) getHomeButton(),
+            (ImageView) getSearchLight(),
+            (ImageView) getCameraButton()
+        };
+
+        final ArrayList<Animator> anims = new ArrayList<Animator>();
+
+        for (final ImageView button : buttons) {
+            if (button != null) {
+                if (mOverrideIconColor == 0) {
+                    mHandler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            button.setColorFilter(null);
+                        }
+
+                    });
+                } else {
+                    anims.add(ObjectAnimator.ofObject(button, "colorFilter",
+                            new ArgbEvaluator(), mPreviousOverrideIconColor,
+                            mOverrideIconColor).setDuration(mDSBDuration));
+                }
+            }
+        }
+
+        if (anims.isEmpty()) {
+            return null;
+        } else {
+            final AnimatorSet animSet = new AnimatorSet();
+            animSet.playTogether(anims);
+            return animSet;
+        }
     }
 
     private void watchForDevicePolicyChanges() {
@@ -299,17 +363,17 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
     private H mHandler = new H();
 
-    private View getHomeButton() {
-        return mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
+    public View getRecentsButton() {
+        return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
     }
 
-    private View getRecentsButton() {
-        return mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_RECENT);
+    public View getBackButton() {
+        return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_BACK);
     }
 
-    private View getBackButton() {
-        return mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_BACK);
-    }
+    public View getHomeButton() {
+        return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
+	}
 
     public View getCurrentView() {
         return mCurrentView;
@@ -360,12 +424,12 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
     // for when home is disabled, but search isn't
     public View getSearchLight() {
-        return mCurrentView.findViewById(R.id.search_light);
+        return mCurrentView == null ? null : mCurrentView.findViewById(R.id.search_light);
     }
 
     // shown when keyguard is visible and camera is available
     public View getCameraButton() {
-        return mCurrentView.findViewById(R.id.camera_button);
+        return mCurrentView == null ? null : mCurrentView.findViewById(R.id.camera_button);
     }
 
     private void getIcons(Resources res) {
@@ -681,6 +745,18 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         mRotatedViews[Configuration.ORIENTATION_LANDSCAPE] = findViewById(R.id.rot90);
         mCurrentView = mRotatedViews[mContext.getResources().getConfiguration().orientation];
 
+        mHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                final AnimatorSet animSet = generateButtonColorsAnimatorSet();
+                if (animSet != null) {
+                    animSet.start();
+                }
+            }
+
+        });
+
         watchForAccessibilityChanges();
     }
 
@@ -767,8 +843,20 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 	if(recent != null) {
             ((ImageView)recent).setImageDrawable(mVertical
                 ? mRecentLandIcon : mRecentIcon);
-	}
-    }
+
+        mHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                final AnimatorSet animSet = generateButtonColorsAnimatorSet();
+                if (animSet != null) {
+                    animSet.start();
+                }
+            }
+
+        });
+     }
+ }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -880,5 +968,4 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
         }
         pw.println();
     }
-
 }
