@@ -501,7 +501,10 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected void updateHoverState() {
-	if (mHoverCling != null) {
+        mHoverState = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.HOVER_STATE, HOVER_DISABLED, UserHandle.USER_CURRENT);
+		if (mHoverState == HOVER_ENABLED) {
+			if (mHoverCling != null) {
             boolean firstRun = mHoverCling.loadSetting();
             // we're pushing the button, so use inverse logic
             mHoverCling.hoverChanged(mHoverState == HOVER_DISABLED);
@@ -509,9 +512,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                 animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
             }
         }
-        mHoverState = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.HOVER_STATE, HOVER_DISABLED, UserHandle.USER_CURRENT);
-
+    }
         mHover.setHoverActive(mHoverState == HOVER_ENABLED);
     }
 
