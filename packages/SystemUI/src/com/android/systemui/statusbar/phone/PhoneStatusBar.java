@@ -24,7 +24,6 @@ import static android.app.StatusBarManager.windowStateToString;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_OPAQUE;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_SEMI_TRANSPARENT;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSLUCENT;
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARENT;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_LIGHTS_OUT;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -2441,7 +2440,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             if (!showing) {
                 mStatusBarView.collapseAllPanels(false);
             }
-            checkBarModes();
         }
         if (mNavigationBarView != null
                 && window == StatusBarManager.WINDOW_NAVIGATION_BAR
@@ -2556,31 +2554,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             // if panels are expandable, force the status bar opaque on any interaction
             sbMode = MODE_OPAQUE;
         }
-        boolean animateSb = shouldAnimateBarTransition(sbMode, mStatusBarWindowState);
-        mStatusBarView.getBarTransitions().transitionTo(sbMode, animateSb);
+        checkBarMode(sbMode, mStatusBarWindowState, mStatusBarView.getBarTransitions());
         if (mNavigationBarView != null) {
-            mNavigationBarView.getBarTransitions().transitionTo(mNavigationBarMode,
-                    shouldAnimateBarTransition(mNavigationBarMode, mNavigationBarWindowState));
-            // The status bar blocker is only needed if both
-            // - the status bar is visible and
-            // - the navigation bar is translucent (as otherwise there is no
-            //   visual 'gap' which needs to be filled)
-            boolean sbbNeeded = mStatusBarWindowState != WINDOW_STATE_HIDDEN
-                    && mNavigationBarMode == MODE_TRANSLUCENT;
-            int sbbMode = sbbNeeded ? sbMode : MODE_TRANSPARENT;
-            mNavigationBarView.getStatusBarBlockerTransitions().transitionTo(sbbMode, animateSb);
+            checkBarMode(mNavigationBarMode,
+                    mNavigationBarWindowState, mNavigationBarView.getBarTransitions());
         }
     }
 
-    private boolean shouldAnimateBarTransition(int mode, int windowState) {
-        return (mScreenOn == null || mScreenOn) && windowState != WINDOW_STATE_HIDDEN;
+    private void checkBarMode(int mode, int windowState, BarTransitions transitions) {
+        final boolean anim = (mScreenOn == null || mScreenOn) && windowState != WINDOW_STATE_HIDDEN;
+        transitions.transitionTo(mode, anim);
     }
 
     private void finishBarAnimations() {
         mStatusBarView.getBarTransitions().finishAnimations();
         if (mNavigationBarView != null) {
             mNavigationBarView.getBarTransitions().finishAnimations();
-            mNavigationBarView.getStatusBarBlockerTransitions().finishAnimations();
         }
     }
 
@@ -2856,8 +2845,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
             pw.print("  mNavigationBarMode=");
             pw.println(BarTransitions.modeToString(mNavigationBarMode));
             dumpBarTransitions(pw, "mNavigationBarView", mNavigationBarView.getBarTransitions());
-            dumpBarTransitions(pw, "mStatusBarBlocker",
-                    mNavigationBarView.getStatusBarBlockerTransitions());
         }
 
         pw.print("  mNavigationBarView=");
@@ -3618,8 +3605,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode {
                 }
                 if (mNavigationBarView != null) {
                     mNavigationBarView.getBarTransitions().transitionTo(barMode, animate);
-                    mNavigationBarView.getStatusBarBlockerTransitions().transitionTo(
-                            barMode, animate);
                 }
             }
         }
