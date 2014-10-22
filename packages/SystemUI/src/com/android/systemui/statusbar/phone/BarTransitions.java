@@ -66,11 +66,6 @@ public class BarTransitions {
         }
     }
 
-    protected void setGradientResourceId(int gradientResourceId) {
-        mBarBackground.setGradientResourceId(mView.getContext().getResources(),
-                gradientResourceId);
-    }
-
     public void updateResources(Resources res) {
         mBarBackground.updateResources(res);
     }
@@ -127,7 +122,7 @@ public class BarTransitions {
     }
 
     private static class BarBackgroundDrawable extends Drawable {
-        private int mGradientResourceId;
+        private final int mGradientResourceId;
         private final int mOpaqueColorResourceId;
         private final int mSemiTransparentColorResourceId;
         private final TimeInterpolator mInterpolator;
@@ -161,11 +156,6 @@ public class BarTransitions {
             mGradientResourceId = gradientResourceId;
             mOpaqueColorResourceId = opaqueColorResourceId;
             mSemiTransparentColorResourceId = semiTransparentColorResourceId;
-        }
-
-        public void setGradientResourceId(Resources res, int gradientResourceId) {
-            mGradient = res.getDrawable(gradientResourceId);
-            mGradientResourceId = gradientResourceId;
         }
 
         public void updateResources(Resources res)  {
