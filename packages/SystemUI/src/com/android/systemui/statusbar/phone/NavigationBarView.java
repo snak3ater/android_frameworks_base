@@ -283,6 +283,10 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
             (ImageView) getRecentsButton(),
             (ImageView) getBackButton(),
             (ImageView) getHomeButton(),
+            (ImageView) getAlwaysMenuButton(),
+            (ImageView) getBigMenuButton(),
+            (ImageView) getSerchButton(),
+	    (ImageView) getConditionalSerchButton(),
             (ImageView) getSearchLight(),
             (ImageView) getCameraButton()
         };
@@ -373,6 +377,22 @@ public class NavigationBarView extends LinearLayout implements NavigationCallbac
 
     public View getHomeButton() {
         return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_HOME);
+	}
+
+    public View getAlwaysMenuButton() {
+        return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_ALWAYS_MENU);
+	}
+
+    public View getBigMenuButton() {
+        return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_MENU_BIG);
+	}
+
+    public View getSerchButton() {
+        return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_SEARCH);
+	}
+
+    public View getConditionalSerchButton() {
+        return mCurrentView == null ? null : mCurrentView.findViewWithTag(NavbarEditor.NAVBAR_CONDITIONAL_MENU);
 	}
 
     public View getCurrentView() {
