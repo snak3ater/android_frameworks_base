@@ -1277,6 +1277,7 @@ package android {
     field public static final int dialog_min_width_minor = 17104900; // 0x1050004
     field public static final int notification_large_icon_height = 17104902; // 0x1050006
     field public static final int notification_large_icon_width = 17104901; // 0x1050005
+    field public static final int status_bar_recents_card_margin = 17104903; // 0x1050007
     field public static final int thumbnail_height = 17104897; // 0x1050001
     field public static final int thumbnail_width = 17104898; // 0x1050002
   }
@@ -17851,6 +17852,20 @@ package android.os {
 
   public static abstract interface IBinder.DeathRecipient {
     method public abstract void binderDied();
+  }
+
+  public abstract interface IBlurService implements android.os.IInterface {
+    method public abstract android.graphics.Bitmap getBlurBmp(android.graphics.Bitmap, int) throws android.os.RemoteException;
+    method public abstract android.graphics.Bitmap getBlurWallpaper(int) throws android.os.RemoteException;
+    method public abstract android.graphics.Bitmap getFullBlurBmp(int) throws android.os.RemoteException;
+    method public abstract android.graphics.Bitmap prepare() throws android.os.RemoteException;
+  }
+
+  public static abstract class IBlurService.Stub extends android.os.Binder implements android.os.IBlurService {
+    ctor public IBlurService.Stub();
+    method public android.os.IBinder asBinder();
+    method public static android.os.IBlurService asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int) throws android.os.RemoteException;
   }
 
   public abstract interface IInterface {
