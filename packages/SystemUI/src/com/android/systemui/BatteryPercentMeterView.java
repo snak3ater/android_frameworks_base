@@ -13,6 +13,9 @@
 
 package com.android.systemui;
 
+import android.animation.ObjectAnimator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -40,7 +43,7 @@ import android.graphics.Region;
 import android.util.Log;
 import com.android.internal.R;
 import com.android.systemui.BatteryMeterView;
-
+import com.android.systemui.statusbar.phone.BarBackgroundUpdater;
 
 public class BatteryPercentMeterView extends ImageView {
     final static String QuickSettings = "quicksettings";
@@ -71,6 +74,9 @@ public class BatteryPercentMeterView extends ImageView {
     private int    mChargingColorDefault;
     private int    mChargingBandHeight;
 
+    private int mOverrideIconColor = 0;
+    private final int mDSBDuration;
+
     // runnable to invalidate view via mHandler.postDelayed() call
     private final Runnable mInvalidate = new Runnable() {
         public void run() {
@@ -97,7 +103,7 @@ public class BatteryPercentMeterView extends ImageView {
                 } else if (mLevel <= getContext().getResources().getInteger(com.android.internal.R.integer.config_criticalBatteryWarningLevel)) {
                     mChargingColorFg = getResources().getColor(com.android.systemui.R.color.batterymeter_percent_critical_color);
                 }
-                mPaintFontBg.setColor(mChargingColorFg);
+                mPaintFontBg.setColor(mOverrideIconColor);
                 if (mActivated && mAttached) {
                     invalidate();
 
@@ -128,6 +134,9 @@ public class BatteryPercentMeterView extends ImageView {
         mPercentBatteryView = percentBatteryType.getString(
                 com.android.systemui.R.styleable.BatteryIcon_batteryView);
 
+	mDSBDuration = context.getResources().getInteger(com.android.systemui.R.integer
+                .dsb_transition_duration);
+
         if (mPercentBatteryView == null) {
             mPercentBatteryView = StatusBar;
         }
@@ -136,6 +145,37 @@ public class BatteryPercentMeterView extends ImageView {
         mBatteryReceiver = new BatteryReceiver();
         initSizeMeasureIconHeight();
         updateSettings();
+	BarBackgroundUpdater.addListener(new BarBackgroundUpdater.UpdateListener(this) {
+
+            @Override
+            public ObjectAnimator onUpdateStatusBarIconColor(final int previousIconColor,
+                    final int iconColor) {
+                mOverrideIconColor = iconColor;
+
+                if (mOverrideIconColor == 0) {
+                    mPaintFontBg.setColor(mChargingColorBg);
+                    mHandler.removeCallbacks(mInvalidate);
+                    mHandler.postDelayed(mInvalidate, 50);
+                } else {
+                    if (mActivated && mAttached) {
+                        final ObjectAnimator anim = ObjectAnimator.ofObject(mPaintFontBg, "color",
+                                new ArgbEvaluator(), mPaintFontFg.getColor(), mOverrideIconColor);
+                        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                            @Override
+                            public void onAnimationUpdate(final ValueAnimator animator) {
+                                invalidate();
+                            }
+
+                        });
+                        return anim;
+                    }
+                }
+
+                return null;
+            }
+
+        });
     }
 
     @Override
@@ -204,7 +244,7 @@ public class BatteryPercentMeterView extends ImageView {
         mTextY = mSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f;
 
         mPaintFontFg = new Paint(mPaintFontBg);
-        mPaintFontFg.setColor(mChargingColorBg);
+        mPaintFontFg.setColor(mChargingColorFg);
 
         if (mActivated && mAttached) {
             invalidate();
