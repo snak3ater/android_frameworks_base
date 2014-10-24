@@ -40,7 +40,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final PhoneStatusBarView mView;
     private final float mIconAlphaWhenOpaque;
 
-    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mBatteryCircle, mBatteryPercent, mClock, mNetworkTraffic;
+    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mBatteryCircle, mClock, mNetworkTraffic;
     private Animator mCurrentAnimation;
 
     public PhoneStatusBarTransitions(PhoneStatusBarView view) {
@@ -56,7 +56,6 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mSignalCluster = mView.findViewById(R.id.signal_cluster);
         mBattery = mView.findViewById(R.id.battery);
         mBatteryCircle = mView.findViewById(R.id.circle_battery);
-	mBatteryPercent = mView.findViewById(R.id.percent_battery);
         mClock = mView.findViewById(R.id.clock);
         mNetworkTraffic = mView.findViewById(R.id.networkTraffic);
         applyModeBackground(-1, getMode(), false /*animate*/);
@@ -130,11 +129,6 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             if (batteryCircleAnim != null) {
                 animList.add(batteryCircleAnim);
             }
-
-            ObjectAnimator batteryPercentAnim = animateTransitionTo(mBatteryPercent, newAlphaBC);
-            if (batteryPercentAnim != null) {
-                animList.add(batteryPercentAnim);
-            }
   
             ObjectAnimator clockAnim = animateTransitionTo(mClock, newAlphaBC);
             if (clockAnim != null) {
@@ -165,9 +159,6 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             
             if (mBattery != null) {
                 mBattery.setAlpha(newAlphaBC);
-            }
-            if (mBatteryPercent !=null) {
-	        mBatteryPercent.setAlpha(newAlphaBC);
             }
             if (mBatteryCircle != null) {
                 mBatteryCircle.setAlpha(newAlphaBC);
