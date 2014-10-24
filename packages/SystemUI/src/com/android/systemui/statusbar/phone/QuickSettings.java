@@ -114,7 +114,6 @@ class QuickSettings {
         BLUETOOTH,
         LOCATION,
         IMMERSIVE,
-	HOVER,
 	HEADSUP,
 	NFC,
 	LIGHTBULB,
@@ -133,7 +132,8 @@ class QuickSettings {
     public static final String DEFAULT_TILES = Tile.USER + DELIMITER + Tile.BRIGHTNESS
         + DELIMITER + Tile.SETTINGS + DELIMITER + Tile.WIFI + DELIMITER + Tile.RSSI
         + DELIMITER + Tile.ROTATION + DELIMITER + Tile.BATTERY + DELIMITER + Tile.BLUETOOTH
-        + DELIMITER + Tile.LOCATION + DELIMITER + Tile.IMMERSIVE + DELIMITER + Tile.LIGHTBULB;
+        + DELIMITER + Tile.LOCATION + DELIMITER + Tile.IMMERSIVE + DELIMITER + Tile.LIGHTBULB
+	+ DELIMITER + Tile.HEADSUP;
 
     private Context mContext;
     private PanelBar mBar;
@@ -1003,38 +1003,6 @@ class QuickSettings {
                     });
                     parent.addView(immersiveTile);
                     if(addMissing) immersiveTile.setVisibility(View.GONE);
-
-			} else if(Tile.HOVER.toString().equals(tile.toString())) { // HOVER
-			final QuickSettingsBasicTile hoverTile
-			= new QuickSettingsBasicTile(mContext);
-			hoverTile.setTileId(Tile.HOVER);
-			hoverTile.setImageResource(R.drawable.ic_qs_hover_off);
-			hoverTile.setTextResource(R.string.quick_settings_hover_off_label);
-			hoverTile.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			boolean hoverModeOn = Settings.System.getInt(mContext
-			.getContentResolver(), Settings.System.HOVER_STATE, 0) == 1;
-
-			Settings.System.putInt(mContext.getContentResolver(),
-			Settings.System.HOVER_STATE, hoverModeOn ? 0 : 1);
-				}
-			});
-
-			hoverTile.setOnLongClickListener(new View.OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-			Intent intent = new Intent(Intent.ACTION_MAIN);
-			intent.setClassName("com.android.settings",
-			"com.android.settings.Settings$HoverSettingsActivity");
-			startSettingsActivity(intent);
-			return true;
-				}
-			});
-			mModel.addHoverTile(hoverTile,
-                                            new QuickSettingsModel.BasicRefreshCallback(hoverTile));
-			parent.addView(hoverTile);
-			if(addMissing) hoverTile.setVisibility(View.GONE);
 			} else if(Tile.HEADSUP.toString().equals(tile.toString())) { // HeadsUp
 			final QuickSettingsDualBasicTile headsupTile
 			= new QuickSettingsDualBasicTile(mContext);
