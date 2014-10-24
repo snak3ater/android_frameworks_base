@@ -107,12 +107,10 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     static class BrightnessState extends State {
         boolean autoBrightness;
     }
-    static class HoverState extends State {
-        boolean isEnabled;
-    }
     static class HeadsupState extends State {
         boolean HeadsupEnabled;
     }
+
     public static class BluetoothState extends State {
         boolean connected = false;
         String stateContentDescription;
@@ -371,26 +369,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         }
     }
 
-    /** ContentObserver to watch Hover state **/
-    private class HoverObserver extends ContentObserver {
-            public HoverObserver(Handler handler) {
-                super(handler);
-            }
-
-            @Override
-            public void onChange(boolean selfChange) {
-                onHoverChanged();
-            }
-
-            public void startObserving() {
-                final ContentResolver cr = mContext.getContentResolver();
-                cr.unregisterContentObserver(this);
-                cr.registerContentObserver(
-                        Settings.System.getUriFor(Settings.System.HOVER_STATE),
-                        false, this, mUserTracker.getCurrentUserId());
-            }
-    }
-
     /** ContentObserver to watch Headsup state **/
     private class HeadsupObserver extends ContentObserver {
             public HeadsupObserver(Handler handler) {
@@ -504,7 +482,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private final MediaRouter mMediaRouter;
     private final RemoteDisplayRouteCallback mRemoteDisplayRouteCallback;
 
-    private final HoverObserver mHoverObserver;
     private final HeadsupObserver mHeadsupObserver;
     private final HeadsUpModeObserver mHeadsUpModeObserver;
 
@@ -578,10 +555,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
     private RefreshCallback mBrightnessCallback;
     private BrightnessState mBrightnessState = new BrightnessState();
 
-    private QuickSettingsTileView mHoverTile;
-    private RefreshCallback mHoverCallback;
-    private HoverState mHoverState = new HoverState();
-
     private QuickSettingsTileView mHeadsupTile;
     private RefreshCallback mHeadsupCallback;
     private HeadsupState mHeadsupState = new HeadsupState();
@@ -648,7 +621,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                 onNextAlarmChanged();
                 onBugreportChanged();
                 rebindMediaRouterAsCurrentUser();
-		mHoverObserver.startObserving();
 		mHeadsupObserver.startObserving();
  		mHeadsUpModeObserver.startObserving();
                 onUsbChanged();
@@ -667,8 +639,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         mSleepTimeObserver.startObserving();
         mImmersiveObserver = new ImmersiveObserver(mHandler);
         mImmersiveObserver.startObserving();
-	mHoverObserver = new HoverObserver(mHandler);
-        mHoverObserver.startObserving();
 	mHeadsupObserver = new HeadsupObserver(mHandler);
         mHeadsupObserver.startObserving();
 	mHeadsUpModeObserver = new HeadsUpModeObserver(mHandler);
@@ -738,7 +708,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
         refreshLocationExtraTile();
         refreshImmersiveGlobalTile();
         refreshImmersiveModeTile();
- 	refreshHoverTile();
  	refreshHeadsupTile();
 	refreshHeadsUpModeTile();
         refreshWifiApTile();
@@ -1797,31 +1766,6 @@ public class QuickSettingsModel implements BluetoothStateChangeCallback,
                 setImmersiveMode(IMMERSIVE_MODE_FULL);
                 break;
         }
-    }
-
-	// Hover
-	void addHoverTile(QuickSettingsTileView view, RefreshCallback cb) {
-        mHoverTile = view;
-        mHoverCallback = cb;
-        onHoverChanged();
-    }
-
-    private void onHoverChanged() {
-        Resources r = mContext.getResources();
-        int mode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.HOVER_STATE, 0,
-                mUserTracker.getCurrentUserId());
-        mHoverState.isEnabled = (mode == 1);
-        mHoverState.iconId = mHoverState.isEnabled
-                ? R.drawable.ic_qs_hover_on
-                : R.drawable.ic_qs_hover_off;
-        mHoverState.label = mHoverState.isEnabled
-                ? r.getString(R.string.quick_settings_hover_on_label)
-                : r.getString(R.string.quick_settings_hover_off_label);
-        mHoverCallback.refreshView(mHoverTile, mHoverState);
-    }
-    void refreshHoverTile() {
-        onHoverChanged();
     }
 
 	// Headsup
