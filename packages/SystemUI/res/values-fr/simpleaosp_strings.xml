@@ -50,8 +50,8 @@
     <string name="quick_settings_bluetooth_discoverable_label">détectable</string>
     <string name="quick_settings_bluetooth_disabled">Désactivé</string>
     <!-- QuickSettings: Location Extra Tile [CHAR LIMIT=NONE] -->
-    <string name="quick_settings_location_mode_high_label">Haute précision</string>
-    <string name="quick_settings_location_mode_battery_label">Economie de batterie</string>
+    <string name="quick_settings_location_mode_high_label">Haute</string>
+    <string name="quick_settings_location_mode_battery_label">Batterie</string>
     <string name="quick_settings_location_mode_sensors_label">Appareil</string>
     <!-- QuickSettings: Sound Tile  -->
     <string name="quick_settings_ringer_mode_silent_label">Silencieux</string>
@@ -96,12 +96,13 @@
 
     <!-- Clear recents confirmation dialog -->
     <string name="navbar_recents_clear_all_title">Tout effacer</string>
-    <string name="navbar_recents_clear_all_message">Voulez-vous que le "bouton recents" efface toutes les applications ?</string>
+    <string name="navbar_recents_clear_all_message">Voulez-vous que le "bouton récent" efface toutes les applications ?</string>
     <string name="navbar_recents_clear_all" translatable="false">@string/navbar_recents_clear_all_title</string>
-
+    <string name="status_bar_recents_card_stack" translatable="false">@string/status_bar_recents_card_stack_title</string>
+	
     <!-- Switch apps -->
     <string name="enable_switch_apps_title">Sélecteur d\'application</string>
-    <string name="enable_switch_apps_message">Lancer rapidement l\'application précédante en restant appuyé sur recents ?</string>
+    <string name="enable_switch_apps_message">Lancer rapidement l\'application précédente en restant appuyé sur récent ?</string>
     <string name="recents_switch" translatable="false">@string/enable_switch_apps_title</string>
 
     <!-- Development shortcut -->
@@ -142,4 +143,8 @@
     <string name="navbar_menu_conditional_button">Bouton (Masquer automatiquement) Menu</string>
     <string name="navbar_menu_always_button">Bouton (toujours afficher) Menu</string>
     <string name="navbar_menu_big_button">Bouton menu</string>
+
+    <!-- Recents card stack view confirmation dialog -->
+    <string name="status_bar_recents_card_stack_title">Récents version pile de carte</string>
+    <string name="status_bar_recents_card_stack_message">Voulez-vous activer la vue pile de carte pour les récents ?</string>
 </resources>
